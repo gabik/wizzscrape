@@ -4,17 +4,19 @@ from HTMLParser import HTMLParser
 import sys
 import datetime
 
+debug_flag=False
 new_year=0
-maxn=500
-Start_orig = datetime.date.today()
+maxn=30#500
+#Start_orig = datetime.date.today()
+Start_orig = datetime.date(2015,5,1)
 Stop = Start_orig + datetime.timedelta(days=maxn)
 cur_year=Start_orig.year
 
-#Start_orig = datetime.date(2014,10,23)
-#Stop = datetime.date(2014,11,10)
 
 
 DDD = sys.argv[1]
+if len(sys.argv) >= 3 :
+ if sys.argv[2] == "debug" : debug_flag=True
 Dests = []
 Dests.append(DDD)
 #Dests.append("BUD")
@@ -161,6 +163,8 @@ for DST in Dests:
   r2 = requests.post('http://wizzair.com/en-GB/Search', data=dict)
   prP = getFlight(cur_year,new_year)
   prP.feed(r2.text)
+  if debug_flag:
+   print prP.data
   flightsList.extend(prP.data)
   new_year=prP.new_year
   if Start > datetime.date(cur_year+1, 2, 10) : new_year=1
@@ -175,14 +179,16 @@ for DST in Dests:
    Inc.append(i)
  Out=clean_dup(Out)
  Inc=clean_dup(Inc)
- print "Debug: After clean_dup: Out, Inc: "
- print Out
- print Inc
+ if debug_flag:
+  print "Debug: After clean_dup: Out, Inc: "
+  print Out
+  print Inc
  Out = sorted(Out, key=lambda k: int(k['price']))
  Inc = sorted(Inc, key=lambda k: int(k['price']))
- print "Debug: After sorting: Out, Inc: "
- print Out
- print Inc
+ if debug_flag:
+  print "Debug: After sorting: Out, Inc: "
+  print Out
+  print Inc
  fd = open("output/"+DST, "w")
  fd.write( "Outgoing: \n")
  for i in Out:
@@ -199,4 +205,4 @@ for DST in Dests:
  fd.close()
 
 print "Done!"
-print datetime.datetime.now
+print datetime.datetime.now()
