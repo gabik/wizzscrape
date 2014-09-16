@@ -3,11 +3,12 @@ import re
 from HTMLParser import HTMLParser
 import sys
 import datetime
+import time
 from scrape_import import find_all, clean_dup, strip_non_ascii, getViewState, getFlight
 
 debug_flag=False
 new_year=0
-maxn=5#00
+maxn=500
 Start_orig = datetime.date.today()
 #Start_orig = datetime.date(2015,5,1)
 Stop = Start_orig + datetime.timedelta(days=maxn)
@@ -44,7 +45,7 @@ for DST in Dests:
    print "Progress: " + str(n) + "/" + str(maxn)
   else:
    sys.stdout.write(" Progress: %d/%d   \r" % (n,maxn) )
-  sys.stdout.flush()
+   sys.stdout.flush()
   dict={}
   dict['ControlGroupRibbonAnonHomeView$AvailabilitySearchInputRibbonAnonHomeView$OriginStation']="TLV"
   dict['ControlGroupRibbonAnonHomeView$AvailabilitySearchInputRibbonAnonHomeView$DestinationStation']=DST
@@ -63,10 +64,31 @@ for DST in Dests:
   if debug_flag:
    print Start.strftime("%d/%m/%Y")
    print Ret.strftime("%d/%m/%Y")
+   print len(list(find_all(r2.text, "marketColumn")))
    for s in find_all(r2.text, '<span class="price">'):
     print strip_non_ascii(r2.text[s+20:r2.text.find('<', s+20, s+30)])
+   print len(prP.data)
    print prP.data
    print r2
+   if (r2.text.find("No flight found for your search") > -1) and (retry_flag==0):
+    print "Only one direction, Trying again..."
+    Ret=Start
+    time.sleep(10)
+    retry_flag=1
+    #filename="logs/"+DST+str(Start.strftime("%d%m%Y"))+".file"
+    #fd1 = open (filename, "w")
+    #fd1.write(strip_non_ascii(r2.text))
+    #fd1.close()
+    #print filename + " output file written"
+    #print "ViewState: Old="+viewstate
+    #r3=None
+    #r3 = requests.get('http://wizzair.com/en-GB/Search')
+    #vsP = getViewState()
+    #vsP.feed(r3.text)
+    #viewstate=vsP._viewstate
+    #print "New="+viewstate
+   else:
+    retry_flag=0
    print '-------'
   flightsList.extend(prP.data)
   new_year=prP.new_year
