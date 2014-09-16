@@ -1,4 +1,5 @@
 import requests
+import json
 import re
 from HTMLParser import HTMLParser
 import sys
@@ -27,6 +28,24 @@ Dests.append(DDD)
 #Dests.append("VNO")
 #Dests.append("WAW")
 #Dests.append("OTP")
+
+color={}
+color['BUDb']="#5173DA"
+color['BUDc']="#99ABEA"
+color['CLJc']="#F55656"
+color['CLJb']="#963636"
+color['KTWc']="#F073E5"
+color['KTWb']="#874081"
+color['PRGc']="#72A9F2"
+color['PRGb']="#3E5D85"
+color['SOFc']="#71F0C3"
+color['SOFb']="#3C8269"
+color['VNOc']="#85F277"
+color['VNOb']="#477A40"
+color['WAWc']="#EBF582"
+color['WAWb']="#535730"
+color['OTPc']="#EDC38C"
+color['OTPb']="#735F45"
 
 r1 = requests.get('http://wizzair.com/en-GB/Search')
 vsP = getViewState()
@@ -114,6 +133,30 @@ for DST in Dests:
   print "Debug: After sorting: Out, Inc: "
   print Out
   print Inc
+ jsonDict=[]
+ for i in Out:
+  d={}
+  d['title']='To: '+DST + ": " + str(i['price'])
+  d["start"]=str(i['year'])+"-"+str(i['month'])+"-"+str(i['day'])
+  d["allday"]="true"
+  d["borderColor"]=color[DST+"b"]
+  d["color"]=color[DST+"c"]
+  d["textColor"]="#000000"
+  jsonDict.append(d)
+
+ for i in Inc:
+  d={}
+  d['title']='From: '+DST + ": " + str(i['price'])
+  d["start"]=str(i['year'])+"-"+str(i['month'])+"-"+str(i['day'])
+  d["allday"]="true"
+  d["borderColor"]=color[DST+"b"]
+  d["color"]=color[DST+"c"]
+  d["textColor"]="#000000"
+  jsonDict.append(d)
+
+ with open("output/" + DST + ".json", "w") as jsonFile:
+  json.dump(jsonDict, jsonFile)
+
  fd = open("output/"+DST, "w")
  fd.write( "Outgoing: \n")
  for i in Out:
