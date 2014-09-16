@@ -70,25 +70,25 @@ for DST in Dests:
    print len(prP.data)
    print prP.data
    print r2
-   if (r2.text.find("No flight found for your search") > -1) and (retry_flag==0):
-    print "Only one direction, Trying again..."
-    Ret=Start
-    time.sleep(10)
-    retry_flag=1
-    #filename="logs/"+DST+str(Start.strftime("%d%m%Y"))+".file"
-    #fd1 = open (filename, "w")
-    #fd1.write(strip_non_ascii(r2.text))
-    #fd1.close()
-    #print filename + " output file written"
-    #print "ViewState: Old="+viewstate
-    #r3=None
-    #r3 = requests.get('http://wizzair.com/en-GB/Search')
-    #vsP = getViewState()
-    #vsP.feed(r3.text)
-    #viewstate=vsP._viewstate
-    #print "New="+viewstate
-   else:
-    retry_flag=0
+   #if (r2.text.find("No flight found for your search") > -1) and (retry_flag==0):
+   # print "Only one direction, Trying again..."
+   # Ret=Start
+   # time.sleep(10)
+   # retry_flag=1
+   # #filename="logs/"+DST+str(Start.strftime("%d%m%Y"))+".file"
+   # #fd1 = open (filename, "w")
+   # #fd1.write(strip_non_ascii(r2.text))
+   # #fd1.close()
+   # #print filename + " output file written"
+   # #print "ViewState: Old="+viewstate
+   # #r3=None
+   # #r3 = requests.get('http://wizzair.com/en-GB/Search')
+   # #vsP = getViewState()
+   # #vsP.feed(r3.text)
+   # #viewstate=vsP._viewstate
+   # #print "New="+viewstate
+   #else:
+   # retry_flag=0
    print '-------'
   flightsList.extend(prP.data)
   new_year=prP.new_year
