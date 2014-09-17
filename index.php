@@ -80,7 +80,7 @@ $(document).ready(function() {
 <style type='text/css'>
 
 	body {
-		margin-top: 40px;
+		margin-top: 10px;
 		text-align: center;
 		font-size: 14px;
 		font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
@@ -103,18 +103,24 @@ $(document).ready(function() {
 .VNO { background-color: #85F277; color: #fff; border: solid 1px #477A40; }
 .WAW { background-color: #EBF582; color: #fff; border: solid 1px #535730; }
 .OTP { background-color: #EDC38C; color: #fff; border: solid 1px #735F45; }
+#byprice { background-color:#F5AF2C; color: #000; border: solid 1px #99FFFF; width: 900px; margin: 10px auto; padding: 5px;}
+#byprice a:link { color: #000;  padding: 5px }
+#byprice a:visited { color: #000;  padding: 5px }
 
 </style>
 </HEAD><BODY>
+<p> <?php print "Last Updated: " . exec('ls -rt logs/ | tail -1 | xargs -I {} tail -1  logs/{}'); ?> </p>
+<div name="byprice" id="byprice">
 Sort by Price:
-<a href="output/BUD">Budapest</a> - 
-<a href="output/CLJ">Cluj-Napoca</a> - 
-<a href="output/KTW">Katowice</a> - 
-<a href="output/OTP">Bucharest</a> - 
-<a href="output/PRG">Prague</a> - 
-<a href="output/SOF">Sofia</a> - 
-<a href="output/VNO">Vilnius</a> - 
+<a href="output/BUD">Budapest</a>  
+<a href="output/CLJ">Cluj-Napoca</a> 
+<a href="output/KTW">Katowice</a> 
+<a href="output/OTP">Bucharest</a> 
+<a href="output/PRG">Prague</a> 
+<a href="output/SOF">Sofia</a>  
+<a href="output/VNO">Vilnius</a> 
 <a href="output/WAW">Warsaw</a>  
+</div>
 
 <div name="buttons" id="buttons">
 <div class="BUD">

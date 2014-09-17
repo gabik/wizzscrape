@@ -5,7 +5,7 @@ from HTMLParser import HTMLParser
 import sys
 import datetime
 import time
-from scrape_import import find_all, clean_dup, strip_non_ascii, getViewState, getFlight
+from wizz_scrape_import import find_all, clean_dup, strip_non_ascii, getViewState, getFlight
 
 debug_flag=False
 new_year=0
