@@ -113,6 +113,61 @@ $(document).ready(function() {
 #byprice a:link { color: #000;  padding: 5px }
 #byprice a:visited { color: #000;  padding: 5px }
 
+
+input[type=range]{
+    -webkit-appearance: none;
+    margin: 5px 10px 20px 0;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+    width: 500px;
+    height: 8px;
+    background: #ddd;
+    border: none;
+    border-radius: 3px;
+}
+
+input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    border: none;
+    height: 16px;
+    width: 26px;
+    border-radius: 25%;
+    background: #baa;
+    margin-top: -4px;
+}
+
+input[type=range]:focus {
+    outline: none;
+}
+
+input[type=range]:focus::-webkit-slider-runnable-track {
+    background: #ccc;
+}
+
+input[type=submit] {
+   width: 130px;
+   height: 30px;
+   overflow: hidden;
+   border: 1px solid #ccc;
+   margin: 0px 0px 10px 0;
+-webkit-box-shadow: 1px 1px 5px 0px rgba(50, 50, 50, 0.68);
+-moz-box-shadow:    1px 1px 5px 0px rgba(50, 50, 50, 0.68);
+box-shadow:         1px 1px 5px 0px rgba(50, 50, 50, 0.68);
+}
+
+select {
+   width: 140px;
+   height: 30px;
+   overflow: hidden;
+   background: #ddd;
+   border: 1px solid #ccc;
+   margin: 0px 0px 10px 0;
+}
+
+p[id=rhead]{
+font-weight: bold;
+}
 </style>
 </HEAD><BODY>
 <div id=wrap name=wrap>
@@ -168,7 +223,7 @@ Sort by Price:
 <DIV id='calendar'></div>
 </div>
 <div id='route'>
-Search by days and price:<BR><BR>
+<p id=rhead>Search by days and price:</p>
 <form name=routeForm method=post action=getroute.php>
 <select name=company id=company>
   <option value="wizz">WizzAir</option>
