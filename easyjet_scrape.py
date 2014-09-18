@@ -6,7 +6,7 @@ from HTMLParser import HTMLParser
 import sys
 import datetime
 import time
-from wizz_scrape_import import getViewState, getFlight
+from easyjet_scrape_import import getViewState, getFlight
 from general_scrape import find_all, clean_dup, strip_non_ascii
 
 # ARGS:
@@ -30,19 +30,8 @@ if len(sys.argv) >= 4 :
  if sys.argv[3] == "debug" : debug_flag=True
 Dests = []
 Dests.append(DDD)
-#Dests.append("BUD")
-#Dests.append("CLJ")
-#Dests.append("KTW")
-#Dests.append("PRG")
-#Dests.append("SOF")
-#Dests.append("VNO")
-#Dests.append("WAW")
-#Dests.append("OTP")
-r1 = requests.get('http://wizzair.com/en-GB/Search')
-vsP = getViewState()
-vsP.feed(r1.text)
-viewstate=vsP._viewstate
 Start = Start_orig
+s = requests.session()
 
 for DST in Dests:
  Start = Start_orig
@@ -57,19 +46,11 @@ for DST in Dests:
   else:
    sys.stdout.write(" Progress: %d/%d   \r" % (n,maxn) )
    sys.stdout.flush()
-  dict={}
-  dict['ControlGroupRibbonAnonHomeView$AvailabilitySearchInputRibbonAnonHomeView$OriginStation']="TLV"
-  dict['ControlGroupRibbonAnonHomeView$AvailabilitySearchInputRibbonAnonHomeView$DestinationStation']=DST
-  dict['ControlGroupRibbonAnonHomeView$AvailabilitySearchInputRibbonAnonHomeView$DepartureDate']=Start.strftime("%d/%m/%Y")
   Ret = Start + datetime.timedelta(days=1)
-  dict['ControlGroupRibbonAnonHomeView$AvailabilitySearchInputRibbonAnonHomeView$ReturnDate']=Ret.strftime("%d/%m/%Y")
-  dict['ControlGroupRibbonAnonHomeView$AvailabilitySearchInputRibbonAnonHomeView$PaxCountCHD'] = 0
-  dict['ControlGroupRibbonAnonHomeView$AvailabilitySearchInputRibbonAnonHomeView$PaxCountINFANT'] = 0
-  dict['ControlGroupRibbonAnonHomeView$AvailabilitySearchInputRibbonAnonHomeView$PaxCountADT'] = 1
-  dict['ControlGroupRibbonAnonHomeView$AvailabilitySearchInputRibbonAnonHomeView$ButtonSubmit'] = "Search"
-  dict['__EVENTTARGET'] = "ControlGroupRibbonAnonHomeView_AvailabilitySearchInputRibbonAnonHomeView_ButtonSubmit"
-  dict['__VIEWSTATE'] = viewstate
-  r2 = requests.post('http://wizzair.com/en-GB/Search', data=dict)
+  #url='http://www.easyjet.com/links.mvc?dep=TLV&dest=' + DST +'&dd='+ (str(int(Start.day)) + "/" + str(int(Start.month)) + "/" + str(int(Start.year))) +'&rd='+ (str(int(Ret.day)) + "/" + str(int(Ret.month)) + "/" + str(int(Ret.year))) +'&apax=1&pid=www.easyjet.com&cpax=0&ipax=0&lang=EN&isOneWay=off&searchFrom=SearchPod|/en/'
+  url='http://www.easyjet.com/links.mvc?dep=TLV&dest=' + DST +'&dd='+ Start.strftime("%d/%m/%Y") +'&rd='+ Ret.strftime("%d/%m/%Y") +'&apax=1&pid=www.easyjet.com&cpax=0&ipax=0&lang=EN&isOneWay=off&searchFrom=SearchPod|/en/'
+  r1 = s.get(url)
+  #r2 = s.get('http://www.easyjet.com/EN/Booking.mvc')
   prP = getFlight(cur_year,new_year)
   prP.feed(r2.text)
   if debug_flag:
@@ -81,25 +62,6 @@ for DST in Dests:
    print len(prP.data)
    print prP.data
    print r2
-   #if (r2.text.find("No flight found for your search") > -1) and (retry_flag==0):
-   # print "Only one direction, Trying again..."
-   # Ret=Start
-   # time.sleep(10)
-   # retry_flag=1
-   # #filename="logs/"+DST+str(Start.strftime("%d%m%Y"))+".file"
-   # #fd1 = open (filename, "w")
-   # #fd1.write(strip_non_ascii(r2.text))
-   # #fd1.close()
-   # #print filename + " output file written"
-   # #print "ViewState: Old="+viewstate
-   # #r3=None
-   # #r3 = requests.get('http://wizzair.com/en-GB/Search')
-   # #vsP = getViewState()
-   # #vsP.feed(r3.text)
-   # #viewstate=vsP._viewstate
-   # #print "New="+viewstate
-   #else:
-   # retry_flag=0
    print '-------'
   flightsList.extend(prP.data)
   new_year=prP.new_year
