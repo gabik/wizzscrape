@@ -48,6 +48,7 @@ for DST in Dests:
  flightsList = []
  n=0
  print DST
+ print str(scrape_time)
  while Stop > Start:
   n+=1
   if debug_flag:

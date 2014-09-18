@@ -3,6 +3,12 @@
 <script src='lib/jquery.min.js'></script>
 <script src='lib/moment.min.js'></script>
 <script src='fullcalendar/fullcalendar.js'></script>
+
+<script>
+function update1(val) {document.querySelector('#mindaysoutput').value = val; }
+function update2(val) {document.querySelector('#maxdaysoutput').value = val; }
+function update3(val) {document.querySelector('#priceoutput').value = val; }
+</script>
 <SCRIPT>
 
 var curSource = new Array();
@@ -86,10 +92,10 @@ $(document).ready(function() {
 		font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
 	}
 
-	#calendar, #buttons {
-		width: 900px;
-		margin: 0 auto;
-	}
+#buttons { width: 900px; margin: 0 auto; }
+#calendar { width: 900px; margin: 0 auto; display: inline-block; }
+#CalAll {float: center; display: inline-block;}
+#route { margin: 50px; float: left; display: inline-block;  text-align: left;}
 
 .BUD, .CLJ, .KTW, .OTP, .PRG, .SOF, .VNO, .WAW {
   float: left; display: inline-block;padding: 8px;  margin-right: 10px;
@@ -109,6 +115,8 @@ $(document).ready(function() {
 
 </style>
 </HEAD><BODY>
+<div id=wrap name=wrap>
+<div name=CalAll id=CalAll>
 <p> <?php print "Last Updated: " . exec('ls -rt logs/ | tail -1 | xargs -I {} tail -1  logs/{}'); ?> </p>
 <div name="byprice" id="byprice">
 Sort by Price:
@@ -158,4 +166,22 @@ Sort by Price:
 </div>
 <div><BR><BR><BR></div>
 <DIV id='calendar'></div>
+</div>
+<div id='route'>
+Search by days and price:<BR><BR>
+<form name=routeForm method=post action=getroute.php>
+<select name=company id=company>
+  <option value="wizz">WizzAir</option>
+</select>
+<br>
+<label for="minDays">Minimum Days: <output for=minDays id=mindaysoutput>4</output> </label><BR>
+<input type=range name=minDays id=minDays value=4 min=2 max=7 onchange="update1(value)"><BR>
+<label for="maxDays">Maximum Days: <output for=maxDays id=maxdaysoutput>6</output> </label></label><BR>
+<input type=range name=maxDays id=maxDays value=6 min=4 max=14 onchange="update2(value)"><BR>
+<label for="price">Maximum Roundtrip Price: <output for=price id=priceoutput>600</output> </label></label><BR>
+<input type=range name=price id=price value=600 min=200 max=2000 step=50 onchange="update3(value)"><BR>
+<input type=submit value=Search>
+</form>
+</div>
+</div>
 </BODY></HTML>
