@@ -40,14 +40,15 @@ class getFlight(HTMLParser):
     self.tmp_price += cur_data
    if self.date==1:
     self.tmp_date += cur_data
-    print ":" + self.tmp_date
  def handle_endtag(self, tag):
   if tag=="span":
    self.price=0
    self.date=0
   if tag=="ul" and self.day==1:
    if self.tmp_price!="":
-    self._vals['date']=self.tmp_date
+    self._vals['weekday']=self.tmp_date.split()[0]
+    self._vals['day']=self.tmp_date.split()[1]
+    self._vals['month']=datetime.datetime.strptime(self.tmp_date.split()[2], "%b").strftime("%m")
     self._vals['price']=strip_non_ascii(self.tmp_price)
     self._vals['direction']=self.direction
     self.data.append(self._vals)
