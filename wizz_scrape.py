@@ -1,4 +1,6 @@
 import requests
+import psycopg2
+from psycopg2 import extras
 import json
 import re
 from HTMLParser import HTMLParser
@@ -14,6 +16,7 @@ Start_orig = datetime.date.today()
 #Start_orig = datetime.date(2015,5,1)
 Stop = Start_orig + datetime.timedelta(days=maxn)
 cur_year=Start_orig.year
+scrape_time = datetime.datetime.today()
 
 DDD = sys.argv[1]
 if len(sys.argv) >= 3 :
@@ -133,6 +136,8 @@ for DST in Dests:
   print "Debug: After sorting: Out, Inc: "
   print Out
   print Inc
+ db= psycopg2.connect( host="manegerdb.cjjasb6ckbh1.us-east-1.rds.amazonaws.com", database="GabiScrape", user="root", password="ManegerDB")
+ curs = db.cursor()
  jsonDict=[]
  for i in Out:
   d={}
@@ -143,6 +148,7 @@ for DST in Dests:
   d["color"]=color[DST+"c"]
   d["textColor"]="#000000"
   jsonDict.append(d)
+  curs.execute("INSERT INTO wizz_flights (scrape_time, direction, dst, price, time, date) VALUES (%s, %s, %s, %s, %s, %s)", (str(scrape_time), 1, DST, int(i['price']), i['time'], str(i['year'])+"-"+str(i['month'])+"-"+str(i['day'])))
 
  for i in Inc:
   d={}
@@ -153,6 +159,9 @@ for DST in Dests:
   d["color"]=color[DST+"c"]
   d["textColor"]="#000000"
   jsonDict.append(d)
+  curs.execute("INSERT INTO wizz_flights (scrape_time, direction, dst, price, time, date) VALUES (%s, %s, %s, %s, %s, %s)", (str(scrape_time), 2, DST, int(i['price']), i['time'], str(i['year'])+"-"+str(i['month'])+"-"+str(i['day'])))
+
+ db.commit()
 
  with open("output/" + DST + ".json", "w") as jsonFile:
   json.dump(jsonDict, jsonFile)

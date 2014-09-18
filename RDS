@@ -1,0 +1,2 @@
+psql -hmanegerdb.cjjasb6ckbh1.us-east-1.rds.amazonaws.com -Uroot -w GabiScrape
+

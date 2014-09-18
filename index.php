@@ -6,14 +6,14 @@
 <SCRIPT>
 
 var curSource = new Array();
-curSource[0] = '/output/BUD.json'
-curSource[1] = '/output/CLJ.json'
-curSource[2] = '/output/KTW.json'
-curSource[3] = '/output/OTP.json'
-curSource[4] = '/output/PRG.json'
-curSource[5] = '/output/SOF.json'
-curSource[6] = '/output/VNO.json'
-curSource[7] = '/output/WAW.json'
+curSource[0] = '/getjson.php?dst=BUD&company=wizz'
+curSource[1] = '/getjson.php?dst=CLJ&company=wizz'
+curSource[2] = '/getjson.php?dst=KTW&company=wizz'
+curSource[3] = '/getjson.php?dst=OTP&company=wizz'
+curSource[4] = '/getjson.php?dst=PRG&company=wizz'
+curSource[5] = '/getjson.php?dst=SOF&company=wizz'
+curSource[6] = '/getjson.php?dst=VNO&company=wizz'
+curSource[7] = '/getjson.php?dst=WAW&company=wizz'
 var newSource = new Array();
 
 $(document).ready(function() {
@@ -35,14 +35,14 @@ $(document).ready(function() {
     })
 
     $("#e1, #e2, #e3, #e4, #e5, #e6, #e7, #e8").change(function() {
-        newSource[0] = $('#e1').is(':checked') ? '/output/BUD.json' : '';
-        newSource[1] = $('#e2').is(':checked') ? '/output/CLJ.json' : '';
-        newSource[2] = $('#e3').is(':checked') ? '/output/KTW.json' : '';
-        newSource[3] = $('#e4').is(':checked') ? '/output/OTP.json' : '';
-        newSource[4] = $('#e5').is(':checked') ? '/output/PRG.json' : '';
-        newSource[5] = $('#e6').is(':checked') ? '/output/SOF.json' : '';
-        newSource[6] = $('#e7').is(':checked') ? '/output/VNO.json' : '';
-        newSource[7] = $('#e8').is(':checked') ? '/output/WAW.json' : '';
+        newSource[0] = $('#e1').is(':checked') ? '/getjson.php?dst=BUD&company=wizz' : '';
+        newSource[1] = $('#e2').is(':checked') ? '/getjson.php?dst=CLJ&company=wizz' : '';
+        newSource[2] = $('#e3').is(':checked') ? '/getjson.php?dst=KTW&company=wizz' : '';
+        newSource[3] = $('#e4').is(':checked') ? '/getjson.php?dst=OTP&company=wizz' : '';
+        newSource[4] = $('#e5').is(':checked') ? '/getjson.php?dst=PRG&company=wizz' : '';
+        newSource[5] = $('#e6').is(':checked') ? '/getjson.php?dst=SOF&company=wizz' : '';
+        newSource[6] = $('#e7').is(':checked') ? '/getjson.php?dst=VNO&company=wizz' : '';
+        newSource[7] = $('#e8').is(':checked') ? '/getjson.php?dst=WAW&company=wizz' : '';
 
         $('#calendar').fullCalendar('removeEventSource', curSource[0]);
         $('#calendar').fullCalendar('removeEventSource', curSource[1]);
