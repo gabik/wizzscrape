@@ -1,0 +1,7 @@
+ami=""
+
+cd $EC2_HOME/bin
+./ec2-run-instances $ami -k gabi-app -t t2.medium -z us-east-1c > /tmp/11
+new_ins=`grep INSTANCE /tmp/11 | awk '{print $2}'`
+./ec2-create-tags $new_ins --tag Name=Manager-1 --tag Kind=Manager --tag Manager=Yes
+
