@@ -8,18 +8,25 @@ import datetime
 import time
 from wizz_scrape_import import find_all, clean_dup, strip_non_ascii, getViewState, getFlight
 
+# ARGS:
+# 1 = DST
+# 2 = 0..15
+# 3 = debug
+
 debug_flag=False
 new_year=0
-maxn=500
+maxn=31#500
+arg_month=sys.argv[2]
 Start_orig = datetime.date.today()
-#Start_orig = datetime.date(2015,5,1)
+#Start_orig = datetime.date(2015,8,1)
+Start_orig += datetime.timedelta(days=(int(maxn)-1)*int(arg_month))
 Stop = Start_orig + datetime.timedelta(days=maxn)
 cur_year=Start_orig.year
 scrape_time = datetime.datetime.today()
 
 DDD = sys.argv[1]
-if len(sys.argv) >= 3 :
- if sys.argv[2] == "debug" : debug_flag=True
+if len(sys.argv) >= 4 :
+ if sys.argv[3] == "debug" : debug_flag=True
 Dests = []
 Dests.append(DDD)
 #Dests.append("BUD")
