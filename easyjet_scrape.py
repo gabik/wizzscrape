@@ -87,10 +87,10 @@ for DST in Dests:
  db= psycopg2.connect( host="manegerdb.cjjasb6ckbh1.us-east-1.rds.amazonaws.com", database="GabiScrape", user="root", password="ManegerDB")
  curs = db.cursor()
  for i in Out:
-  curs.execute("INSERT INTO wizz_flights (scrape_time, direction, dst, price, time, date) VALUES (%s, %s, %s, %s, %s, %s)", (str(scrape_time), 1, DST, int(i['price']), i['time'], str(i['year'])+"-"+str(i['month'])+"-"+str(i['day'])))
+  curs.execute("INSERT INTO easyjet_flights (scrape_time, direction, dst, price, time, date) VALUES (%s, %s, %s, %s, %s, %s)", (str(scrape_time), 1, DST, int(i['price']), i['time'], str(i['year'])+"-"+str(i['month'])+"-"+str(i['day'])))
 
  for i in Inc:
-  curs.execute("INSERT INTO wizz_flights (scrape_time, direction, dst, price, time, date) VALUES (%s, %s, %s, %s, %s, %s)", (str(scrape_time), 2, DST, int(i['price']), i['time'], str(i['year'])+"-"+str(i['month'])+"-"+str(i['day'])))
+  curs.execute("INSERT INTO easyjet_flights (scrape_time, direction, dst, price, time, date) VALUES (%s, %s, %s, %s, %s, %s)", (str(scrape_time), 2, DST, int(i['price']), i['time'], str(i['year'])+"-"+str(i['month'])+"-"+str(i['day'])))
 
  db.commit()
 
