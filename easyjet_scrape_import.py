@@ -12,6 +12,7 @@ class getFlight(HTMLParser):
   self.tmp_date=""
   self.tmp_price=""
   self.tmp_data=""
+  self.tmp_time=""
   self.day=0
   self.endday=0
   self.price=0
@@ -28,13 +29,16 @@ class getFlight(HTMLParser):
   if tag=="div":
    for a,b in attrs:
     if a=="class" and b=="OutboundDaySlider": self.direction=1
-    if a=="class" and b=="ReturnDaySlider ": self.direction=2
-    if a=="class" and b=="day": self.day=1
+    if a=="class" and b=="ReturnDaySlider": self.direction=2
+    if a=="class" and b=="day": 
+     self.day=1
+     self.tmp_date=""
     if a=="class" and b=="day nextDay": self.day=0
   if tag=="span":
    for a,b in attrs:
     if a=="class" and b.split()[0]=="dayDate" : self.date=1
     if a=="class" and b[0:5]=="price" : self.price=1
+    if a=="aria-hidden" and b=="true" : self.time=1
  def handle_data(self, data):
   cur_data=data.strip()
   if cur_data!="" and self.day==1 : 
@@ -42,18 +46,23 @@ class getFlight(HTMLParser):
     self.tmp_price += cur_data
    if self.date==1:
     self.tmp_date += cur_data
+   if self.time==1:
+    self.tmp_time += cur_data + " "
  def handle_endtag(self, tag):
   if tag=="span":
    self.price=0
    self.date=0
-  if tag=="ul" and self.day==1:
+   self.time=0
+  if tag=="li" and self.day==1:
    if self.tmp_price!="":
     self._vals['weekday']=self.tmp_date.split()[0]
     self._vals['day']=self.tmp_date.split()[1]
     self._vals['month']=datetime.datetime.strptime(self.tmp_date.split()[2], "%b").strftime("%m")
-    self._vals['price']=int(strip_non_ascii(self.tmp_price)*eur+0.5)
+    self._vals['price']=int(float(strip_non_ascii(self.tmp_price))*eur+0.5)
     self._vals['priceE']=strip_non_ascii(self.tmp_price)
     self._vals['direction']=self.direction
+    self._vals['dep_time']=self.tmp_time.split()[1]
+    self._vals['arr_time']=self.tmp_time.split()[3]
     tmp_year=self.year
     if self.new_year==1:
      self._vals['year']=str(tmp_year+1)
@@ -66,5 +75,5 @@ class getFlight(HTMLParser):
      self._vals['year']=str(tmp_year)
     self.data.append(self._vals)
    self._vals={}
-   self.tmp_date=""
    self.tmp_price=""
+   self.tmp_time=""

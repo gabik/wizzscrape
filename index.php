@@ -172,7 +172,7 @@ font-weight: bold;
 </HEAD><BODY>
 <div id=wrap name=wrap>
 <div name=CalAll id=CalAll>
-<p> <?php print "Last Updated: " . exec('ls -rt logs/ | tail -1 | xargs -I {} tail -1  logs/{}'); ?> </p>
+<p> <?php print "Last Updated: " . exec('./get_lastupdate.sh | head -1'); ?> </p>
 <div name="byprice" id="byprice">
 Sort by Price:
 <a href="output/BUD">Budapest</a>  

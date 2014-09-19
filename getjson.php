@@ -32,7 +32,7 @@ $first=1;
 while ($row = pg_fetch_row($result)) {
  $direction = "";
  if ($first == 1) { $json=$json."{"; $first=0; } else {$json=$json.", {"; }
- $json=$json.'"textColor": "#000000", "bordercolor":"'.$color[$row[2]."b"].'", "color": "'.$color[$row[2]."c"].'", "allday": "true", "title": "'.$directions[$row[1]].': '.$row[2].' '.$row[3].'", "start": "'.$row[5].'"';
+ $json=$json.'"textColor": "#000000", "bordercolor":"'.$color[$row[2]."b"].'", "color": "'.$color[$row[2]."c"].'", "allday": "true", "title": "'.$directions[$row[1]].': '.$row[2].' '.$row[3].' '.$row[5].'", "start": "'.$row[4].'"';
  $json=$json."}";
 }
 $json=$json."]";

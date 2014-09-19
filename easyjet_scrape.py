@@ -2,11 +2,11 @@ import requests
 import psycopg2
 from psycopg2 import extras
 import re
-from HTMLParser import HTMLParser
+from HTMLParser import HTMLParser, HTMLParseError
 import sys
 import datetime
 import time
-from easyjet_scrape_import import getViewState, getFlight
+from easyjet_scrape_import import getFlight
 from general_scrape import find_all, clean_dup, strip_non_ascii
 
 # ARGS:
@@ -52,12 +52,16 @@ for DST in Dests:
   r1 = s.get(url)
   #r2 = s.get('http://www.easyjet.com/EN/Booking.mvc')
   prP = getFlight(cur_year,new_year)
-  prP.feed(r1.text)
+  try:
+   prP.feed(r1.text)
+  except HTMLParseError, err:
+   print "HTMLParseError: %s" % err
   if debug_flag:
    print Start.strftime("%d/%m/%Y")
    print Ret.strftime("%d/%m/%Y")
    print len(prP.data)
-   print prP.data
+   for i in prP.data:
+    print i
    print r1
    print '-------'
   flightsList.extend(prP.data)
@@ -65,49 +69,17 @@ for DST in Dests:
   if Start > datetime.date(cur_year+1, 2, 10) : new_year=1
   Start=Ret 
  print ""
- Out=[]
- Inc=[]
- for i in flightsList:
-  if i['direction'] == 4 : 
-   Out.append(i) 
-  else: 
-   Inc.append(i)
- Out=clean_dup(Out)
- Inc=clean_dup(Inc)
+ flightsList=clean_dup(flightsList)
  if debug_flag:
   print "Debug: After clean_dup: Out, Inc: "
-  print Out
-  print Inc
- Out = sorted(Out, key=lambda k: int(k['price']))
- Inc = sorted(Inc, key=lambda k: int(k['price']))
- if debug_flag:
-  print "Debug: After sorting: Out, Inc: "
-  print Out
-  print Inc
+  for i in flightsList:
+   print i
  db= psycopg2.connect( host="manegerdb.cjjasb6ckbh1.us-east-1.rds.amazonaws.com", database="GabiScrape", user="root", password="ManegerDB")
  curs = db.cursor()
- for i in Out:
-  curs.execute("INSERT INTO easyjet_flights (scrape_time, direction, dst, price, time, date) VALUES (%s, %s, %s, %s, %s, %s)", (str(scrape_time), 1, DST, int(i['price']), i['time'], str(i['year'])+"-"+str(i['month'])+"-"+str(i['day'])))
-
- for i in Inc:
-  curs.execute("INSERT INTO easyjet_flights (scrape_time, direction, dst, price, time, date) VALUES (%s, %s, %s, %s, %s, %s)", (str(scrape_time), 2, DST, int(i['price']), i['time'], str(i['year'])+"-"+str(i['month'])+"-"+str(i['day'])))
+ for i in flightsList:
+  curs.execute("INSERT INTO easyjet_flights (scrape_time, direction, dst, price, dep_time, arr_time, date) VALUES (%s, %s, %s, %s, %s, %s, %s)", (str(scrape_time), i['direction'], DST, int(i['price']), i['dep_time'], i['arr_time'], str(i['year'])+"-"+str(i['month'])+"-"+str(i['day'])))
 
  db.commit()
-
- fd = open("output/"+DST, "w")
- fd.write( "Outgoing: \n")
- for i in Out:
-  new_date = str(i['day']) + "/" + str(i['month']) + "/" + str(i['year'])
-  fd.write("{0:<15} {1:<15} {2:<25} {3:<15}".format(i['weekday'],new_date,i['time'],i['price']))
-  fd.write("\n")
- fd.write("\n")
- fd.write( "___\n")
- fd.write( "Incoming: \n")
- for i in Inc:
-  new_date = str(i['day']) + "/" + str(i['month']) + "/" + str(i['year'])
-  fd.write("{0:<15} {1:<15} {2:<25} {3:<15}".format(i['weekday'],new_date,i['time'],i['price']))
-  fd.write("\n")
- fd.close()
 
 print "Done!"
 print datetime.datetime.now()
