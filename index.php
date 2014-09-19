@@ -36,7 +36,16 @@ $(document).ready(function() {
             curSource[4],
             curSource[5],
             curSource[6],
-            curSource[7]
+            curSource[7],
+            '/getjson.php?dst=BSL&company=easyjet',
+            '/getjson.php?dst=GVA&company=easyjet',
+            '/getjson.php?dst=HAM&company=easyjet',
+            '/getjson.php?dst=LGW&company=easyjet',
+            '/getjson.php?dst=LTN&company=easyjet',
+            '/getjson.php?dst=MAN&company=easyjet',
+            '/getjson.php?dst=MXP&company=easyjet',
+            '/getjson.php?dst=FCO&company=easyjet',
+            '/getjson.php?dst=SXF&company=easyjet',
         ]
     })
 
@@ -186,39 +195,35 @@ Sort by Price:
 </div>
 
 <div name="buttons" id="buttons">
-<div class="BUD">
-    <input type="checkbox" checked="checked" name="e1" id="e1" />
-    <label for="e1">Budapest</label>
+<div>Wizz: </div>
+<div class="BUD"> <input type="checkbox" checked="checked" name="e1" id="e1" /> <label for="e1">Budapest</label> </div>
+<div class="CLJ"> <input type="checkbox" checked="checked" name="e2" id="e2" /> <label for="e2">Cluj-Napoca</label> </div>
+<div class="KTW"> <input type="checkbox" checked="checked" name="e3" id="e3" /> <label for="e3">Katowice</label> </div>
+<div class="OTP"> <input type="checkbox" checked="checked" name="e4" id="e4" /> <label for="e4">Bucharest</label> </div>
+<div class="PRG"> <input type="checkbox" checked="checked" name="e5" id="e5" /> <label for="e5">Prague</label> </div>
+<div class="SOF"> <input type="checkbox" checked="checked" name="e6" id="e6" /> <label for="e6">Sofia</label> </div>
+<div class="VNO"> <input type="checkbox" checked="checked" name="e7" id="e7" /> <label for="e7">Vilnius</label> </div>
+<div class="WAW"> <input type="checkbox" checked="checked" name="e8" id="e8" /> <label for="e8">Warsaw</label> </div>
 </div>
-<div class="CLJ">
-    <input type="checkbox" checked="checked" name="e2" id="e2" />
-    <label for="e2">Cluj-Napoca</label>
+
+<BR>
+<BR>
+<BR>
+<div name="buttons1" id="buttons1">
+<div>Easyjet: </div>
+<div class="BSL"> <input type="checkbox" checked="checked" name="e1" id="e1" /> <label for="e1">Basel-Mulhouse</label> </div>
+<div class="GVA"> <input type="checkbox" checked="checked" name="e2" id="e2" /> <label for="e2">Geneva</label> </div>
+<div class="HAM"> <input type="checkbox" checked="checked" name="e3" id="e3" /> <label for="e3">Hamburg</label> </div>
+<div class="LGW"> <input type="checkbox" checked="checked" name="e4" id="e4" /> <label for="e4">London-Gatwick</label> </div>
+<div class="LTN"> <input type="checkbox" checked="checked" name="e5" id="e5" /> <label for="e5">London-Luton</label> </div>
+<div class="MAN"> <input type="checkbox" checked="checked" name="e6" id="e6" /> <label for="e6">Manchester</label> </div>
+<div class="MXP"> <input type="checkbox" checked="checked" name="e7" id="e7" /> <label for="e7">Milan</label> </div>
+<div class="FCO"> <input type="checkbox" checked="checked" name="e8" id="e8" /> <label for="e8">Rome</label> </div>
+<div class="SXX"> <input type="checkbox" checked="checked" name="e9" id="e9" /> <label for="e9">Berlin</label> </div>
 </div>
-<div class="KTW">
-    <input type="checkbox" checked="checked" name="e3" id="e3" />
-    <label for="e3">Katowice</label>
-</div>
-<div class="OTP">
-    <input type="checkbox" checked="checked" name="e4" id="e4" />
-    <label for="e4">Bucharest</label>
-</div>
-<div class="PRG">
-    <input type="checkbox" checked="checked" name="e5" id="e5" />
-    <label for="e5">Prague</label>
-</div>
-<div class="SOF">
-    <input type="checkbox" checked="checked" name="e6" id="e6" />
-    <label for="e6">Sofia</label>
-</div>
-<div class="VNO">
-    <input type="checkbox" checked="checked" name="e7" id="e7" />
-    <label for="e7">Vilnius</label>
-</div>
-<div class="WAW">
-    <input type="checkbox" checked="checked" name="e8" id="e8" />
-    <label for="e8">Warsaw</label>
-</div>
-</div>
+
+
+
 <div><BR><BR><BR></div>
 <DIV id='calendar'></div>
 </div>
@@ -227,6 +232,7 @@ Sort by Price:
 <form name=routeForm method=post action=getroute.php>
 <select name=company id=company>
   <option value="wizz">WizzAir</option>
+  <option value="easyjet">Easyjet</option>
 </select>
 <br>
 <label for="minDays">Minimum Days: <output for=minDays id=mindaysoutput>4</output> </label><BR>

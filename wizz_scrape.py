@@ -19,10 +19,10 @@ new_year=0
 maxn=31#500
 arg_month=sys.argv[2]
 Start_orig = datetime.date.today()
+cur_year=Start_orig.year
 #Start_orig = datetime.date(2015,8,1)
 Start_orig += datetime.timedelta(days=(int(maxn)-1)*int(arg_month))
 Stop = Start_orig + datetime.timedelta(days=maxn)
-cur_year=Start_orig.year
 scrape_time = datetime.datetime.today()
 
 DDD = sys.argv[1]
