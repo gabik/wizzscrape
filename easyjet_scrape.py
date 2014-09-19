@@ -52,16 +52,13 @@ for DST in Dests:
   r1 = s.get(url)
   #r2 = s.get('http://www.easyjet.com/EN/Booking.mvc')
   prP = getFlight(cur_year,new_year)
-  prP.feed(r2.text)
+  prP.feed(r1.text)
   if debug_flag:
    print Start.strftime("%d/%m/%Y")
    print Ret.strftime("%d/%m/%Y")
-   print len(list(find_all(r2.text, "marketColumn")))
-   for s in find_all(r2.text, '<span class="price">'):
-    print strip_non_ascii(r2.text[s+20:r2.text.find('<', s+20, s+30)])
    print len(prP.data)
    print prP.data
-   print r2
+   print r1
    print '-------'
   flightsList.extend(prP.data)
   new_year=prP.new_year

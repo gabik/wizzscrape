@@ -3,7 +3,9 @@ import re
 from HTMLParser import HTMLParser
 import sys
 import datetime
-from general_scrape import find_all, clean_dup, strip_non_ascii
+from general_scrape import find_all, clean_dup, strip_non_ascii, get_currency
+
+eur=get_currency("eur")
 
 class getFlight(HTMLParser):
  def __init__(self, year, new_year):
@@ -49,8 +51,19 @@ class getFlight(HTMLParser):
     self._vals['weekday']=self.tmp_date.split()[0]
     self._vals['day']=self.tmp_date.split()[1]
     self._vals['month']=datetime.datetime.strptime(self.tmp_date.split()[2], "%b").strftime("%m")
-    self._vals['price']=strip_non_ascii(self.tmp_price)
+    self._vals['price']=int(strip_non_ascii(self.tmp_price)*eur+0.5)
+    self._vals['priceE']=strip_non_ascii(self.tmp_price)
     self._vals['direction']=self.direction
+    tmp_year=self.year
+    if self.new_year==1:
+     self._vals['year']=str(tmp_year+1)
+    else:
+     if int(self._vals['month'])==1 : 
+      tmp_year=self.year+1
+     elif int(self._vals['month'])==2 :
+      self.new_year=1
+      tmp_year=self.year+1
+     self._vals['year']=str(tmp_year)
     self.data.append(self._vals)
    self._vals={}
    self.tmp_date=""

@@ -4,7 +4,7 @@ $conn_string = "host=manegerdb.cjjasb6ckbh1.us-east-1.rds.amazonaws.com port=543
 
 $db = pg_pconnect($conn_string);
 
-$result = pg_query($db, "select b.* from (select max(scrape_time) max_scrape, date max_date from ".$_GET["company"]."_flights where date>'".$_GET["start"]."' and date<'".$_GET["end"]."' and dst='".$_GET["dst"]."' group by date ) a join ".$_GET["company"]."_flights b on a.max_date=b.date and a.max_scrape=b.scrape_time");
+$result = pg_query($db, "select b.* from (select max(scrape_time) max_scrape, date max_date, direction from ".$_GET["company"]."_flights where date>'".$_GET["start"]."' and date<'".$_GET["end"]."' and dst='".$_GET["dst"]."' group by date,direction ) a join ".$_GET["company"]."_flights b on a.max_date=b.date and a.max_scrape=b.scrape_time and a.direction=b.direction");
 $direction_result = pg_query($db, "select * from directions");
 $directions=array();
 while ($row = pg_fetch_row($direction_result)) { $directions[$row[0]] = $row[1]; }

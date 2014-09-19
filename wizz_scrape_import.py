@@ -64,7 +64,8 @@ class getFlight(HTMLParser):
   if self.date == 1: 
    self.tmp_date += data + " "
   if self.time == 1: 
-   self._vals['time'] = strip_non_ascii(data)
+   self._vals['dep_time'] = strip_non_ascii(data).split()[0]
+   self._vals['arr_time'] = strip_non_ascii(data).split()[1]
  def handle_endtag(self, tag):
   if tag == "h3" : self.header=0
   if tag == "span":

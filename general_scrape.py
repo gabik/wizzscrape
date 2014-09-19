@@ -1,4 +1,5 @@
 import re
+import requests
 
 def find_all(a_str, sub):
  start = 0
@@ -27,3 +28,6 @@ def strip_non_ascii(string):
  newstr=''.join(stripped)
  return re.sub(',', '', newstr)
 
+def get_currency(cur):
+ r=requests.get('http://fx-rate.net/'+str(cur)+'/ils')
+ return float(r.text[r.text.find('<div style="font-size:25px;color:black;margin-top:5px">'):r.text.find('<div style="font-size:25px;color:black;margin-top:5px">')+80].split('>')[1].split()[0])
