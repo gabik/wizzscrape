@@ -9,30 +9,40 @@ $direction_result = pg_query($db, "select * from directions");
 $directions=array();
 while ($row = pg_fetch_row($direction_result)) { $directions[$row[0]] = $row[1]; }
 $color=array();
-$color['BUDb']="#5173DA";
-$color['BUDc']="#99ABEA";
-$color['CLJc']="#F55656";
-$color['CLJb']="#963636";
-$color['KTWc']="#F073E5";
-$color['KTWb']="#874081";
-$color['PRGc']="#72A9F2";
-$color['PRGb']="#3E5D85";
-$color['SOFc']="#71F0C3";
-$color['SOFb']="#3C8269";
-$color['VNOc']="#85F277";
-$color['VNOb']="#477A40";
-$color['WAWc']="#EBF582";
-$color['WAWb']="#535730";
-$color['OTPc']="#EDC38C";
-$color['OTPb']="#735F45";
+$bcolor=array();
+for ($i=0;$i<9;$i+=1) {
+$bcolor[$i]="#".(string)dechex(7+$i).(string)dechex(7+$i).(string)dechex($i).(string)dechex($i).(string)dechex(7+$i).(string)dechex(7+$i);
+}
+$i=0;
+$destinations=pg_query($db, "select * from destinations");
+while ($row = pg_fetch_row($destinations)){
+ if ($row[0]=="wizz") {
+  $color[$row[1]."c"]=$bcolor[$i];
+  $color[$row[1]."b"]=$bcolor[$i];
+  $i+=1;
+ }
+}
 
+for ($i=0;$i<9;$i+=1) {
+$bcolor[$i]="#".(string)dechex(7+$i).(string)dechex(7+$i).(string)dechex(3+$i).(string)dechex(3+$i).(string)dechex($i).(string)dechex($i);
+}
+$destinations=pg_query($db, "select * from destinations");
+$i=0;
+while ($row = pg_fetch_row($destinations)){
+ if ($row[0]=="easyjet") {
+  $color[$row[1]."c"]=$bcolor[$i];
+  $color[$row[1]."b"]=$bcolor[$i];
+  $i+=1;
+ }
+}
 
 $json="[";
 $first=1;
 while ($row = pg_fetch_row($result)) {
  $direction = "";
  if ($first == 1) { $json=$json."{"; $first=0; } else {$json=$json.", {"; }
- $json=$json.'"textColor": "#000000", "bordercolor":"'.$color[$row[2]."b"].'", "color": "'.$color[$row[2]."c"].'", "allday": "true", "title": "'.$directions[$row[1]].': '.$row[2].' '.$row[3].'", "tooltip":"'.$row[5].'", "start": "'.$row[4].'"';
+ $tip="Dep: " . $row[5] . "<BR>Arr: " . $row[6];
+ $json=$json.'"textColor": "#fff", "bordercolor":"'.$color[$row[2]."b"].'", "color": "'.$color[$row[2]."c"].'", "allday": "true", "title": "'.$directions[$row[1]].': '.$row[2].' '.$row[3].'", "tooltip":"'.$tip.'", "start": "'.$row[4].'"';
  $json=$json."}";
 }
 $json=$json."]";

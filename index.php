@@ -18,6 +18,43 @@ while ($row = pg_fetch_row($companies_result)) {
 <link rel="stylesheet" type="text/css" href="lib/jquery.qtip.min.css">
 <link rel="stylesheet" type="text/css" href="lib/calendar.css">
 
+<style>
+
+<?php
+
+$destinations=pg_query($db, "select * from destinations");
+while ($row = pg_fetch_row($destinations)){
+ echo ".".$row[1].", ";
+}
+echo "fake { float: left; display: inline-block;padding: 8px;  margin-right: 10px; }";
+
+for ($i=0;$i<9;$i+=1) {
+$bcolor[$i]="#".(string)dechex(7+$i).(string)dechex(7+$i).(string)dechex($i).(string)dechex($i).(string)dechex(7+$i).(string)dechex(7+$i);
+}
+$i=0;
+$destinations=pg_query($db, "select * from destinations");
+while ($row = pg_fetch_row($destinations)){
+ if ($row[0]=="wizz") {
+ echo ".".$row[1]." { background-color: ".$bcolor[$i]."; color: #fff; border: solid 1px ".$bcolor[$i]."; }";
+  $i+=1;
+ }
+}
+
+for ($i=0;$i<9;$i+=1) {
+$bcolor[$i]="#".(string)dechex(7+$i).(string)dechex(7+$i).(string)dechex(3+$i).(string)dechex(3+$i).(string)dechex($i).(string)dechex($i);
+}
+$destinations=pg_query($db, "select * from destinations");
+$i=0;
+while ($row = pg_fetch_row($destinations)){
+ if ($row[0]=="easyjet") {
+ echo ".".$row[1]." { background-color: ".$bcolor[$i]."; color: #fff; border: solid 1px ".$bcolor[$i]."; }";
+  $i+=1;
+ }
+}
+
+?>
+
+</style>
 <script>
 function update1(val) {document.querySelector('#mindaysoutput').value = val; }
 function update2(val) {document.querySelector('#maxdaysoutput').value = val; }
@@ -54,7 +91,7 @@ echo "curSource[$y]\n";
 ?>
         ],
     eventRender: function(event, element) {
-     element.qtip({content: event.tooltip});
+     element.qtip({content: event.tooltip, style: {padding: 5, background: '#A2D959', color: 'black', color: 'black', border: {width: 7,radius: 5,color: '#A2D959'}}});
     }
 
     })
@@ -108,7 +145,7 @@ foreach ($companies as $cmp) {
    echo '<div class='.$destinations[$y][1].'> <input type="checkbox" checked="checked" name="e'.$y.'" id="e'.$y.'" /> <label for="e'.$y.'">'.$destinations[$y][2].'</label> </div>'."\n";
   }
  }
- echo "</div>\n\n<BR>";
+ echo "</div>\n\n<BR><BR><BR>";
 }
 ?>
 
