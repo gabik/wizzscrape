@@ -178,7 +178,11 @@ table {
 $conn_string = "host=manegerdb.cjjasb6ckbh1.us-east-1.rds.amazonaws.com port=5432 dbname=GabiScrape user=root password=ManegerDB";
 $db = pg_pconnect($conn_string);
 
-$result = pg_query($db, "select distinct a.date, b.date, c.destination, a.price, b.price, a.price+b.price total , (b.date - a.date) dd from ".$_POST['company']."_flights a join ".$_POST['company']."_flights b on a.dst=b.dst join (select * from destinations where company='".$_POST['company']."') c on a.dst=c.airport  where a.direction=1 and b.direction=2 and (b.date - a.date)>=".$_POST['minDays']." and (b.date - a.date)<=".$_POST['maxDays']." and (a.price+b.price)<=".$_POST['price']." order by total;");
+if ($_POST['dst']=="ALL") {
+ $result = pg_query($db, "select distinct a.date, b.date, c.destination, a.price, b.price, a.price+b.price total , (b.date - a.date) dd from ".$_POST['company']."_flights a join ".$_POST['company']."_flights b on a.dst=b.dst join (select * from destinations where company='".$_POST['company']."') c on a.dst=c.airport  where a.direction=1 and b.direction=2 and (b.date - a.date)>=".$_POST['minDays']." and (b.date - a.date)<=".$_POST['maxDays']." and (a.price+b.price)<=".$_POST['price']." order by total;");
+} else {
+ $result = pg_query($db, "select distinct a.date, b.date, c.destination, a.price, b.price, a.price+b.price total , (b.date - a.date) dd from ".$_POST['company']."_flights a join ".$_POST['company']."_flights b on a.dst=b.dst join (select * from destinations where company='".$_POST['company']."' and airport='".$_POST['dst']."') c on a.dst=c.airport  where a.direction=1 and b.direction=2 and (b.date - a.date)>=".$_POST['minDays']." and (b.date - a.date)<=".$_POST['maxDays']." and (a.price+b.price)<=".$_POST['price']." order by total;");
+}
 
 pg_close();
 ?>

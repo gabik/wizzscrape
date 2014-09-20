@@ -118,9 +118,20 @@ foreach ($companies as $cmp) {
 <div id='route'>
 <p id=rhead>Search by days and price:</p>
 <form name=routeForm method=post action=getroute.php>
+<label >Company: </label><BR>
 <select name=company id=company>
   <option value="wizz">WizzAir</option>
   <option value="easyjet">Easyjet</option>
+</select>
+<br>
+<label>Destination:</label><BR>
+<select name=dst id=dst>
+<option value="ALL">All</option>
+<?php
+foreach ($destinations as $dst) {
+echo '<option value="'.$dst[1].'">'.$dst[2].'</option>'."\n";
+}
+?>
 </select>
 <br>
 <label for="minDays">Minimum Days: <output for=minDays id=mindaysoutput>4</output> </label><BR>
