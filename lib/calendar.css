@@ -1,0 +1,84 @@
+
+	body {
+		margin-top: 10px;
+		text-align: center;
+		font-size: 14px;
+		font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
+	}
+
+#buttons { width: 900px; margin: 0 auto; }
+#calendar { width: 900px; margin: 0 auto; display: inline-block; }
+#CalAll {float: center; display: inline-block;}
+#route { margin: 50px; float: left; display: inline-block;  text-align: left;}
+
+.BUD, .CLJ, .KTW, .OTP, .PRG, .SOF, .VNO, .WAW {
+  float: left; display: inline-block;padding: 8px;  margin-right: 10px;
+}
+
+.BUD { background-color: #99ABEA; color: #fff; border: solid 1px #5173DA; }
+.CLJ { background-color: #F55656; color: #fff; border: solid 1px #963636; }
+.KTW { background-color: #F073E5; color: #fff; border: solid 1px #874081; }
+.PRG { background-color: #72A9F2; color: #fff; border: solid 1px #3E5D85; }
+.SOF { background-color: #71F0C3; color: #fff; border: solid 1px #3C8269; }
+.VNO { background-color: #85F277; color: #fff; border: solid 1px #477A40; }
+.WAW { background-color: #EBF582; color: #fff; border: solid 1px #535730; }
+.OTP { background-color: #EDC38C; color: #fff; border: solid 1px #735F45; }
+#byprice { background-color:#F5AF2C; color: #000; border: solid 1px #99FFFF; width: 900px; margin: 10px auto; padding: 5px;}
+#byprice a:link { color: #000;  padding: 5px }
+#byprice a:visited { color: #000;  padding: 5px }
+
+
+input[type=range]{
+    -webkit-appearance: none;
+    margin: 5px 10px 20px 0;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+    width: 500px;
+    height: 8px;
+    background: #ddd;
+    border: none;
+    border-radius: 3px;
+}
+
+input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    border: none;
+    height: 16px;
+    width: 26px;
+    border-radius: 25%;
+    background: #baa;
+    margin-top: -4px;
+}
+
+input[type=range]:focus {
+    outline: none;
+}
+
+input[type=range]:focus::-webkit-slider-runnable-track {
+    background: #ccc;
+}
+
+input[type=submit] {
+   width: 130px;
+   height: 30px;
+   overflow: hidden;
+   border: 1px solid #ccc;
+   margin: 0px 0px 10px 0;
+-webkit-box-shadow: 1px 1px 5px 0px rgba(50, 50, 50, 0.68);
+-moz-box-shadow:    1px 1px 5px 0px rgba(50, 50, 50, 0.68);
+box-shadow:         1px 1px 5px 0px rgba(50, 50, 50, 0.68);
+}
+
+select {
+   width: 140px;
+   height: 30px;
+   overflow: hidden;
+   background: #ddd;
+   border: 1px solid #ccc;
+   margin: 0px 0px 10px 0;
+}
+
+p[id=rhead]{
+font-weight: bold;
+}
