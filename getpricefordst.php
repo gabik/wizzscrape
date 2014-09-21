@@ -1,8 +1,9 @@
 <HTML>
 <HEAD><TITLE>Search results - Gabi</TITLE>
 <script src='lib/jquery.min.js'></script>
-<script src="lib/stupidtable.min.js?dev"></script>
+<script src="lib/jquery.dataTables.min.js"></script>
 <link rel="stylesheet" type="text/css" href="lib/table.css">
+<link rel="stylesheet" type="text/css" href="lib/jquery.dataTables.min.css">
 
 <script>
     $(function(){
@@ -23,7 +24,7 @@ $db = pg_pconnect($conn_string);
 $query="
 select a.*, c.direction from (select * from ".$_GET["cmp"]."_flights_v where dst='".$_GET["dst"]."') a join directions c on a.direction=c.id order by price
 ";
-echo $query;
+#echo $query;
 $result = pg_query($db, $query);
 #"select b.*, c.direction from (select max(scrape_time) max_scrape, date max_date, direction from ".$_GET["cmp"]."_flights where dst='".$_GET["dst"]."' group by date,direction ) a join ".$_GET["cmp"]."_flights b on a.max_date=b.date and a.max_scrape=b.scrape_time and a.direction=b.direction join directions c on a.direction=c.id order by price");
 
