@@ -26,7 +26,7 @@ $destinations=pg_query($db, "select * from destinations");
 while ($row = pg_fetch_row($destinations)){
  echo ".".$row[1].", ";
 }
-echo "fake { float: left; display: inline-block;padding: 8px;  margin-right: 10px; }";
+echo "fake { float: left; display: inline-block;padding: 8px;  margin-right: 1px; }";
 
 for ($i=0;$i<9;$i+=1) {
 $bcolor[$i]="#".(string)dechex(7+$i).(string)dechex(7+$i).(string)dechex($i).(string)dechex($i).(string)dechex(7+$i).(string)dechex(7+$i);
@@ -82,6 +82,7 @@ for ($y=0;$y<$i;$y++) {
 $(document).ready(function() {
 
     $('#calendar').fullCalendar({
+	height: "auto",
         eventSources: [
 <?php
 for ($y=0;$y<$i-1;$y++) {
@@ -124,29 +125,20 @@ for ($y=0;$y<$i;$y++) {
 <div id=wrap name=wrap>
 <div name=CalAll id=CalAll>
 <p> <?php print "Last Updated: " . exec('./get_lastupdate.sh | head -1'); ?> </p>
-<div name="byprice" id="byprice">
-Sort by Price:
-<a href="output/BUD">Budapest</a>  
-<a href="output/CLJ">Cluj-Napoca</a> 
-<a href="output/KTW">Katowice</a> 
-<a href="output/OTP">Bucharest</a> 
-<a href="output/PRG">Prague</a> 
-<a href="output/SOF">Sofia</a>  
-<a href="output/VNO">Vilnius</a> 
-<a href="output/WAW">Warsaw</a>  
-</div>
 
 <?php
+echo "<div name=buttonswrap>\n";
 foreach ($companies as $cmp) {
  echo '<div name="buttons" id="buttons">'."\n";
  echo "<div id=cmp_head name=cmp_head>$cmp</div>\n";
  for ($y=0;$y<$i;$y++) {
   if ($destinations[$y][0]==$cmp) {
-   echo '<div class='.$destinations[$y][1].'> <input type="checkbox" checked="checked" name="e'.$y.'" id="e'.$y.'" /> <label for="e'.$y.'">'.$destinations[$y][2].'</label> </div>'."\n";
+   echo '<div class='.$destinations[$y][1].'> <input type="checkbox" checked="checked" name="e'.$y.'" id="e'.$y.'" /> <label for="e'.$y.'">'.$destinations[$y][2].'<br><a class=ShowAll href="getpricefordst.php?cmp='.$cmp.'&dst='.$destinations[$y][1].'">Show All</a></label> </div>'."\n";
   }
  }
- echo "</div>\n\n<BR><BR><BR>";
+ echo "</div>\n";
 }
+echo "</div>\n";
 ?>
 
 <div><BR><BR><BR></div>
