@@ -1,12 +1,17 @@
 <HTML>
 <HEAD><TITLE>Search results - Gabi</TITLE>
 <script src='lib/jquery.min.js'></script>
-<script src="lib/stupidtable.min.js?dev"></script>
+<script src="lib/jquery.dataTables.min.js"></script>
 <link rel="stylesheet" type="text/css" href="lib/table.css">
+<link rel="stylesheet" type="text/css" href="lib/jquery.dataTables.min.css">
 
 <script>
     $(function(){
-        $("table").stupidtable();
+        $("table").DataTable(
+	 {
+          "iDisplayLength": 50
+	 }
+	);
     });
 </script>
 
@@ -17,68 +22,29 @@ $conn_string = "host=manegerdb.cjjasb6ckbh1.us-east-1.rds.amazonaws.com port=543
 $db = pg_pconnect($conn_string);
 
 if ($_POST['dst']=="ALL") {
- $result = pg_query($db, "
-select d.* from ( select a.scrape_time ast, b.scrape_time bst, a.date adt, b.date bdt, c.destination cdst, a.price apr, b.price bpr, a.price+b.price total , (b.date - a.date) dd from (
-  select b1.* from (
-   select max(scrape_time) max_scrape, date max_date, direction from ".$_POST['company']."_flights group by date,direction
-  ) a1
- join
- ".$_POST['company']."_flights b1
-  on a1.max_date=b1.date and a1.max_scrape=b1.scrape_time and a1.direction=b1.direction
-  order by price
- ) a
- join
- (
-  select b1.* from (
-   select max(scrape_time) max_scrape, date max_date, direction from ".$_POST['company']."_flights group by date,direction
- ) a1
- join
- ".$_POST['company']."_flights b1
-  on a1.max_date=b1.date and a1.max_scrape=b1.scrape_time and a1.direction=b1.direction
-  order by price
- ) b
-  on a.dst=b.dst
- join ( select * from destinations where company='".$_POST['company']."' ) c
-  on a.dst=c.airport
+ $query="
+select d.* from ( select a.scrape_time ast, b.scrape_time bst, a.date adt, b.date bdt, c.destination cdst, a.price apr, b.price bpr, a.price+b.price total , (b.date - a.date) dd from ".$_POST['company']."_flights_v a
+ join ".$_POST['company']."_flights_v b on a.dst=b.dst
+ join destinations c on a.dst=c.airport and c.company='".$_POST['company']."'
  where a.direction=1 and b.direction=2 and (b.date - a.date)>=".$_POST['minDays']." and (b.date - a.date)<=".$_POST['maxDays']." and (a.price+b.price)<=".$_POST['price']."
  order by total
  ) d
-");
-#select distinct a.date, b.date, c.destination, a.price, b.price, a.price+b.price total , (b.date - a.date) dd from ".$_POST['company']."_flights a join ".$_POST['company']."_flights b on a.dst=b.dst join (select * from destinations where company='".$_POST['company']."') c on a.dst=c.airport  where a.direction=1 and b.direction=2 and (b.date - a.date)>=".$_POST['minDays']." and (b.date - a.date)<=".$_POST['maxDays']." and (a.price+b.price)<=".$_POST['price']." order by total;");
+"; 
 } else {
- $result = pg_query($db, "
-select d.* from ( select a.scrape_time ast, b.scrape_time bst, a.date adt, b.date bdt, c.destination cdst, a.price apr, b.price bpr, a.price+b.price total , (b.date - a.date) dd from ( 
-  select b1.* from (
-   select max(scrape_time) max_scrape, date max_date, direction from ".$_POST['company']."_flights where dst='".$_POST['dst']."' group by date,direction
-  ) a1
- join
- ".$_POST['company']."_flights b1
-  on a1.max_date=b1.date and a1.max_scrape=b1.scrape_time and a1.direction=b1.direction
-  order by price
- ) a
- join
- (
-  select b1.* from (
-   select max(scrape_time) max_scrape, date max_date, direction from ".$_POST['company']."_flights where dst='".$_POST['dst']."' group by date,direction
- ) a1
- join
- ".$_POST['company']."_flights b1
-  on a1.max_date=b1.date and a1.max_scrape=b1.scrape_time and a1.direction=b1.direction
-  order by price
- ) b
-  on a.dst=b.dst 
- join ( select * from destinations where company='".$_POST['company']."' ) c
-  on a.dst=c.airport
+ $query="
+select d.* from ( select a.scrape_time ast, b.scrape_time bst, a.date adt, b.date bdt, c.destination cdst, a.price apr, b.price bpr, a.price+b.price total , (b.date - a.date) dd from ".$_POST['company']."_flights_v a
+ join ".$_POST['company']."_flights_v b on a.dst=b.dst and a.dst='".$_POST['dst']."'
+ join destinations c on a.dst=c.airport and c.company='".$_POST['company']."'
  where a.direction=1 and b.direction=2 and (b.date - a.date)>=".$_POST['minDays']." and (b.date - a.date)<=".$_POST['maxDays']." and (a.price+b.price)<=".$_POST['price']."
  order by total
- ) d"
-);
-#select distinct a.date, b.date, c.destination, a.price, b.price, a.price+b.price total , (b.date - a.date) dd from ".$_POST['company']."_flights a join ".$_POST['company']."_flights b on a.dst=b.dst join (select * from destinations where company='".$_POST['company']."' and airport='".$_POST['dst']."') c on a.dst=c.airport  where a.direction=1 and b.direction=2 and (b.date - a.date)>=".$_POST['minDays']." and (b.date - a.date)<=".$_POST['maxDays']." and (a.price+b.price)<=".$_POST['price']." order by total;");
+ ) d
+";
 }
-
+#echo $query;
+$result = pg_query($db, $query);
 pg_close();
 ?>
-<Table class="bordered" id="route">
+<Table id="route" class="table table-striped table-bordered display">
 <thead>
  <tr>
   <th data-sort="string"> Destination </th>

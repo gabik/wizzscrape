@@ -6,7 +6,11 @@
 
 <script>
     $(function(){
-        $("table").stupidtable();
+        $("table").DataTable(
+         {
+          "iDisplayLength": 50
+         }
+        );
     });
 </script>
 
@@ -16,11 +20,16 @@
 $conn_string = "host=manegerdb.cjjasb6ckbh1.us-east-1.rds.amazonaws.com port=5432 dbname=GabiScrape user=root password=ManegerDB";
 $db = pg_pconnect($conn_string);
 
-$result = pg_query($db, "select b.*, c.direction from (select max(scrape_time) max_scrape, date max_date, direction from ".$_GET["cmp"]."_flights where dst='".$_GET["dst"]."' group by date,direction ) a join ".$_GET["cmp"]."_flights b on a.max_date=b.date and a.max_scrape=b.scrape_time and a.direction=b.direction join directions c on a.direction=c.id order by price");
+$query="
+select a.*, c.direction from (select * from ".$_GET["cmp"]."_flights_v where dst='".$_GET["dst"]."') a join directions c on a.direction=c.id order by price
+";
+echo $query;
+$result = pg_query($db, $query);
+#"select b.*, c.direction from (select max(scrape_time) max_scrape, date max_date, direction from ".$_GET["cmp"]."_flights where dst='".$_GET["dst"]."' group by date,direction ) a join ".$_GET["cmp"]."_flights b on a.max_date=b.date and a.max_scrape=b.scrape_time and a.direction=b.direction join directions c on a.direction=c.id order by price");
 
 pg_close();
 ?>
-<Table class="bordered" id="route">
+<Table id="route" class="table table-striped table-bordered display">
 <thead>
  <tr>
   <th data-sort="string"> Destination </th>
