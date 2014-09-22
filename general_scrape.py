@@ -9,6 +9,11 @@ def find_all(a_str, sub):
   yield start
   start += len(sub) # use start += 1 to find overlapping matches
 
+def clean_dup_list(seq):
+ noDupes = []
+ [noDupes.append(i) for i in seq if not noDupes.count(i)]
+ return noDupes
+
 def clean_dup(lst):
  lst.sort()
  newlst=[]

@@ -25,9 +25,9 @@ while ($row = pg_fetch_row($companies_result)) {
 
 $destinations=pg_query($db, "select * from destinations");
 while ($row = pg_fetch_row($destinations)){
- echo ".".$row[1].", ";
+ echo ".".$row[0].$row[1].", ";
 }
-echo "fake { float: left; display: inline-block;padding: 3px;  margin-right: 1px; }";
+echo "fake { float: left; display: inline-block;padding: 3px;  margin-right: 1px; }\n";
 
 for ($i=0;$i<9;$i+=1) {
 $bcolor[$i]="#".(string)dechex(7+$i).(string)dechex(7+$i).(string)dechex($i).(string)dechex($i).(string)dechex(7+$i).(string)dechex(7+$i);
@@ -36,7 +36,7 @@ $i=0;
 $destinations=pg_query($db, "select * from destinations");
 while ($row = pg_fetch_row($destinations)){
  if ($row[0]=="wizz") {
- echo ".".$row[1]." { background-color: ".$bcolor[$i]."; color: #fff; border: solid 1px ".$bcolor[$i]."; }";
+ echo ".".$row[0].$row[1]." { background-color: ".$bcolor[$i]."; color: #fff; border: solid 1px ".$bcolor[$i]."; }\n";
   $i+=1;
  }
 }
@@ -48,10 +48,23 @@ $destinations=pg_query($db, "select * from destinations");
 $i=0;
 while ($row = pg_fetch_row($destinations)){
  if ($row[0]=="easyjet") {
- echo ".".$row[1]." { background-color: ".$bcolor[$i]."; color: #fff; border: solid 1px ".$bcolor[$i]."; }";
+ echo ".".$row[0].$row[1]." { background-color: ".$bcolor[$i]."; color: #fff; border: solid 1px ".$bcolor[$i]."; }\n";
   $i+=1;
  }
 }
+
+for ($i=0;$i<5;$i+=1) {
+$bcolor[$i]="#".(string)dechex($i*2).(string)dechex($i*2).(string)dechex(7+$i).(string)dechex(7+$i).(string)dechex(11+$i).(string)dechex(11+$i);
+}
+$destinations=pg_query($db, "select * from destinations");
+$i=0;
+while ($row = pg_fetch_row($destinations)){
+ if ($row[0]=="up") {
+ echo ".".$row[0].$row[1]." { background-color: ".$bcolor[$i]."; color: #fff; border: solid 1px ".$bcolor[$i]."; }\n";
+  $i+=1;
+ }
+}
+
 
 ?>
 
@@ -133,7 +146,7 @@ foreach ($companies as $cmp) {
  echo "<div id=cmp_head name=cmp_head>$cmp</div>\n";
  for ($y=0;$y<$i;$y++) {
   if ($destinations[$y][0]==$cmp) {
-   echo '<div class='.$destinations[$y][1].'> <input type="checkbox" checked="checked" name="e'.$y.'" id="e'.$y.'" /> <label for="e'.$y.'">'.$destinations[$y][2].'<br><a class=ShowAll href="getpricefordst.php?cmp='.$cmp.'&dst='.$destinations[$y][1].'">Show All</a></label> </div>'."\n";
+   echo '<div class='.$destinations[$y][0].$destinations[$y][1].'> <input type="checkbox" checked="checked" name="e'.$y.'" id="e'.$y.'" /> <label for="e'.$y.'">'.$destinations[$y][2].'<br><a class=ShowAll href="getpricefordst.php?cmp='.$cmp.'&dst='.$destinations[$y][1].'">Show All</a></label> </div>'."\n";
   }
  }
  echo "</div>\n";
@@ -151,6 +164,7 @@ echo "</div>\n";
 <select name=company id=company>
   <option value="wizz">WizzAir</option>
   <option value="easyjet">Easyjet</option>
+  <option value="up">Up by Elal</option>
 </select>
 <br>
 <label>Destination:</label><BR>

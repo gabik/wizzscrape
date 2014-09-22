@@ -41,7 +41,7 @@ select d.* from ( select a.scrape_time ast, b.scrape_time bst, a.date adt, b.dat
  ) d
 ";
 }
-#echo $query;
+echo $query;
 $result = pg_query($db, $query);
 pg_close();
 ?>
