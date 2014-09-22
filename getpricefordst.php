@@ -1,5 +1,6 @@
 <HTML>
 <HEAD><TITLE>Search results - Gabi</TITLE>
+<script src='lib/analytics.js'></script>
 <script src='lib/jquery.min.js'></script>
 <script src="lib/jquery.dataTables.min.js"></script>
 <link rel="stylesheet" type="text/css" href="lib/table.css">

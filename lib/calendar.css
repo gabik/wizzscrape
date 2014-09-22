@@ -6,12 +6,12 @@
 		font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
 	}
 
-#buttons { width: 1000px; height: 70px ;margin: 0 auto; }
+#buttons { width: 1000px; height: 60px ;margin: 0 auto; }
 #cmp_head { font-weight: bold; text-decoration: underline; }
 #calendar { width: 1000px; margin: 0 auto; display: inline-block; }
 .ShowAll { font-size: 9px; float: left; color: #fff;}
 #CalAll {float: center; display: inline-block;}
-#route { margin: 30px; float: left; display: inline-block;  text-align: left; border: 5px #000; background-color : #f7f7ff; padding: 10px;}
+#route { margin: 15px 30px; float: left; display: inline-block;  text-align: left; border: 5px #000; background-color : #f7f7ff; padding: 10px;}
 
 input[type=range]{
     -webkit-appearance: none;

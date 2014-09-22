@@ -10,6 +10,7 @@ while ($row = pg_fetch_row($companies_result)) {
 }
 ?>
 <HTML><HEAD><TITLE>Cal View - Wizz Gabi</TITLE>
+<script src='lib/analytics.js'></script>
 <link rel='stylesheet' href='fullcalendar/fullcalendar.css' />
 <script src='lib/jquery.min.js'></script>
 <script src='lib/moment.min.js'></script>
@@ -26,7 +27,7 @@ $destinations=pg_query($db, "select * from destinations");
 while ($row = pg_fetch_row($destinations)){
  echo ".".$row[1].", ";
 }
-echo "fake { float: left; display: inline-block;padding: 8px;  margin-right: 1px; }";
+echo "fake { float: left; display: inline-block;padding: 3px;  margin-right: 1px; }";
 
 for ($i=0;$i<9;$i+=1) {
 $bcolor[$i]="#".(string)dechex(7+$i).(string)dechex(7+$i).(string)dechex($i).(string)dechex($i).(string)dechex(7+$i).(string)dechex(7+$i);
@@ -124,7 +125,6 @@ for ($y=0;$y<$i;$y++) {
 </HEAD><BODY>
 <div id=wrap name=wrap>
 <div name=CalAll id=CalAll>
-<p> <?php print "Last Updated: " . exec('./get_lastupdate.sh | head -1'); ?> </p>
 
 <?php
 echo "<div name=buttonswrap>\n";
@@ -172,5 +172,14 @@ echo '<option value="'.$dst[1].'">'.$dst[2].'</option>'."\n";
 <input type=submit value=Search>
 </form>
 </div>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- 2fly1 -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:300px;height:250px"
+     data-ad-client="ca-pub-3421081986991175"
+     data-ad-slot="5484560444"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
 </div>
 </BODY></HTML>
