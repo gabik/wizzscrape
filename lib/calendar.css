@@ -1,4 +1,27 @@
 
+#dst_filter {
+-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+filter: alpha(opacity=80);
+-moz-opacity: 0.8;
+-khtml-opacity: 0.8;
+opacity: 0.8;
+border: 5px #d3d3e4 solid;
+
+background-color: #fafafa;
+
+-webkit-border-radius: 20px;
+-moz-border-radius: 20px;
+border-radius: 20px;
+
+-moz-box-shadow: 6px 6px 12px 2px #888888;
+-webkit-box-shadow: 6px 6px 12px 2px #888888;
+box-shadow: 6px 6px 12px 2px #888888;
+padding: 10px;
+}
+
+
+
+
 	body {
 		margin-top: 10px;
 		text-align: center;

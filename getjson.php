@@ -17,8 +17,7 @@ for ($i=0;$i<9;$i+=1) {
 $bcolor[$i]="#".(string)dechex(7+$i).(string)dechex(7+$i).(string)dechex($i).(string)dechex($i).(string)dechex(7+$i).(string)dechex(7+$i);
 }
 $i=0;
-$destinations=pg_query($db, "select * from destinations");
-$tmp_dst=$destinations;
+$tmp_dst=pg_query($db, "select * from destinations");
 while ($row = pg_fetch_row($tmp_dst)){
  if ($row[0]=="wizz") {
   $color[$row[1]."c"]=$bcolor[$i];
@@ -26,13 +25,12 @@ while ($row = pg_fetch_row($tmp_dst)){
   $i+=1;
  }
 }
+pg_result_seek($tmp_dst, 0);
 
 for ($i=0;$i<9;$i+=1) {
 $bcolor[$i]="#".(string)dechex(7+$i).(string)dechex(7+$i).(string)dechex(3+$i).(string)dechex(3+$i).(string)dechex($i).(string)dechex($i);
 }
 $i=0;
-$destinations=pg_query($db, "select * from destinations");
-$tmp_dst=$destinations;
 while ($row = pg_fetch_row($tmp_dst)){
  if ($row[0]=="easyjet") {
   $color[$row[1]."c"]=$bcolor[$i];
@@ -40,6 +38,20 @@ while ($row = pg_fetch_row($tmp_dst)){
   $i+=1;
  }
 }
+pg_result_seek($tmp_dst, 0);
+
+for ($i=0;$i<5;$i+=1) {
+$bcolor[$i]="#".(string)dechex($i*2).(string)dechex($i*2).(string)dechex(7+$i).(string)dechex(7+$i).(string)dechex(11+$i).(string)dechex(11+$i);
+}
+$i=0;
+while ($row = pg_fetch_row($tmp_dst)){
+ if ($row[0]=="up") {
+  $color[$row[1]."c"]=$bcolor[$i];
+  $color[$row[1]."b"]=$bcolor[$i];
+  $i+=1;
+ }
+}
+
 
 $json="[";
 $first=1;

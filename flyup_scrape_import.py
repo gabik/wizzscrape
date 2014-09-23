@@ -7,6 +7,22 @@ from general_scrape import find_all, clean_dup, strip_non_ascii
 
 fullpostdict={}
 
+def clean_dup_max(lst, direction):
+ lst.sort(key=lambda x: str(x['year'])+str(x['month'])+str(x['day']))
+ newlst=[]
+ last_elem=lst[0]
+ for i in lst:
+  if i['direction']==direction:
+   if (i['direction']==last_elem['direction']) and (i['year']==last_elem['year']) and (i['month']==last_elem['month']) and (i['day']==last_elem['day']) :
+    if i['maxprice']>last_elem['maxprice'] : last_elem['maxprice']=i['maxprice']
+    if i['price']>last_elem['price'] : last_elem['price']=i['price']
+   else:
+    if last_elem['direction']==direction:
+     newlst.append(i)
+    last_elem=i
+ return newlst
+
+
 class getPostVals(HTMLParser):
  def __init__(self):
   self.inputs=[]

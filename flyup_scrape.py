@@ -15,7 +15,7 @@ import flyup_scrape_import as up
 
 debug_flag=False
 new_year=0
-maxn=31#500
+maxn=31
 arg_month=sys.argv[2]
 Start_orig = datetime.date.today()
 cur_year=Start_orig.year
@@ -122,10 +122,17 @@ for DST in Dests:
   flightsList.extend(d4)
   Start=Start + datetime.timedelta(days=1)
  print ""
- fl2=clean_dup(flightsList)
+ if debug_flag:
+  print "Debug: efore clean_dup: Out, Inc: "
+  print flightsList
+ fl2=up.clean_dup_max(flightsList, 1)
+ fl3=up.clean_dup_max(flightsList, 2)
+ fl2.extend(fl3)
  if debug_flag:
   print "Debug: After clean_dup: Out, Inc: "
-  print fl2
+  for i in fl2:
+   print i
+
  db= psycopg2.connect( host="manegerdb.cjjasb6ckbh1.us-east-1.rds.amazonaws.com", database="GabiScrape", user="root", password="ManegerDB")
  curs = db.cursor()
  for i in fl2:
