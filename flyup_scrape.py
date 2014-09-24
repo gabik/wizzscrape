@@ -143,7 +143,6 @@ for DST in Dests:
    curs.execute("DELETE FROM flights WHERE direction=%s and dst=%s and date=%s and dep_time=%s and company=%s", (i['direction'],DST,str(i['year'])+"-"+str(i['month'])+"-"+str(i['day']),'00:00',str(company_id)))
   curs.execute("INSERT INTO flights (company, scrape_time, direction, dst, price, dep_time, arr_time, date) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)", (str(company_id), str(scrape_time), i['direction'], DST, int(i['price']), '00:00', '00:00', str(i['year'])+"-"+str(i['month'])+"-"+str(i['day'])))
   curs.execute("INSERT INTO archive_flights (company, scrape_time, direction, dst, price, dep_time, arr_time, date) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)", (str(company_id), str(scrape_time), i['direction'], DST, int(i['price']), '00:00', '00:00', str(i['year'])+"-"+str(i['month'])+"-"+str(i['day'])))
-  #curs.execute("INSERT INTO up_flights (scrape_time, direction, dst, price, max_price, dep_time, arr_time, date) VALUES (%s, %s, %s, %s, %s, '00:00', '00:00', %s)" , (str(scrape_time), str(i['direction']), DST, str(int(i['price'])), str(int(i['maxprice'])), str(i['year'])+"-"+str(i['month'])+"-"+str(i['day'])))
 
  db.commit()
 
