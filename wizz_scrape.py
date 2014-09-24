@@ -127,28 +127,23 @@ for DST in Dests:
   print Inc
  db= psycopg2.connect( host="manegerdb.cjjasb6ckbh1.us-east-1.rds.amazonaws.com", database="GabiScrape", user="root", password="ManegerDB")
  curs = db.cursor()
+ curs.execute("select id from companies where name='wizz'")
+ company_id=curs.fetchone()[0]
  for i in Out:
-  curs.execute("INSERT INTO wizz_flights (scrape_time, direction, dst, price, dep_time, arr_time, date) VALUES (%s, %s, %s, %s, %s, %s, %s)", (str(scrape_time), 1, DST, int(i['price']), i['dep_time'], i['arr_time'],str(i['year'])+"-"+str(i['month'])+"-"+str(i['day'])))
+  curs.execute("select * FROM flights WHERE direction=%s and dst=%s and date=%s and dep_time=%s and company=%s", (1,DST,str(i['year'])+"-"+str(i['month'])+"-"+str(i['day']),i['dep_time'],str(company_id)))
+  if (len(curs.fetchall()) > 0):
+   curs.execute("DELETE FROM flights WHERE direction=%s and dst=%s and date=%s and dep_time=%s and company=%s", (1,DST,str(i['year'])+"-"+str(i['month'])+"-"+str(i['day']),i['dep_time'],str(company_id)))
+  curs.execute("INSERT INTO flights (company, scrape_time, direction, dst, price, dep_time, arr_time, date) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)", (str(company_id),str(scrape_time), 1, DST, int(i['price']), i['dep_time'], i['arr_time'],str(i['year'])+"-"+str(i['month'])+"-"+str(i['day'])))
+  curs.execute("INSERT INTO archive_flights (company, scrape_time, direction, dst, price, dep_time, arr_time, date) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)", (str(company_id),str(scrape_time), 1, DST, int(i['price']), i['dep_time'], i['arr_time'],str(i['year'])+"-"+str(i['month'])+"-"+str(i['day'])))
 
  for i in Inc:
-  curs.execute("INSERT INTO wizz_flights (scrape_time, direction, dst, price, dep_time, arr_time, date) VALUES (%s, %s, %s, %s, %s, %s, %s)", (str(scrape_time), 2, DST, int(i['price']), i['dep_time'], i['arr_time'], str(i['year'])+"-"+str(i['month'])+"-"+str(i['day'])))
+  curs.execute("select * FROM flights WHERE direction=%s and dst=%s and date=%s and dep_time=%s and company=%s", (2,DST,str(i['year'])+"-"+str(i['month'])+"-"+str(i['day']),i['dep_time'],str(company_id)))
+  if (len(curs.fetchall()) > 0):
+   curs.execute("DELETE FROM flights WHERE direction=%s and dst=%s and date=%s and dep_time=%s and company=%s", (2,DST,str(i['year'])+"-"+str(i['month'])+"-"+str(i['day']),i['dep_time'],str(company_id)))
+  curs.execute("INSERT INTO flights (company, scrape_time, direction, dst, price, dep_time, arr_time, date) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)", (str(company_id),str(scrape_time), 2, DST, int(i['price']), i['dep_time'], i['arr_time'],str(i['year'])+"-"+str(i['month'])+"-"+str(i['day'])))
+  curs.execute("INSERT INTO archive_flights (company, scrape_time, direction, dst, price, dep_time, arr_time, date) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)", (str(company_id),str(scrape_time), 2, DST, int(i['price']), i['dep_time'], i['arr_time'],str(i['year'])+"-"+str(i['month'])+"-"+str(i['day'])))
 
  db.commit()
 
- #fd = open("output/"+DST, "w")
- #fd.write( "Outgoing: \n")
- #for i in Out:
-  #new_date = str(i['day']) + "/" + str(i['month']) + "/" + str(i['year'])
-  #fd.write("{0:<15} {1:<15} {2:<25} {3:<15}".format(i['weekday'],new_date,i['time'],i['price']))
-  #fd.write("\n")
- #fd.write("\n")
- #fd.write( "___\n")
- #fd.write( "Incoming: \n")
- #for i in Inc:
-  #new_date = str(i['day']) + "/" + str(i['month']) + "/" + str(i['year'])
-  #fd.write("{0:<15} {1:<15} {2:<25} {3:<15}".format(i['weekday'],new_date,i['time'],i['price']))
-  #fd.write("\n")
- #fd.close()
-#
 print "Done!"
 print datetime.datetime.now()
