@@ -1,4 +1,11 @@
 
+#filters_b {
+font: 700 1.75em Helvetica;
+text-shadow: 1px 1px 0 rgb(223, 227, 229), 4px 4px 0 rgba(0, 0, 0, 0.25);
+color: #3f3f3f;
+padding-top: 10px;
+}
+
 #dst_filter {
 z-index: 5;
 top: -230px;
@@ -19,7 +26,7 @@ border-radius: 20px;
 -moz-box-shadow: 6px 6px 12px 2px #888888;
 -webkit-box-shadow: 6px 6px 12px 2px #888888;
 box-shadow: 6px 6px 12px 2px #888888;
-padding: 50px 10px 30px 10px;
+padding: 50px 10px 10px 10px;
 }
 
 
@@ -32,9 +39,9 @@ padding: 50px 10px 30px 10px;
 		font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
 	}
 
-#buttons { width: 1000px; height: 60px ;margin: 0 auto; }
+#buttons { width: 880px; height: 60px ;margin: 0 auto; }
 #cmp_head { font-weight: bold; text-decoration: underline; }
-#calendar { width: 1000px; margin: 0 auto; margin-top: 30px; display: inline-block; }
+#calendar { width: 900px; margin: 0 auto; margin-top: 30px; display: inline-block; }
 .ShowAll { font-size: 9px; float: left; color: #fff;}
 #CalAll {float: center; display: inline-block;}
 #route { margin: 15px 30px; float: left; display: inline-block;  text-align: left; border: 5px #000; background-color : #f7f7ff; padding: 10px;}

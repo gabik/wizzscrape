@@ -110,7 +110,7 @@ $(document).ready(function() {
       } else { 
        $('#dst_filter').animate({top: "-230px"}, 300); 
        filters=0;
-       $('#filters_b').text("Show Filters");
+       $('#filters_b').text("Show filters and destinations list");
       }
      } 
     );
@@ -187,57 +187,64 @@ foreach ($companies as $cmp) {
 </SCRIPT>
 </HEAD><BODY>
 <div id=wrap name=wrap>
-<div name=CalAll id=CalAll>
+ <div name=CalAll id=CalAll>
 
-<div id="dst_filter">
+  <div id="dst_filter">
 <?php
-echo "<div name=buttonswrap>\n";
-foreach ($companies as $cmp) {
- echo '<div name="buttons" id="buttons">'."\n";
- echo "<div id=cmp_head name=cmp_head>$cmp</div>\n";
- foreach ($destinations[$cmp] as $dcmp) 
-   echo '<div class='.$cmp.$dcmp['airport'].'> <input type="checkbox" checked="checked" name="'.$cmp.$dcmp['airport'].'" id="'.$cmp.$dcmp['airport'].'" /> <label for="e'.$cmp.$dcmp['airport'].'">'.$dcmp['destination'].'<br><a class=ShowAll href="getpricefordst.php?cmp='.$cmp.'&dst='.$dcmp['airport'].'">Show All</a></label> </div>'."\n";
- echo "</div>\n";
-}
-echo "</div>\n";
-?>
-<div id=filters_b>
-Show Filters
-</div>
-</div>
-<div><BR><BR><BR></div>
-<DIV id='calendar'></div>
-</div>
-<div id='route'>
-<p id=rhead>Search by days and price:</p>
-<form name=routeForm method=post action=getroute.php>
-<label >Company: </label><BR>
-<select name=company id=company>
-  <option>Select Company</option>
-  <option value="wizz">WizzAir</option>
-  <option value="easyjet">Easyjet</option>
-  <option value="up">Up by Elal</option>
-</select>
-<br>
-<label>Destination:</label><BR>
-<select name=dst id=dst>
-<option value="">Select Company</option>
-</select>
-<br>
-<label for="minDays">Minimum Days: <output for=minDays id=mindaysoutput>4</output> </label><BR>
-<input type=range name=minDays id=minDays value=4 min=2 max=7 onchange="update1(value)"><BR>
-<label for="maxDays">Maximum Days: <output for=maxDays id=maxdaysoutput>6</output> </label></label><BR>
-<input type=range name=maxDays id=maxDays value=6 min=4 max=14 onchange="update2(value)"><BR>
-<label for="price">Maximum Roundtrip Price: <output for=price id=priceoutput>600</output> </label></label><BR>
-<input type=range name=price id=price value=600 min=200 max=2000 step=50 onchange="update3(value)"><BR>
-<input type=submit value=Search>
-</form>
-</div>
-</div>
-ADS
-<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-<!-- 2fly1 -->
-<ins class="adsbygoogle" style="display:inline-block;width:300px;height:250px" data-ad-client="ca-pub-3421081986991175" data-ad-slot="5484560444"></ins>
-<script> (adsbygoogle = window.adsbygoogle || []).push({}); </script>
-ADS
+	echo "<div name=buttonswrap>\n";
+	foreach ($companies as $cmp) {
+	 echo '<div name="buttons" id="buttons">'."\n";
+	 echo "<div id=cmp_head name=cmp_head>$cmp</div>\n";
+	 foreach ($destinations[$cmp] as $dcmp) 
+	   echo '<div class='.$cmp.$dcmp['airport'].'> <input type="checkbox" checked="checked" name="'.$cmp.$dcmp['airport'].'" id="'.$cmp.$dcmp['airport'].'" /> <label for="e'.$cmp.$dcmp['airport'].'">'.$dcmp['destination'].'<br><a class=ShowAll href="getpricefordst.php?cmp='.$cmp.'&dst='.$dcmp['airport'].'">Show All</a></label> </div>'."\n";
+	 echo "</div>\n";
+	}
+	echo "</div>\n";
+	?>
+   <div id=filters_b>
+    Show filters and destinations list
+   </div>
+  </div>
+  <div><BR><BR><BR></div>
+  <DIV id='calendar'></div>
+  </div>
+  <div id='route'>
+   <p id=rhead>Search by days and price:</p>
+   <form name=routeForm method=post action=getroute.php>
+   <label >Company: </label><BR>
+   <select name=company id=company>
+      <option value="ALL">All Companies</option>
+      <option value="wizz">WizzAir</option>
+      <option value="easyjet">Easyjet</option>
+      <option value="up">Up by Elal</option>
+   </select>
+   <br>
+   <label>Destination:</label><BR>
+   <select name=dst id=dst>
+    <option value="ALL">All Destinations</option>
+    <?php
+    foreach ($companies as $cmp) {
+     foreach ($destinations[$cmp] as $dcmp) { 
+      echo '<option value="'.$dcmp['airport'].'">'.$dcmp['destination'].' ('.$dcmp['airport'].')</option>'."\n";
+     }
+    }
+    ?>
+   </select>
+   <br>
+   <label for="minDays">Minimum Days: <output for=minDays id=mindaysoutput>4</output> </label><BR>
+   <input type=range name=minDays id=minDays value=4 min=2 max=7 onchange="update1(value)"><BR>
+   <label for="maxDays">Maximum Days: <output for=maxDays id=maxdaysoutput>6</output> </label></label><BR>
+   <input type=range name=maxDays id=maxDays value=6 min=4 max=14 onchange="update2(value)"><BR>
+   <label for="price">Maximum Roundtrip Price: <output for=price id=priceoutput>600</output> </label></label><BR>
+   <input type=range name=price id=price value=600 min=200 max=2000 step=50 onchange="update3(value)"><BR>
+   <input type=submit value=Search>
+   </form>
+  <div id=adsense>
+   <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+   <!-- 2fly600x300 -->
+   <ins class="adsbygoogle" style="display:inline-block;width:300px;height:600px" data-ad-client="ca-pub-3421081986991175" data-ad-slot="8172171649"></ins>
+   <script> (adsbygoogle = window.adsbygoogle || []).push({}); </script>
+  </div>
+  </div>
+ </div>
 </BODY></HTML>

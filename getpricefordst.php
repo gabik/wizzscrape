@@ -22,9 +22,13 @@
 
 $conn_string = "host=manegerdb.cjjasb6ckbh1.us-east-1.rds.amazonaws.com port=5432 dbname=GabiScrape user=root password=ManegerDB";
 $db = pg_pconnect($conn_string);
+$query="select id from companies where name='".$_GET['cmp']."'";
+$result = pg_query($db, $query);
+$company_id_a=pg_fetch_row($result);
+$company_id = $company_id_a[0];
 
 $query="
-select a.*, c.direction from (select scrape_time,direction,dst,price,date,dep_time,arr_time from ".$_GET["cmp"]."_flights_v where dst='".$_GET["dst"]."') a join directions c on a.direction=c.id order by price
+select a.*, c.direction from (select scrape_time,direction,dst,price,date,dep_time,arr_time from flights where dst='".$_GET["dst"]."' and company='".$company_id."') a join directions c on a.direction=c.id 
 ";
 #echo $query;
 $result = pg_query($db, $query);

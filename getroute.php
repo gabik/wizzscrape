@@ -16,26 +16,49 @@
 $conn_string = "host=manegerdb.cjjasb6ckbh1.us-east-1.rds.amazonaws.com port=5432 dbname=GabiScrape user=root password=ManegerDB";
 $db = pg_pconnect($conn_string);
 
-if ($_POST['dst']=="ALL") {
- $query="
-select d.* from ( select a.scrape_time ast, b.scrape_time bst, a.date adt, b.date bdt, c.destination cdst, a.price apr, b.price bpr, a.price+b.price total , (b.date - a.date) dd from ".$_POST['company']."_flights_v a
- join ".$_POST['company']."_flights_v b on a.dst=b.dst
- join destinations c on a.dst=c.airport and c.company='".$_POST['company']."'
- where a.direction=1 and b.direction=2 and (b.date - a.date)>=".$_POST['minDays']." and (b.date - a.date)<=".$_POST['maxDays']." and (a.price+b.price)<=".$_POST['price']."
- order by total
- ) d
-";
+$query="select id from companies where name='".$_POST['company']."'";
+$result = pg_query($db, $query);
+$company_id_a=pg_fetch_row($result);
+$company_id = $company_id_a[0];
+
+if ($_POST['company']=="ALL") {
+ if ($_POST['dst']=="ALL") {
+  $query="
+ select d.* from ( select a.scrape_time ast, b.scrape_time bst, a.date adt, b.date bdt, c.destination cdst, a.price apr, b.price bpr, a.price+b.price total , (b.date - a.date) dd , e.name from flights a
+  join flights b on a.dst=b.dst and a.company=b.company
+  join companies e on e.id=a.company
+  join destinations c on a.dst=c.airport and c.company=e.name
+  where a.direction=1 and b.direction=2 and (b.date - a.date)>=".$_POST['minDays']." and (b.date - a.date)<=".$_POST['maxDays']." and (a.price+b.price)<=".$_POST['price'].") d
+ ";
+ } else {
+  $query="
+ select d.* from ( select a.scrape_time ast, b.scrape_time bst, a.date adt, b.date bdt, c.destination cdst, a.price apr, b.price bpr, a.price+b.price total , (b.date - a.date) dd , e.name from flights a
+  join flights b on a.dst=b.dst and a.company=b.company and a.dst='".$_POST['dst']."'
+  join companies e on e.id=a.company
+  join destinations c on a.dst=c.airport and c.company=e.name
+  where a.direction=1 and b.direction=2 and (b.date - a.date)>=".$_POST['minDays']." and (b.date - a.date)<=".$_POST['maxDays']." and (a.price+b.price)<=".$_POST['price'].") d
+ ";
+ }
+
 } else {
- $query="
-select d.* from ( select a.scrape_time ast, b.scrape_time bst, a.date adt, b.date bdt, c.destination cdst, a.price apr, b.price bpr, a.price+b.price total , (b.date - a.date) dd from ".$_POST['company']."_flights_v a
- join ".$_POST['company']."_flights_v b on a.dst=b.dst and a.dst='".$_POST['dst']."'
- join destinations c on a.dst=c.airport and c.company='".$_POST['company']."'
- where a.direction=1 and b.direction=2 and (b.date - a.date)>=".$_POST['minDays']." and (b.date - a.date)<=".$_POST['maxDays']." and (a.price+b.price)<=".$_POST['price']."
- order by total
- ) d
-";
+ if ($_POST['dst']=="ALL") {
+  $query="
+ select d.* from ( select a.scrape_time ast, b.scrape_time bst, a.date adt, b.date bdt, c.destination cdst, a.price apr, b.price bpr, a.price+b.price total , (b.date - a.date) dd , e.name from flights a
+  join flights b on a.dst=b.dst 
+  join destinations c on a.dst=c.airport and c.company='".$_POST['company']."'
+  join companies e on e.id='".$company_id."'
+  where a.direction=1 and b.direction=2 and (b.date - a.date)>=".$_POST['minDays']." and (b.date - a.date)<=".$_POST['maxDays']." and (a.price+b.price)<=".$_POST['price'].") d
+ ";
+ } else {
+  $query="
+ select d.* from ( select a.scrape_time ast, b.scrape_time bst, a.date adt, b.date bdt, c.destination cdst, a.price apr, b.price bpr, a.price+b.price total , (b.date - a.date) dd , e.name from flights a
+  join flights b on a.dst=b.dst and a.dst='".$_POST['dst']."'
+  join destinations c on a.dst=c.airport and c.company='".$_POST['company']."'
+  join companies e on e.id='".$company_id."'
+  where a.direction=1 and b.direction=2 and (b.date - a.date)>=".$_POST['minDays']." and (b.date - a.date)<=".$_POST['maxDays']." and (a.price+b.price)<=".$_POST['price'].") d ";
+ }
 }
-#echo $query;
+echo $query;
 $result = pg_query($db, $query);
 pg_close();
 
@@ -89,7 +112,7 @@ pg_result_seek($result, 0);
     $("table").DataTable(
     {
       "iDisplayLength": 50,
-      "order": [[ 5 ,"asc" ]]
+      "order": [[ 6 ,"asc" ]]
     });
 
 
@@ -110,6 +133,7 @@ function ShowCal(){ $("#table-tab").hide("fast") ; $("#cal-tab").show("fast"); }
 <Table id="route" class="table table-striped table-bordered display">
 <thead>
  <tr>
+  <th data-sort="string"> Company </th>
   <th data-sort="string"> Destination </th>
   <th data-sort="string"> Outgoing </th>
   <th data-sort="string"> Ingoing </th>
@@ -123,6 +147,7 @@ function ShowCal(){ $("#table-tab").hide("fast") ; $("#cal-tab").show("fast"); }
   <?php  
 while ($row = pg_fetch_row($result)) {
  echo '<tr>';
+ echo '<td> '.$row[9].' </td>';
  echo '<td> '.$row[4].' </td>';
  echo '<td> '.$row[2].' </td>';
  echo '<td> '.$row[3].' </td>';
