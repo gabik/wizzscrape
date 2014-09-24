@@ -21,6 +21,34 @@ $result = pg_query($db, $query);
 $company_id_a=pg_fetch_row($result);
 $company_id = $company_id_a[0];
 
+$flight_join="";
+$companies_join="";
+$destination_join="";
+
+if ($_POST['company']=="ALL") {
+ $flight_join=" and a.company=b.company";
+ $companies_join="a.company";
+ $destination_join="e.name";
+ if ($_POST['dst']!=="ALL") {
+  $flight_join=$flight_join." and a.dst='".$_POST['dst']."'";
+ }
+} else {
+ $flight_join=" ";
+ $companies_join="'".$company_id."'";
+ $destination_join="'".$_POST['company']."'";
+ if ($_POST['dst']!="ALL") {
+  $flight_join=$flight_join." and a.dst='".$_POST['dst']."'";
+ }
+}
+
+$testquery="
+select d.* from ( select a.scrape_time ast, b.scrape_time bst, a.date adt, b.date bdt, c.destination cdst, a.price apr, b.price bpr, a.price+b.price total , (b.date - a.date) dd , e.name from flights a
+join flights b on a.dst=b.dst $flight_join
+join companies e on e.id=$companies_join
+join destinations c on a.dst=c.airport and c.company=$destination_join
+where a.direction=1 and b.direction=2 and (b.date - a.date)>=".$_POST['minDays']." and (b.date - a.date)<=".$_POST['maxDays']." and (a.price+b.price)<=".$_POST['price'].") d
+";
+
 if ($_POST['company']=="ALL") {
  if ($_POST['dst']=="ALL") {
   $query="
@@ -58,7 +86,6 @@ if ($_POST['company']=="ALL") {
   where a.direction=1 and b.direction=2 and (b.date - a.date)>=".$_POST['minDays']." and (b.date - a.date)<=".$_POST['maxDays']." and (a.price+b.price)<=".$_POST['price'].") d ";
  }
 }
-echo $query;
 $result = pg_query($db, $query);
 pg_close();
 
@@ -166,4 +193,10 @@ while ($row = pg_fetch_row($result)) {
 <div id="calendar"></div>
 </div>
 </div>
-</BODY></HTML>
+</BODY>
+<?php
+echo $query;
+echo "\n\n<BR><BR>\n\n";
+echo $testquery;
+?>
+</HTML>
