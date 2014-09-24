@@ -1,10 +1,13 @@
 
 #dst_filter {
+z-index: 5;
+top: -230px;
+position: absolute;
 -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
 filter: alpha(opacity=80);
 -moz-opacity: 0.8;
 -khtml-opacity: 0.8;
-opacity: 0.8;
+opacity: 0.93;
 border: 5px #d3d3e4 solid;
 
 background-color: #fafafa;
@@ -16,7 +19,7 @@ border-radius: 20px;
 -moz-box-shadow: 6px 6px 12px 2px #888888;
 -webkit-box-shadow: 6px 6px 12px 2px #888888;
 box-shadow: 6px 6px 12px 2px #888888;
-padding: 10px;
+padding: 50px 10px 30px 10px;
 }
 
 
@@ -31,7 +34,7 @@ padding: 10px;
 
 #buttons { width: 1000px; height: 60px ;margin: 0 auto; }
 #cmp_head { font-weight: bold; text-decoration: underline; }
-#calendar { width: 1000px; margin: 0 auto; display: inline-block; }
+#calendar { width: 1000px; margin: 0 auto; margin-top: 30px; display: inline-block; }
 .ShowAll { font-size: 9px; float: left; color: #fff;}
 #CalAll {float: center; display: inline-block;}
 #route { margin: 15px 30px; float: left; display: inline-block;  text-align: left; border: 5px #000; background-color : #f7f7ff; padding: 10px;}

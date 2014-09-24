@@ -100,6 +100,21 @@ foreach ($companies as $cmp) {
 
 $(document).ready(function() {
 
+    var filters=0;
+    $('#filters_b').click(
+     function() {
+      if (filters==0) { 
+       $('#dst_filter').animate({top: "-20px"}, 300); 
+       filters=1;
+       $('#filters_b').text("Hide Filters");
+      } else { 
+       $('#dst_filter').animate({top: "-230px"}, 300); 
+       filters=0;
+       $('#filters_b').text("Show Filters");
+      }
+     } 
+    );
+
     $('#calendar').fullCalendar({
 	height: "auto",
         eventSources: [
@@ -186,6 +201,9 @@ foreach ($companies as $cmp) {
 }
 echo "</div>\n";
 ?>
+<div id=filters_b>
+Show Filters
+</div>
 </div>
 <div><BR><BR><BR></div>
 <DIV id='calendar'></div>
