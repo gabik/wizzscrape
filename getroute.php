@@ -41,7 +41,7 @@ if ($_POST['company']=="ALL") {
  }
 }
 
-$testquery="
+$query="
 select d.* from ( select a.scrape_time ast, b.scrape_time bst, a.date adt, b.date bdt, c.destination cdst, a.price apr, b.price bpr, a.price+b.price total , (b.date - a.date) dd , e.name from flights a
 join flights b on a.dst=b.dst $flight_join
 join companies e on e.id=$companies_join
@@ -49,43 +49,6 @@ join destinations c on a.dst=c.airport and c.company=$destination_join
 where a.direction=1 and b.direction=2 and (b.date - a.date)>=".$_POST['minDays']." and (b.date - a.date)<=".$_POST['maxDays']." and (a.price+b.price)<=".$_POST['price'].") d
 ";
 
-if ($_POST['company']=="ALL") {
- if ($_POST['dst']=="ALL") {
-  $query="
- select d.* from ( select a.scrape_time ast, b.scrape_time bst, a.date adt, b.date bdt, c.destination cdst, a.price apr, b.price bpr, a.price+b.price total , (b.date - a.date) dd , e.name from flights a
-  join flights b on a.dst=b.dst and a.company=b.company
-  join companies e on e.id=a.company
-  join destinations c on a.dst=c.airport and c.company=e.name
-  where a.direction=1 and b.direction=2 and (b.date - a.date)>=".$_POST['minDays']." and (b.date - a.date)<=".$_POST['maxDays']." and (a.price+b.price)<=".$_POST['price'].") d
- ";
- } else {
-  $query="
- select d.* from ( select a.scrape_time ast, b.scrape_time bst, a.date adt, b.date bdt, c.destination cdst, a.price apr, b.price bpr, a.price+b.price total , (b.date - a.date) dd , e.name from flights a
-  join flights b on a.dst=b.dst and a.company=b.company and a.dst='".$_POST['dst']."'
-  join companies e on e.id=a.company
-  join destinations c on a.dst=c.airport and c.company=e.name
-  where a.direction=1 and b.direction=2 and (b.date - a.date)>=".$_POST['minDays']." and (b.date - a.date)<=".$_POST['maxDays']." and (a.price+b.price)<=".$_POST['price'].") d
- ";
- }
-
-} else {
- if ($_POST['dst']=="ALL") {
-  $query="
- select d.* from ( select a.scrape_time ast, b.scrape_time bst, a.date adt, b.date bdt, c.destination cdst, a.price apr, b.price bpr, a.price+b.price total , (b.date - a.date) dd , e.name from flights a
-  join flights b on a.dst=b.dst 
-  join destinations c on a.dst=c.airport and c.company='".$_POST['company']."'
-  join companies e on e.id='".$company_id."'
-  where a.direction=1 and b.direction=2 and (b.date - a.date)>=".$_POST['minDays']." and (b.date - a.date)<=".$_POST['maxDays']." and (a.price+b.price)<=".$_POST['price'].") d
- ";
- } else {
-  $query="
- select d.* from ( select a.scrape_time ast, b.scrape_time bst, a.date adt, b.date bdt, c.destination cdst, a.price apr, b.price bpr, a.price+b.price total , (b.date - a.date) dd , e.name from flights a
-  join flights b on a.dst=b.dst and a.dst='".$_POST['dst']."'
-  join destinations c on a.dst=c.airport and c.company='".$_POST['company']."'
-  join companies e on e.id='".$company_id."'
-  where a.direction=1 and b.direction=2 and (b.date - a.date)>=".$_POST['minDays']." and (b.date - a.date)<=".$_POST['maxDays']." and (a.price+b.price)<=".$_POST['price'].") d ";
- }
-}
 $result = pg_query($db, $query);
 pg_close();
 
@@ -194,9 +157,4 @@ while ($row = pg_fetch_row($result)) {
 </div>
 </div>
 </BODY>
-<?php
-echo $query;
-echo "\n\n<BR><BR>\n\n";
-echo $testquery;
-?>
 </HTML>
