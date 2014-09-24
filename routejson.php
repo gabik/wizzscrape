@@ -16,7 +16,7 @@ if ($_POST['company']=="ALL") {
  $flight_join=" and a.company=b.company";
  $companies_join="a.company";
  $destination_join="e.name";
- if ($_POST['dst']!=="ALL") {
+ if ($_POST['dst']!="ALL") {
   $flight_join=$flight_join." and a.dst='".$_POST['dst']."'";
  }
 } else {
