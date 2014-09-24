@@ -5,7 +5,7 @@
 <script src="lib/jquery.dataTables.min.js"></script>
 <link rel="stylesheet" type="text/css" href="lib/table.css">
 <link rel="stylesheet" type="text/css" href="lib/jquery.dataTables.min.css">
-<link rel='stylesheet' href='fullcalendar/fullcalendar.css' />
+<link rel='stylesheet' href='lib/fullcalendar.min.css' />
 <script src='lib/jquery.qtip.min.js'></script>
 <script src='lib/moment.min.js'></script>
 <script src='lib/fullcalendar.min.js'></script>

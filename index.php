@@ -11,7 +11,7 @@ while ($row = pg_fetch_row($companies_result)) {
 ?>
 <HTML><HEAD><TITLE>Cal View - Wizz Gabi</TITLE>
 <script src='lib/analytics.js'></script>
-<link rel='stylesheet' href='fullcalendar/fullcalendar.css' />
+<link rel='stylesheet' href='lib/fullcalendar.min.css' />
 <script src='lib/jquery.min.js'></script>
 <script src='lib/moment.min.js'></script>
 <script src='lib/jquery.qtip.min.js'></script>
