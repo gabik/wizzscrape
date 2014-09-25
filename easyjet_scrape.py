@@ -15,11 +15,9 @@ from general_scrape import find_all, clean_dup, strip_non_ascii
 # 3 = debug
 
 debug_flag=False
-new_year=0
 maxn=31#500
 arg_month=sys.argv[2]
 Start_orig = datetime.date.today()
-cur_year=Start_orig.year
 #Start_orig = datetime.date(2015,8,1)
 Start_orig += datetime.timedelta(days=(int(maxn)-1)*int(arg_month))
 Stop = Start_orig + datetime.timedelta(days=maxn)
@@ -47,11 +45,10 @@ for DST in Dests:
    sys.stdout.write(" Progress: %d/%d   \r" % (n,maxn) )
    sys.stdout.flush()
   Ret = Start + datetime.timedelta(days=1)
-  #url='http://www.easyjet.com/links.mvc?dep=TLV&dest=' + DST +'&dd='+ (str(int(Start.day)) + "/" + str(int(Start.month)) + "/" + str(int(Start.year))) +'&rd='+ (str(int(Ret.day)) + "/" + str(int(Ret.month)) + "/" + str(int(Ret.year))) +'&apax=1&pid=www.easyjet.com&cpax=0&ipax=0&lang=EN&isOneWay=off&searchFrom=SearchPod|/en/'
   url='http://www.easyjet.com/links.mvc?dep=TLV&dest=' + DST +'&dd='+ Start.strftime("%d/%m/%Y") +'&rd='+ Ret.strftime("%d/%m/%Y") +'&apax=1&pid=www.easyjet.com&cpax=0&ipax=0&lang=EN&isOneWay=off&searchFrom=SearchPod|/en/'
   r1 = s.get(url)
-  #r2 = s.get('http://www.easyjet.com/EN/Booking.mvc')
-  prP = getFlight(cur_year,new_year)
+  cur_date=Start.strftime("%d-%m-%Y")
+  prP = getFlight(cur_date)
   try:
    prP.feed(r1.text)
   except HTMLParseError, err:
@@ -65,8 +62,6 @@ for DST in Dests:
    print r1
    print '-------'
   flightsList.extend(prP.data)
-  new_year=prP.new_year
-  if Start > datetime.date(cur_year+1, 2, 10) : new_year=1
   Start=Ret 
  print ""
  flightsList=clean_dup(flightsList)
@@ -79,9 +74,11 @@ for DST in Dests:
  curs.execute("select id from companies where name='easyjet'")
  company_id=curs.fetchone()[0]
  for i in flightsList:
-  curs.execute("select * FROM flights WHERE direction=%s and dst=%s and date=%s and dep_time=%s and company=%s", (i['direction'],DST,str(i['year'])+"-"+str(i['month'])+"-"+str(i['day']),i['dep_time'],str(company_id)))
+  depp1=datetime.datetime.strftime(datetime.datetime.strptime(i['dep_time'], "%H:%M")+datetime.timedelta(minutes=60), "%H:%M")
+  depm1='00:00' if (int(i['dep_time'][0:i['dep_time'].find(':')]) == 0) else datetime.datetime.strftime(datetime.datetime.strptime(i['dep_time'], "%H:%M")-datetime.timedelta(minutes=60), "%H:%M")
+  curs.execute("select * FROM flights WHERE direction=%s and dst=%s and date=%s and dep_time>%s and dep_time<%s and company=%s", (i['direction'],DST,str(i['year'])+"-"+str(i['month'])+"-"+str(i['day']),depm1,depp1,str(company_id)))
   if (len(curs.fetchall()) > 0):
-   curs.execute("DELETE FROM flights WHERE direction=%s and dst=%s and date=%s and dep_time=%s and company=%s", (i['direction'],DST,str(i['year'])+"-"+str(i['month'])+"-"+str(i['day']),i['dep_time'],str(company_id)))
+   curs.execute("DELETE FROM flights WHERE direction=%s and dst=%s and date=%s and dep_time>%s and dep_time<%s and company=%s", (i['direction'],DST,str(i['year'])+"-"+str(i['month'])+"-"+str(i['day']),depm1,depp1,str(company_id)))
   curs.execute("INSERT INTO flights (company, scrape_time, direction, dst, price, dep_time, arr_time, date) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)", (str(company_id), str(scrape_time), i['direction'], DST, int(i['price']), i['dep_time'], i['arr_time'], str(i['year'])+"-"+str(i['month'])+"-"+str(i['day'])))
   curs.execute("INSERT INTO archive_flights (company, scrape_time, direction, dst, price, dep_time, arr_time, date) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)", (str(company_id), str(scrape_time), i['direction'], DST, int(i['price']), i['dep_time'], i['arr_time'], str(i['year'])+"-"+str(i['month'])+"-"+str(i['day'])))
 

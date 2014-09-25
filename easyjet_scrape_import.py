@@ -8,7 +8,7 @@ from general_scrape import find_all, clean_dup, strip_non_ascii, get_currency
 eur=get_currency("eur")
 
 class getFlight(HTMLParser):
- def __init__(self, year, new_year):
+ def __init__(self, req_date):
   self.tmp_date=""
   self.tmp_price=""
   self.tmp_data=""
@@ -22,8 +22,7 @@ class getFlight(HTMLParser):
   self._vals = {}
   self.header = 0
   self.direction = 0
-  self.year=year
-  self.new_year=new_year
+  self.req_date=req_date
   HTMLParser.__init__(self)
  def handle_starttag(self, tag, attrs):
   if tag=="div":
@@ -63,16 +62,11 @@ class getFlight(HTMLParser):
     self._vals['direction']=self.direction
     self._vals['dep_time']=self.tmp_time.split()[1]
     self._vals['arr_time']=self.tmp_time.split()[3]
-    tmp_year=self.year
-    if self.new_year==1:
-     self._vals['year']=str(tmp_year+1)
-    else:
-     if int(self._vals['month'])==1 : 
-      tmp_year=self.year+1
-     elif int(self._vals['month'])==2 :
-      self.new_year=1
-      tmp_year=self.year+1
-     self._vals['year']=str(tmp_year)
+    tmp_year=int(self.req_date.split("-")[2])
+    tmp_mon=int(self.req_date.split("-")[1])
+    if (tmp_mon==1) and (int(self._vals['month'])==12): tmp_year-=1
+    if (tmp_mon==12) and (int(self._vals['month'])==1): tmp_year+=1
+    self._vals['year'] = str(tmp_year)
     self.data.append(self._vals)
    self._vals={}
    self.tmp_price=""
