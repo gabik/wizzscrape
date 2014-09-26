@@ -21,6 +21,17 @@ if (array_key_exists('days', $_POST)) {
  $minDays=$_POST['minDays'];
  $maxDays=$_POST['maxDays'];
 }
+
+if (array_key_exists('AllDates', $_POST)) {
+ if ($_POST['AllDates']=="on") {
+  $dates_join="";
+ } else {
+  $dates_join="1";
+ }
+} else {
+ $dates_join="1";
+}
+
 $conn_string = "host=manegerdb.cjjasb6ckbh1.us-east-1.rds.amazonaws.com port=5432 dbname=GabiScrape user=root password=ManegerDB";
 $db = pg_pconnect($conn_string);
 
@@ -32,6 +43,9 @@ $company_id = $company_id_a[0];
 $flight_join="";
 $companies_join="";
 $destination_join="";
+if ($dates_join=="1"){
+ $dates_join=" and a.date>='".$_POST['dpd1']."' and a.date<='".$_POST['dpd2']."'";
+}
 
 if ($_POST['company']=="ALL") {
  $flight_join=" and a.company=b.company";
@@ -51,32 +65,40 @@ if ($_POST['company']=="ALL") {
 
 $query="
 select d.* from ( select a.scrape_time ast, b.scrape_time bst, a.date adt, b.date bdt, c.destination cdst, a.price apr, b.price bpr, a.price+b.price total , (b.date - a.date) dd , e.name from flights a
-join flights b on a.dst=b.dst $flight_join
+join flights b on a.dst=b.dst $flight_join $dates_join
 join companies e on e.id=$companies_join
 join destinations c on a.dst=c.airport and c.company=$destination_join
 where a.direction=1 and b.direction=2 and (b.date - a.date)>=".$minDays." and (b.date - a.date)<=".$maxDays." and (a.price+b.price)<=".$_POST['price'].") d
 ";
 
+#echo $query;
+
 $result = pg_query($db, $query);
 pg_close();
 
-$base_colors=array('#3F5D7D', '#279B61', '#993333', '#A3E496', '#95CAE4', '#FFCC33', '#CC6699', '#CC3333', '#008AB8', '#FFFF7A');
+function rand_color() {
+    return sprintf('#%06X', mt_rand(0, 0xFFFFFF));
+}
+
+#$base_colors=array('#3F5D7D', '#279B61', '#993333', '#A3E496', '#95CAE4', '#FFCC33', '#CC6699', '#CC3333', '#008AB8', '#FFFF7A');
 $i=0;
 $colors=array();
 while ($row = pg_fetch_row($result)) {
- if ($color[$row[4]] == "" ) { $color[$row[4]]=$base_colors[$i]; $i+=1; }
+ if ($color[$row[4]] == "" ) { $color[$row[4]]=rand_color(); } #$base_colors[$i]; $i+=1; }
 }
 
 pg_result_seek($result, 0);
 $events=array();
 while ($row = pg_fetch_row($result)) {
  $title=$row[4].": ".$row[7];
- $cur_event=array("title" => $title, "start" => $row[2], "end" => $row[3], "color" => $color[$row[4]]);
+ #$cur_event=array("title" => $title, "start" => $row[2], "end" => $row[3], "color" => $color[$row[4]]);
+ $cur_event=array("title" => $title, "start" => $row[2], "end" => $row[3], "color" => rand_color());
  if ($events[$row[4]] == "") { 
   $events[$row[4]]=array();
  } 
  array_push($events[$row[4]], $cur_event);
 }
+
 ?>
 
 

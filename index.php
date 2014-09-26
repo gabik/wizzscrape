@@ -6,6 +6,8 @@
 <link href="lib/slider/css/slider.css" rel="stylesheet">
 <script src="lib/slider/js/bootstrap-slider.js"></script>
 <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<link href="lib/datepicker/css/datepicker3.css" rel="stylesheet">
+<script src="lib/datepicker/js/bootstrap-datepicker.js"></script>
 
 <style>
 body { width:100%; padding:64px 20px 0 20px;}
@@ -24,7 +26,7 @@ body { width:100%; padding:64px 20px 0 20px;}
  border-bottom-left-radius: 10px;
  border-bottom-right-radius : 10px;
 }
-.custom_btn { width : 650px ; height: 70px ; margin:20px 0 0 50px; }
+.custom_btn { width : 250px ; height: 50px ;  margin:10px 0 0 250px; }
 #adsense-left { padding-top: 10px;}
 #adsense-foot { padding-top: 10px; margin: 30px 0 0 5px;}
 .well { margin-bottom: 5px; }
@@ -36,12 +38,13 @@ body { width:100%; padding:64px 20px 0 20px;}
 }
 .navbar-nav>.active>a { border-radius: 5px; }
 .cnt-head {padding: 0 0 0 60px; width: 100%;}
-.custom-nav { padding: 5px 20px 5px 20px ;
+.custom-nav { padding: 5px 20px 5px 20px ;}
+h1.head1 {margin-top:5px; }
 
 .slider-handle {
-width: 30px;
-height: 30px;
-top: -5px;
+width: 25px;
+height: 25px;
+top: -3px;
 }
 .slider-handle.round {
 border-radius: 10px;
@@ -52,7 +55,6 @@ background-image: linear-gradient(to bottom, #ABC2FF, #B3B7FF);
 }
 </style>
 
-<script>
 
 <?php
  $conn_string = "host=manegerdb.cjjasb6ckbh1.us-east-1.rds.amazonaws.com port=5432 dbname=GabiScrape user=root password=ManegerDB";
@@ -74,7 +76,35 @@ background-image: linear-gradient(to bottom, #ABC2FF, #B3B7FF);
  
 ?>
  
+<script>
+
+var nowTemp = new Date();
+var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+
 $(document).ready(function() {
+
+    $('#AllDates').change(function() {
+     if (this.checked) {
+      $('#dpd1').attr("disabled", "disabled");
+      $('#dpd2').attr("disabled", "disabled");
+     } else {
+      $('#dpd1').removeAttr("disabled");
+      $('#dpd2').removeAttr("disabled");
+      var todayDate = new Date();
+      var endDate = new Date();
+      endDate.setMonth(endDate.getMonth() + 6);
+      $('#dpd1').datepicker('setDate', todayDate);
+      $('#dpd2').datepicker('setDate', endDate);
+     }
+    });
+ 
+    $('.dtpicker').datepicker({
+      startDate: '0',
+      autoclose: true,
+      todayBtn: "linked",
+      format: "yyyy-mm-dd",
+      todayHighlight: true
+    });
 
     $('#days').slider({
     })
@@ -168,7 +198,7 @@ $(document).ready(function() {
 <div class="row ">
  <div class="jumbotron jumbotron-head">
   <div class="container cnt-head">
-   <h1 class="text-capitalize">Find The Cheapest Flights From Tel Aviv!</h1>
+   <h1 class="text-capitalize head1">Find The Cheapest Flights From Tel Aviv!</h1>
   </div>
  </div>
 </div>
@@ -241,6 +271,25 @@ $(document).ready(function() {
       <span id="priceval">600</span>
       <input type="text" value="600" data-slider-min="200" data-slider-max="2000" data-slider-step="50" data-slider-value="600" id="price" name="price" >
       Shekels
+     </div>
+    </div>
+
+    <div class="well form-group">
+     <div class=col-sm-2 style=" padding-top: 6px;">
+      <b>Dates Limit: </b>
+     </div>
+     <div class=col-sm-2 style=" padding-top: 6px;">
+<label>
+<input type="checkbox" checked id="AllDates" name="AllDates"> All Dates
+</label>
+     </div>
+     <div class="col-sm-8">
+      <div class="input-group" id="datepicker"> 
+       <span class="input-group-addon">From</span>
+       <input type="text" class="form-control dtpicker" name="dpd1" id="dpd1" disabled/> 
+       <span class="input-group-addon">To</span>
+       <input type="text" class="form-control dtpicker" name="dpd2" id="dpd2" disabled/> 
+      </div>
      </div>
     </div>
 
