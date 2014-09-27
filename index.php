@@ -230,6 +230,7 @@ $(document).ready(function() {
        <option value="wizz">WizzAir</option>
        <option value="easyjet">Easyjet</option>
        <option value="up">Up by Elal</option>
+       <option value="airmed">Air Mediterranee</option>
       </select>
      </div>
     </div>

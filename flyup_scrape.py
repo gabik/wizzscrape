@@ -15,7 +15,7 @@ import flyup_scrape_import as up
 
 debug_flag=False
 new_year=0
-maxn=11
+maxn=31
 arg_month=sys.argv[2]
 Start_orig = datetime.date.today()
 cur_year=Start_orig.year
