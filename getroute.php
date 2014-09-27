@@ -10,6 +10,9 @@
 <script src='lib/moment.min.js'></script>
 <script src='lib/fullcalendar.min.js'></script>
 <link rel="stylesheet" type="text/css" href="lib/jquery.qtip.min.css">
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 
 
 <?php
@@ -106,6 +109,21 @@ while ($row = pg_fetch_row($result)) {
 
 
 $(document).ready(function() {
+
+    $('.wizz1Remark').tooltip({
+     'show': true,
+     html: true,
+     placement: "left",
+     'title': "Remarks:<BR> Include:<BR>Flight out and back.<BR><BR>Exclude:<BR>No Suitcases."
+    });
+
+    $('.orderTip').tooltip({
+     'show': true,
+     html: true,
+     placement: "left",
+     'title': "Order This Flight Now!"
+    });
+
     $('#calendar').fullCalendar({
         height: "auto",
         events: [
@@ -132,7 +150,7 @@ pg_result_seek($result, 0);
     $("table").DataTable(
     {
       "iDisplayLength": 50,
-      "order": [[ 6 ,"asc" ]]
+      "order": [[ 7 ,"asc" ]]
     });
 
 
@@ -156,25 +174,32 @@ function ShowCal(){ $("#table-tab").hide("fast") ; $("#cal-tab").show("fast"); }
   <th data-sort="string"> Company </th>
   <th data-sort="string"> Destination </th>
   <th data-sort="string"> Outgoing </th>
+  <th data-sort="string"> Weekday </th>
   <th data-sort="string"> Ingoing </th>
   <th data-sort="int"> Out Price </th>
   <th data-sort="int"> In Price </th>
   <th data-sort="int"> Total Price </th>
-  <th data-sort="int"> Days </th>
+  <th data-sort="int"> Nights </th>
+  <th > Remarks </th>
+  <th > Book! </th>
  </tr>
 </thead>
 <tbody>
   <?php  
+$row10="wizz1Remark";
 while ($row = pg_fetch_row($result)) {
  echo '<tr>';
  echo '<td> '.$row[9].' </td>';
  echo '<td> '.$row[4].' </td>';
  echo '<td> '.$row[2].' </td>';
+ echo '<td> '.date('l', strtotime( $row[2])).' </td>';
  echo '<td> '.$row[3].' </td>';
  echo '<td> '.$row[5].' </td>';
  echo '<td> '.$row[6].' </td>';
  echo '<td> '.$row[7].' </td>';
  echo '<td> '.$row[8].' </td>';
+ echo '<td><center> <i class="fa fa-exclamation-circle '.$row10.'"></i></center> </td>';
+ echo '<td><center> <i class="fa fa-paper-plane-o orderTip"></i></center> </td>';
  echo '</tr>';
 }
 ?>
