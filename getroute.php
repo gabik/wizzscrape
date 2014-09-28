@@ -13,6 +13,7 @@
 <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script src="lib/dataTables.bootstrap.js"></script>
 
 
 <?php
@@ -153,7 +154,6 @@ pg_result_seek($result, 0);
       "order": [[ 7 ,"asc" ]]
     });
 
-
 });
 
 function ShowTable(){ $("#cal-tab").hide("fast") ; $("#table-tab").show("fast"); }
@@ -164,11 +164,11 @@ function ShowCal(){ $("#table-tab").hide("fast") ; $("#cal-tab").show("fast"); }
 
 </HEAD<BODY>
 <div id="route_wrap">
-<button onclick="ShowTable();"  >TableView</button>
-<button  onclick="ShowCal();">CalView</button>
+<button onclick="ShowTable();" class="btn btn-default btn-lg active" >TableView</button>
+<button  onclick="ShowCal();" class="btn btn-default btn-lg">CalView</button>
 
 <div id="table-tab"><P>
-<Table id="route" class="table table-striped table-bordered display">
+<Table id="route" class="table table-striped table-bordered display ">
 <thead>
  <tr>
   <th data-sort="string"> Company </th>
@@ -188,19 +188,19 @@ function ShowCal(){ $("#table-tab").hide("fast") ; $("#cal-tab").show("fast"); }
   <?php  
 $row10="wizz1Remark";
 while ($row = pg_fetch_row($result)) {
- echo '<tr>';
- echo '<td> <img class="cmp_logo" src="pics/'.$row[9].'.jpg"> </td>';
- echo '<td> '.$row[4].' </td>';
- echo '<td> '.$row[2].' </td>';
- echo '<td> '.date('l', strtotime( $row[2])).' </td>';
- echo '<td> '.$row[3].' </td>';
- echo '<td> '.$row[5].' <i class="fa fa-ils"></i></td>';
- echo '<td> '.$row[6].' <i class="fa fa-ils"></i></td>';
- echo '<td> '.$row[7].' <i class="fa fa-ils"></i></td>';
- echo '<td> '.$row[8].' </td>';
- echo '<td><center> <i class="fa fa-exclamation-circle fa-lg '.$row10.'"></i></center> </td>';
- echo '<td><center> <a href="redirect.php?company='.$row[9].'&DST='.$row[10].'&start='.$row[2].'&end='.$row[3].'"><i class="fa fa-paper-plane-o orderTip fa-lg"></i></a></center> </td>';
- echo '</tr>';
+ echo '<tr>'."\n";
+ echo ' <td> <img class="cmp_logo" src="pics/'.$row[9].'.jpg"> </td>'."\n";
+ echo ' <td> '.$row[4].' </td>'."\n";
+ echo ' <td> '.$row[2].' </td>'."\n";
+ echo ' <td> '.date('l', strtotime( $row[2])).' </td>'."\n";
+ echo ' <td> '.$row[3].' </td>'."\n";
+ echo ' <td> '.$row[5].' <i class="fa fa-ils"></i></td>'."\n";
+ echo ' <td> '.$row[6].' <i class="fa fa-ils"></i></td>'."\n";
+ echo ' <td> '.$row[7].' <i class="fa fa-ils"></i></td>'."\n";
+ echo ' <td> '.$row[8].' </td>'."\n";
+ echo ' <td><center> <i class="fa fa-exclamation-circle fa-lg '.$row10.'"></i></center> </td>'."\n";
+ echo ' <td><center> <a href="redirect.php?company='.$row[9].'&DST='.$row[10].'&start='.$row[2].'&end='.$row[3].'"><i class="fa fa-paper-plane-o orderTip fa-lg"></i></a></center> </td>'."\n";
+ echo '</tr>'."\n";
 }
 ?>
 </tbody>
