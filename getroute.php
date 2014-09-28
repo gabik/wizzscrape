@@ -67,7 +67,7 @@ if ($_POST['company']=="ALL") {
 }
 
 $query="
-select d.* from ( select a.scrape_time ast, b.scrape_time bst, a.date adt, b.date bdt, c.destination cdst, a.price apr, b.price bpr, a.price+b.price total , (b.date - a.date) dd , e.name from flights a
+select d.* from ( select a.scrape_time ast, b.scrape_time bst, a.date adt, b.date bdt, c.destination cdst, a.price apr, b.price bpr, a.price+b.price total , (b.date - a.date) dd , e.name,a.dst from flights a
 join flights b on a.dst=b.dst $flight_join $dates_join
 join companies e on e.id=$companies_join
 join destinations c on a.dst=c.airport and c.company=$destination_join
@@ -189,17 +189,17 @@ function ShowCal(){ $("#table-tab").hide("fast") ; $("#cal-tab").show("fast"); }
 $row10="wizz1Remark";
 while ($row = pg_fetch_row($result)) {
  echo '<tr>';
- echo '<td> '.$row[9].' </td>';
+ echo '<td> <img class="cmp_logo" src="pics/'.$row[9].'.jpg"> </td>';
  echo '<td> '.$row[4].' </td>';
  echo '<td> '.$row[2].' </td>';
  echo '<td> '.date('l', strtotime( $row[2])).' </td>';
  echo '<td> '.$row[3].' </td>';
- echo '<td> '.$row[5].' </td>';
- echo '<td> '.$row[6].' </td>';
- echo '<td> '.$row[7].' </td>';
+ echo '<td> '.$row[5].' <i class="fa fa-ils"></i></td>';
+ echo '<td> '.$row[6].' <i class="fa fa-ils"></i></td>';
+ echo '<td> '.$row[7].' <i class="fa fa-ils"></i></td>';
  echo '<td> '.$row[8].' </td>';
- echo '<td><center> <i class="fa fa-exclamation-circle '.$row10.'"></i></center> </td>';
- echo '<td><center> <i class="fa fa-paper-plane-o orderTip"></i></center> </td>';
+ echo '<td><center> <i class="fa fa-exclamation-circle fa-lg '.$row10.'"></i></center> </td>';
+ echo '<td><center> <a href="redirect.php?company='.$row[9].'&DST='.$row[10].'&start='.$row[2].'&end='.$row[3].'"><i class="fa fa-paper-plane-o orderTip fa-lg"></i></a></center> </td>';
  echo '</tr>';
 }
 ?>

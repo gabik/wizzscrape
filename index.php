@@ -2,6 +2,7 @@
 <script src='lib/analytics.js'></script>
 <script src='lib/jquery.min.js'></script>
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 <link href="lib/slider/css/slider.css" rel="stylesheet">
 <script src="lib/slider/js/bootstrap-slider.js"></script>
@@ -11,35 +12,63 @@
 
 <style>
 body { width:100%; padding:64px 20px 0 20px;}
-#days { width: 300px; }
-#price { width: 400px; }
+#days { width: 250px; }
+#price { width: 250px; }
 .container {
    padding-right: 15px;
    padding-left: 15px;
    margin-right: 15px;
    margin-left: 15px;
+   width:100%;
 }
 .jumbotron-form {
  padding-top:0px;
  padding-bottom:10px;
  margin-bottom: 0px;
- border-bottom-left-radius: 10px;
- border-bottom-right-radius : 10px;
+ border-radius: 10px;
+background: -webkit-linear-gradient(-81deg, #4D90FE, #4D90FE); //#3394de, #2288d5, 4D90FE);
 }
-.custom_btn { width : 250px ; height: 50px ;  margin:10px 0 0 250px; }
+.custom_btn { width : 250px ; height: 50px ;  margin-top:1px; }
+.custom_btn_col { margin:0px; }
 #adsense-left { padding-top: 10px;}
-#adsense-foot { padding-top: 10px; margin: 30px 0 0 5px;}
-.well { margin-bottom: 5px; }
+#adsense-foot { padding-top: 10px; margin: 20px 0 0 5px;}
+.well { 
+ margin-bottom: 5px; 
+ padding:10px; 
+ background: -webkit-linear-gradient(top, #E6F0FF, #F7FAFF);
+}
+.form-well { 
+ background: -webkit-linear-gradient(top, #fff, #fff);
+ padding:20px 40px; 
+ margin-bottom: 0px; 
+}
+form {
+ margin-bottom: 0px; 
+}
 .jumbotron-head {
  margin: 0px; 
  padding:0px;
- border-top-left-radius: 10px;
- border-top-right-radius: 10px;
 }
 .navbar-nav>.active>a { border-radius: 5px; }
 .cnt-head {padding: 0 0 0 60px; width: 100%;}
-.custom-nav { padding: 5px 20px 5px 20px ;}
-h1.head1 {margin-top:5px; }
+.custom-nav {
+ padding: 5px 20px 5px 20px ;
+ background: -webkit-linear-gradient(top, #fff 0%, #f5f7fa 100%);
+}
+h1.head1 {
+ margin-top:5px;
+  background: -webkit-linear-gradient(top, #fff 0%, #f5f7fa 100%);
+ //  background: -webkit-linear-gradient(#e3e5ff, #a9b0fc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+ font-size: 50px;
+}
+
+@media screen and (max-width: 800px) {
+ h1.head1 {
+  font-size: 10px; 
+ }
+}
 
 .slider-handle {
 width: 25px;
@@ -47,11 +76,15 @@ height: 25px;
 top: -3px;
 }
 .slider-handle.round {
-border-radius: 10px;
+border-radius: 8px;
 }
 
 .slider-selection {
 background-image: linear-gradient(to bottom, #ABC2FF, #B3B7FF);
+}
+
+.white-txt {
+color:white;
 }
 </style>
 
@@ -82,6 +115,10 @@ var nowTemp = new Date();
 var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
 
 $(document).ready(function() {
+
+    $('#submitSearch').click(function() {
+     $('#routeForm')[0].submit();
+    });
 
     $('#AllDates').change(function() {
      if (this.checked) {
@@ -195,30 +232,26 @@ $(document).ready(function() {
     </p>
    </div>
 </nav>
-<div class="row ">
- <div class="jumbotron jumbotron-head">
-  <div class="container cnt-head">
-   <h1 class="text-capitalize head1">Find The Cheapest Flights From Tel Aviv!</h1>
-  </div>
- </div>
-</div>
 <div class=row>
  <div class="jumbotron jumbotron-form">
   <div class=container>
+   <div class="row">
+    <div class="col-md-12">
+     <h1 class="text-capitalize head1"><B>Find The Cheapest Flights From Tel Aviv!</B></h1>
+    </div>
+   </div>
    <div class=col-md-4>
     <div id=adsense-left>
-     <!-- 2fly-336x280 
-     <ins class="adsbygoogle" style="display:inline-block;width:336px;height:280px" data-ad-client="ca-pub-3421081986991175" data-ad-slot="3770494841"></ins>
--->
-<!-- 2fly600x300 -->
-<ins class="adsbygoogle" style="display:inline-block;width:300px;height:600px" data-ad-client="ca-pub-3421081986991175" data-ad-slot="8172171649"></ins>
+     <!-- 2fly600x300 -->
+     <ins class="adsbygoogle" style="display:inline-block;width:300px;height:600px" data-ad-client="ca-pub-3421081986991175" data-ad-slot="8172171649"></ins>
      <script> (adsbygoogle = window.adsbygoogle || []).push({}); </script>
     </div>
    </div>
-   <div class=col-md-8>
-    <p class="lead text-capitalize">No matter when, No matter where, Only price matter.</p>
+   <div class=col-md-6>
+    <p class="lead text-capitalize white-txt">No matter when, No matter where, Only price matter.</p>
 
-    <form name=routeForm method=post action=getroute.php class="form-horizontal">
+    <div class="well form-well">
+    <form name=routeForm method=post action=getroute.php class="form-horizontal" id=routeForm>
 
     <div class="form-group well">
      <div class=col-sm-2>
@@ -255,36 +288,41 @@ $(document).ready(function() {
 
     <div class="well form-group">
      <div class=col-sm-2>
-      <b>Select Days: </b>
+      <b>Nights: </b>
      </div>
-     <div class="col-sm-10">
-      Minimum <span id=minDaysval>4</span> Days
+     <div class="col-sm-2">
+      Min <span id=minDaysval>4</span>
+     </div>
+     <div class="col-sm-6">
       <input type="text" value="4,6" data-slider-min="2" data-slider-max="14" data-slider-step="1" data-slider-value="[4,6]" id="days" name="days">
-      Maximum <span id=maxDaysval>6</span> days
+     </div>
+     <div class="col-sm-2">
+      Max <span id=maxDaysval>6</span>
      </div>
     </div>
 
     <div class="well form-group">
      <div class=col-sm-2>
-      <b>Max price: </b>
+      <b>Price: </b>
      </div>
-     <div class="col-sm-10">
-      <span id="priceval">600</span>
+     <div class="col-sm-2">
+      <span id="priceval">600</span> <i class="fa fa-ils"></i>
+     </div>
+     <div class="col-sm-8">
       <input type="text" value="600" data-slider-min="200" data-slider-max="2000" data-slider-step="50" data-slider-value="600" id="price" name="price" >
-      Shekels
      </div>
     </div>
 
     <div class="well form-group">
      <div class=col-sm-2 style=" padding-top: 6px;">
-      <b>Dates Limit: </b>
+      <b>Dates: </b>
      </div>
-     <div class=col-sm-2 style=" padding-top: 6px;">
-<label>
-<input type="checkbox" checked id="AllDates" name="AllDates"> All Dates
-</label>
+     <div class=col-sm-4 style=" padding-top: 6px;">
+      <label>
+      <input type="checkbox" checked id="AllDates" name="AllDates"> All Dates
+      </label>
      </div>
-     <div class="col-sm-8">
+     <div class="col-sm-6 ">
       <div class="input-group" id="datepicker"> 
        <span class="input-group-addon">From</span>
        <input type="text" class="form-control dtpicker" name="dpd1" id="dpd1" disabled/> 
@@ -294,9 +332,14 @@ $(document).ready(function() {
      </div>
     </div>
 
-    <input type=submit value=Search class="btn btn-primary btn-lg custom_btn">
+    <div class="form-group custom_btn_col">
+     <div class="col-sm-12 text-center">
+      <button id='submitSearch' class="btn btn-primary btn-lg custom_btn form-control"> Search <i class="fa fa-paper-plane-o"></i> </button>
+     </div>
+    </div>
 
     </form>
+    </div>
     <div class=row>
      <div id=adsense-foot>
       <!-- 2fly-footer -->
@@ -308,5 +351,4 @@ $(document).ready(function() {
   </div>
  </div>
 </div>
-
 </BODY></HTML>
