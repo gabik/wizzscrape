@@ -167,6 +167,11 @@ pg_result_seek($result, 0);
 
 });
 
+$(window).load(function() {
+	$(".loader").fadeOut("slow");
+})
+
+
 function ShowTable(){ 
  $("#cal-tab").hide("fast") ; 
  $("#table-tab").show("fast"); 
@@ -183,8 +188,32 @@ function ShowCal(){
 
 
 </script>
+<style>
+.loader {
+background: rgb(239,239,239); /* Old browsers */
+background: -moz-linear-gradient(top,  rgba(239,239,239,1) 1%, rgba(255,255,255,1) 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(1%,rgba(239,239,239,1)), color-stop(100%,rgba(255,255,255,1))); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top,  rgba(239,239,239,1) 1%,rgba(255,255,255,1) 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top,  rgba(239,239,239,1) 1%,rgba(255,255,255,1) 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top,  rgba(239,239,239,1) 1%,rgba(255,255,255,1) 100%); /* IE10+ */
+background: linear-gradient(to bottom,  rgba(239,239,239,1) 1%,rgba(255,255,255,1) 100%); /* W3C */
+position:fixed; left:0px; top:0px; width:100%; height:100%; z-index:1000;
+}
+
+.load_center {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.load_txt {
+ padding-bottom:100px;
+}
+
+</style>
 
 </HEAD<BODY>
+<div class="loader"><h2 class="load_center load_txt">Loading your request...</h2><BR><i class="fa fa-spinner fa-5x fa-spin load_center"></i></div>
 <div id="route_wrap">
 <ul class="nav nav-pills">
   <li id="table-li" class="active" onclick="ShowTable();"><a href="#">Table View</a></li>
