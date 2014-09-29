@@ -309,7 +309,7 @@ $(document).ready(function() {
       <span id="priceval">600</span> <i class="fa fa-ils"></i>
      </div>
      <div class="col-sm-8">
-      <input type="text" value="600" data-slider-min="200" data-slider-max="2000" data-slider-step="50" data-slider-value="600" id="price" name="price" >
+      <input type="text" value="600" data-slider-min="200" data-slider-max="10000" data-slider-step="50" data-slider-value="600" id="price" name="price" >
      </div>
     </div>
 
