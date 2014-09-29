@@ -120,6 +120,21 @@ $(document).ready(function() {
      $('#routeForm')[0].submit();
     });
 
+    $('#price').slider({
+    })
+    .on('slide', function(e) { 
+     var cur_val=$('#price').val();
+     $('#priceval').text(cur_val);
+    });
+
+    $('#AllPrice').change(function() {
+     if (this.checked) {
+      $('#price').slider("disable");
+     } else {
+      $('#price').slider("enable");
+     }
+    });
+
     $('#AllDates').change(function() {
      if (this.checked) {
       $('#dpd1').attr("disabled", "disabled");
@@ -129,7 +144,7 @@ $(document).ready(function() {
       $('#dpd2').removeAttr("disabled");
       var todayDate = new Date();
       var endDate = new Date();
-      endDate.setMonth(endDate.getMonth() + 6);
+      endDate.setDays(endDate.getDay() + 1);
       $('#dpd1').datepicker('setDate', todayDate);
       $('#dpd2').datepicker('setDate', endDate);
      }
@@ -149,13 +164,6 @@ $(document).ready(function() {
      var cur_val=$('#days').val().split(",");
      $('#minDaysval').text(cur_val[0]);
      $('#maxDaysval').text(cur_val[1]);
-    });
-
-    $('#price').slider({
-    })
-    .on('slide', function(e) { 
-     var cur_val=$('#price').val();
-     $('#priceval').text(cur_val);
     });
 
     <?php
@@ -263,6 +271,7 @@ $(document).ready(function() {
        <option value="wizz">WizzAir</option>
        <option value="easyjet">Easyjet</option>
        <option value="up">Up by Elal</option>
+       <option value="elal">Elal</option>
        <option value="airmed">Air Mediterranee</option>
       </select>
      </div>
@@ -305,11 +314,14 @@ $(document).ready(function() {
      <div class=col-sm-2>
       <b>Price: </b>
      </div>
+     <div class=col-sm-2 style=" padding-top: 6px;">
+      <label> <input type="checkbox" checked id="AllPrice" name="AllPrice">All</label>
+     </div>
      <div class="col-sm-2">
       <span id="priceval">600</span> <i class="fa fa-ils"></i>
      </div>
-     <div class="col-sm-8">
-      <input type="text" value="600" data-slider-min="200" data-slider-max="10000" data-slider-step="50" data-slider-value="600" id="price" name="price" >
+     <div class="col-sm-6">
+      <input type="text" value="600" data-slider-min="200" data-slider-max="10000" data-slider-step="100" data-slider-value="600" id="price" name="price" data-slider-enabled="false">
      </div>
     </div>
 
@@ -317,12 +329,10 @@ $(document).ready(function() {
      <div class=col-sm-2 style=" padding-top: 6px;">
       <b>Dates: </b>
      </div>
-     <div class=col-sm-4 style=" padding-top: 6px;">
-      <label>
-      <input type="checkbox" checked id="AllDates" name="AllDates"> All Dates
-      </label>
+     <div class=col-sm-2 style=" padding-top: 6px;">
+      <label> <input type="checkbox" checked id="AllDates" name="AllDates">All</label>
      </div>
-     <div class="col-sm-6 ">
+     <div class="col-sm-8 ">
       <div class="input-group" id="datepicker"> 
        <span class="input-group-addon">From</span>
        <input type="text" class="form-control dtpicker" name="dpd1" id="dpd1" disabled/> 

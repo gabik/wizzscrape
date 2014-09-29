@@ -36,6 +36,17 @@ if (array_key_exists('AllDates', $_POST)) {
  $dates_join="1";
 }
 
+if (array_key_exists('AllPrice', $_POST)) {
+ if ($_POST['AllPrice']=="on") {
+  $price_join="";
+ } else {
+  $price_join=" and (a.price+b.price)<=".$_POST['price'];
+ }
+} else {
+ $price_join=" and (a.price+b.price)<=".$_POST['price'];
+}
+
+
 $conn_string = "host=manegerdb.cjjasb6ckbh1.us-east-1.rds.amazonaws.com port=5432 dbname=GabiScrape user=root password=ManegerDB";
 $db = pg_pconnect($conn_string);
 
@@ -72,7 +83,7 @@ select d.* from ( select a.scrape_time ast, b.scrape_time bst, a.date adt, b.dat
 join flights b on a.dst=b.dst $flight_join $dates_join
 join companies e on e.id=$companies_join
 join destinations c on a.dst=c.airport and c.company=$destination_join
-where a.direction=1 and b.direction=2 and (b.date - a.date)>=".$minDays." and (b.date - a.date)<=".$maxDays." and (a.price+b.price)<=".$_POST['price'].") d
+where a.direction=1 and b.direction=2 and (b.date - a.date)>=".$minDays." and (b.date - a.date)<=".$maxDays." ".$price_join.") d
 ";
 
 #echo $query;
