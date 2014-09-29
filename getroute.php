@@ -140,6 +140,7 @@ $(document).ready(function() {
         height: "auto",
         events: [
 <?php
+/*
 #while ($row = pg_fetch_row($result)) {
 foreach ($events as $event) {
  foreach ($event as $cur_e) {
@@ -151,6 +152,7 @@ foreach ($events as $event) {
   echo "},\n";
  }
 }
+*/
 pg_result_seek($result, 0);
 ?>
         ],
@@ -222,7 +224,7 @@ position:fixed; left:0px; top:0px; width:100%; height:100%; z-index:1000;
 
 
 <div id="table-tab"><P>
-<Table id="route" class="table table-striped table-bordered display ">
+<Table id="route" class="table table-striped table-bordered display " data-show-header="false">
 <thead>
  <tr>
   <th data-sort="string"> Company </th>
