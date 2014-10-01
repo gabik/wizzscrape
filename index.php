@@ -97,7 +97,7 @@ color:white;
  while ($row = pg_fetch_row($companies_result)) {
   array_push($companies, $row[0]);
  }
- $dst_results=pg_query($db, "select * from destinations");
+ $dst_results=pg_query($db, "select * from destinations order by destination");
  pg_result_seek($dst_results, 0);
  $destinations=Array();
  
@@ -106,6 +106,12 @@ color:white;
   $cur_dst=array("airport" => $row[1], "destination" => $row[2]);
   array_push($destinations[$row[0]], $cur_dst);
  }
+$all_dst_r=pg_query($db, "select distinct airport, destination from destinations order by destination");
+$destinations['ALL']=array();
+while ($row = pg_fetch_row($all_dst_r)) {
+ $cur_dst=array("airport" => $row[0], "destination" => $row[1]);
+ array_push($destinations['ALL'], $cur_dst);
+}
  
 ?>
  
@@ -180,6 +186,13 @@ $(document).ready(function() {
       }
       echo "},\n";
      }
+     echo '"ALL": {';
+     $first=1;
+     foreach($destinations['ALL'] as $dst) {
+      if ($first!=1) { echo ", " ; } else { $first=0; }
+      echo "'".$dst['airport']."':'".$dst['destination']."' ";
+     }
+     echo "},\n";
     ?>
     };
 
@@ -187,22 +200,22 @@ $(document).ready(function() {
      var $select_dst = $("#dst");
      $select_dst.empty();
      $select_dst.append($("<option></option>").attr("value", "ALL").text("All Destinations"));
-     if ($(this).val()=="ALL") {
-      var cur_key;
-      for (cur_key in destinations) {
-       var cur_cmp = destinations[cur_key];
-       var x;
-       for (x in cur_cmp) {
-        $select_dst.append($("<option></option>").attr("value", x).text(cur_cmp[x]+" ("+x+")"));
-       }
-      }
-     } else {
+ //    if ($(this).val()=="ALL") {
+ //     var cur_key;
+ //     for (cur_key in destinations) {
+ //      var cur_cmp = destinations[cur_key];
+ //      var x;
+ //      for (x in cur_cmp) {
+ //       $select_dst.append($("<option></option>").attr("value", x).text(cur_cmp[x]+" ("+x+")"));
+ //      }
+ //     }
+ //    } else {
       var cur_cmp = destinations[$(this).val()];
       var x;
       for (x in cur_cmp) {
        $select_dst.append($("<option></option>")
         .attr("value", x).text(cur_cmp[x]+" ("+x+")"));
-      }
+ //     }
      }
     }); 
 });
@@ -285,11 +298,9 @@ $(document).ready(function() {
       <select name=dst id=dst class="form-control">
        <option value="ALL">All Destinations</option>
        <?php
-       foreach ($companies as $cmp) {
-        foreach ($destinations[$cmp] as $dcmp) { 
+        foreach ($destinations['ALL'] as $dcmp) { 
          echo '<option value="'.$dcmp['airport'].'">'.$dcmp['destination'].' ('.$dcmp['airport'].')</option>'."\n";
         }
-       }
        ?>
       </select>
      </div>

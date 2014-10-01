@@ -10,6 +10,7 @@
 <script src='lib/moment.min.js'></script>
 <script src='lib/fullcalendar.min.js'></script>
 <link rel="stylesheet" type="text/css" href="lib/jquery.qtip.min.css">
+<link rel="stylesheet" type="text/css" href="lib/route.css">
 <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
@@ -190,29 +191,6 @@ function ShowCal(){
 
 
 </script>
-<style>
-.loader {
-background: rgb(239,239,239); /* Old browsers */
-background: -moz-linear-gradient(top,  rgba(239,239,239,1) 1%, rgba(255,255,255,1) 100%); /* FF3.6+ */
-background: -webkit-gradient(linear, left top, left bottom, color-stop(1%,rgba(239,239,239,1)), color-stop(100%,rgba(255,255,255,1))); /* Chrome,Safari4+ */
-background: -webkit-linear-gradient(top,  rgba(239,239,239,1) 1%,rgba(255,255,255,1) 100%); /* Chrome10+,Safari5.1+ */
-background: -o-linear-gradient(top,  rgba(239,239,239,1) 1%,rgba(255,255,255,1) 100%); /* Opera 11.10+ */
-background: -ms-linear-gradient(top,  rgba(239,239,239,1) 1%,rgba(255,255,255,1) 100%); /* IE10+ */
-background: linear-gradient(to bottom,  rgba(239,239,239,1) 1%,rgba(255,255,255,1) 100%); /* W3C */
-position:fixed; left:0px; top:0px; width:100%; height:100%; z-index:1000;
-}
-
-.load_center {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-.load_txt {
- padding-bottom:100px;
-}
-
-</style>
 
 </HEAD<BODY>
 <div class="loader"><h2 class="load_center load_txt">Loading your request...</h2><BR><i class="fa fa-spinner fa-5x fa-spin load_center"></i></div>
@@ -224,44 +202,26 @@ position:fixed; left:0px; top:0px; width:100%; height:100%; z-index:1000;
 
 
 <div id="table-tab"><P>
-<Table id="route" class="table table-striped table-bordered display " data-show-header="false">
-<thead>
- <tr>
-  <th data-sort="string"> Company </th>
-  <th data-sort="string"> Destination </th>
-  <th data-sort="string"> Outgoing </th>
-  <th data-sort="string"> Weekday </th>
-  <th data-sort="string"> Ingoing </th>
-  <th data-sort="int"> Out Price </th>
-  <th data-sort="int"> In Price </th>
-  <th data-sort="int"> Total Price </th>
-  <th data-sort="int"> Nights </th>
-  <th > Remarks </th>
-  <th > Book! </th>
- </tr>
-</thead>
-<tbody>
   <?php  
-$row10="wizz1Remark";
 while ($row = pg_fetch_row($result)) {
- echo '<tr>'."\n";
- echo ' <td> <img class="cmp_logo" src="images/'.$row[9].'.jpg"> </td>'."\n";
- echo ' <td> '.$row[4].' </td>'."\n";
- echo ' <td> '.$row[2].' </td>'."\n";
- echo ' <td> '.date('l', strtotime( $row[2])).' </td>'."\n";
- echo ' <td> '.$row[3].' </td>'."\n";
- echo ' <td> '.$row[5].' <i class="fa fa-ils"></i></td>'."\n";
- echo ' <td> '.$row[6].' <i class="fa fa-ils"></i></td>'."\n";
- echo ' <td> '.$row[7].' <i class="fa fa-ils"></i></td>'."\n";
- echo ' <td> '.$row[8].' </td>'."\n";
- echo ' <td><center> <i class="fa fa-exclamation-circle fa-lg '.$row10.'"></i></center> </td>'."\n";
- echo ' <td><center> <a href="redirect.php?company='.$row[9].'&DST='.$row[10].'&start='.$row[2].'&end='.$row[3].'"><i class="fa fa-paper-plane-o orderTip fa-lg"></i></a></center> </td>'."\n";
- echo '</tr>'."\n";
+ echo '<div class="result_row">'."\n";
+ echo '<img src="images/flight_card.jpg">'."\n";
+ echo '<div class="result_price"><i class="fa fa-ils"></i>'.$row[7].'</div>'."\n";
+ echo '<div class="result_company"><img src="images/'.$row[9].'.jpg" class="cmp_logo"></div>'."\n";
+ echo '<div class="result_outdate">'.date('l d/m/y', strtotime( $row[2])).' 00:00</div>'."\n";
+ echo '<div class="result_indate">'.date('l d/m/y', strtotime( $row[3])).' 00:00</div>'."\n";
+ echo '<div class="result_outsrc">Tel Aviv (TLV)</div>'."\n";
+ echo '<div class="result_insrc">'.$row[4].'</div>'."\n";
+ echo '<div class="result_indst">Tel Aviv (TLV)</div>'."\n";
+ echo '<div class="result_outdst">'.$row[4].'</div>'."\n";
+ echo '<div class="result_outdur">'."02:50H".'</div>'."\n";
+ echo '<div class="result_indur">'."02:50H".'</div>'."\n";
+ echo '<div class="result_outarr">'."08:10".'</div>'."\n";
+ echo '<div class="result_inarr">'."20:00".'</div>'."\n";
+ echo '<div class="result_icons"><span class="fa-stack fa-2x"><i class="fa fa-suitcase fa-stack-1x"></i><i class="fa fa-ban fa-stack-2x text-white"></i></div>'."\n";
+ echo '</div>'."\n";
 }
 ?>
-</tbody>
-</Table>
-</P>
 </div>
 <div id="cal-tab">
 <div id="calendar"></div>
