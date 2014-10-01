@@ -97,11 +97,11 @@ function rand_color() {
 }
 
 #$base_colors=array('#3F5D7D', '#279B61', '#993333', '#A3E496', '#95CAE4', '#FFCC33', '#CC6699', '#CC3333', '#008AB8', '#FFFF7A');
-$i=0;
-$colors=array();
-while ($row = pg_fetch_row($result)) {
- if ($color[$row[4]] == "" ) { $color[$row[4]]=rand_color(); } #$base_colors[$i]; $i+=1; }
-}
+#$i=0;
+#$colors=array();
+#while ($row = pg_fetch_row($result)) {
+# if ($color[$row[4]] == "" ) { $color[$row[4]]=rand_color(); } #$base_colors[$i]; $i+=1; }
+#}
 
 pg_result_seek($result, 0);
 $events=array();
@@ -118,8 +118,69 @@ while ($row = pg_fetch_row($result)) {
 ?>
 
 
+
 <script>
 
+var weekday = new Array(7);
+weekday[0]=  "Sunday";
+weekday[1] = "Monday";
+weekday[2] = "Tuesday";
+weekday[3] = "Wednesday";
+weekday[4] = "Thursday";
+weekday[5] = "Friday";
+weekday[6] = "Saturday";
+
+var sorted_flights= [
+<?php
+ pg_result_seek($result, 0);
+ $first=1;
+ while ($row = pg_fetch_row($result)) {
+  if ($first==1) { $first=0; } else { echo ", "; }
+  echo '{price:'.$row[7].', company:"'.$row[9].'", outdate:"'.$row[2].'", indate:"'.$row[3].'", outsrc:"Tel Aviv (TLV)", outdst:"'.$row[4].'",outdur:"02:50",indur:"02:40",outarr:"08:10",inarr:"20:00"}'."\n";
+ }
+?>
+];
+
+function fill_results() {
+ $("#flight_results").hide("slow");
+ $("#flight_results").empty();
+ for (var f in sorted_flights) {
+  var flight = sorted_flights[f];
+  var outdate=new Date(flight['outdate']);
+  var indate=new Date(flight['indate']);
+  var data = 
+    '<div class="result_row">'+
+    '<img src="images/flight_card.jpg">'+
+    '<div class="result_price"><i class="fa fa-ils"></i>'+flight['price']+'</div>'+
+    '<div class="result_company"><img src="images/'+flight['company']+'.jpg" class="cmp_logo"></div>'+
+    '<div class="result_outdate">'+weekday[outdate.getUTCDay()]+" "+outdate.getUTCDate()+"/"+outdate.getUTCMonth()+"/"+outdate.getUTCFullYear()+' 00:00</div>'+
+    '<div class="result_indate">'+weekday[indate.getUTCDay()]+" "+indate.getUTCDate()+"/"+indate.getUTCMonth()+"/"+indate.getUTCFullYear()+' 00:00</div>'+
+    '<div class="result_outsrc">Tel Aviv (TLV)</div>'+
+    '<div class="result_insrc">'+flight['outdst']+'</div>'+
+    '<div class="result_indst">Tel Aviv (TLV)</div>'+
+    '<div class="result_outdst">'+flight['outdst']+'</div>'+
+    '<div class="result_outdur">'+"02:50H"+'</div>'+
+    '<div class="result_indur">'+"02:50H"+'</div>'+
+    '<div class="result_outarr">'+"08:10"+'</div>'+
+    '<div class="result_inarr">'+"20:00"+'</div>'+
+    '<div class="result_icons"><span class="fa-stack fa-2x"><i class="fa fa-suitcase fa-stack-1x"></i><i class="fa fa-ban fa-stack-2x text-white"></i></div>'+
+    '</div>';
+  $("#flight_results").append(data);
+ }
+ $("#flight_results").show("fast");
+}
+
+function SortByprice(a,b) {
+  if (a.price < b.price) return -1;
+  if (a.price > b.price) return 1;
+  return 0;
+}
+
+function SortByoutdate(a,b) {
+  if (a.outdate < b.outdate) return -1;
+  if (a.outdate > b.outdate) return 1;
+  return 0;
+}
 
 $(document).ready(function() {
 
@@ -167,6 +228,9 @@ pg_result_seek($result, 0);
       "iDisplayLength": 50,
       "order": [[ 7 ,"asc" ]]
     });
+ 
+    sorted_flights.sort(SortByprice);
+    fill_results();
 
 });
 
@@ -189,6 +253,17 @@ function ShowCal(){
  $("#table-li").removeClass("active");
 }
 
+function sortBy(col) {
+ $("#sort_bar").find("li").each(function() {
+  var $this = $(this);
+  $this.removeClass("active");
+ });
+ var s = document.getElementById("sb_"+col);
+ $(s).addClass("active");
+ sorted_flights.sort(eval("SortBy"+col));
+ fill_results();
+ 
+}
 
 </script>
 
@@ -200,31 +275,23 @@ function ShowCal(){
   <li id="cal-li" onclick="ShowCal();"><a href="#">Calendar View</a></li>
 </ul>
 
+<ul class="nav nav-pills" id="sort_bar">
+ <div class="navbar-header">
+  <a class="navbar-brand" href="#">Sort By: </a>
+ </div>
+ <li id="sb_price" class="active" onclick="sortBy('price');"><a href="#">Price</a></li>
+ <li id="sb_outdate" onclick="sortBy('outdate');"><a href="#">Departure Date</a></li>
+</ul>
 
-<div id="table-tab"><P>
-  <?php  
-while ($row = pg_fetch_row($result)) {
- echo '<div class="result_row">'."\n";
- echo '<img src="images/flight_card.jpg">'."\n";
- echo '<div class="result_price"><i class="fa fa-ils"></i>'.$row[7].'</div>'."\n";
- echo '<div class="result_company"><img src="images/'.$row[9].'.jpg" class="cmp_logo"></div>'."\n";
- echo '<div class="result_outdate">'.date('l d/m/y', strtotime( $row[2])).' 00:00</div>'."\n";
- echo '<div class="result_indate">'.date('l d/m/y', strtotime( $row[3])).' 00:00</div>'."\n";
- echo '<div class="result_outsrc">Tel Aviv (TLV)</div>'."\n";
- echo '<div class="result_insrc">'.$row[4].'</div>'."\n";
- echo '<div class="result_indst">Tel Aviv (TLV)</div>'."\n";
- echo '<div class="result_outdst">'.$row[4].'</div>'."\n";
- echo '<div class="result_outdur">'."02:50H".'</div>'."\n";
- echo '<div class="result_indur">'."02:50H".'</div>'."\n";
- echo '<div class="result_outarr">'."08:10".'</div>'."\n";
- echo '<div class="result_inarr">'."20:00".'</div>'."\n";
- echo '<div class="result_icons"><span class="fa-stack fa-2x"><i class="fa fa-suitcase fa-stack-1x"></i><i class="fa fa-ban fa-stack-2x text-white"></i></div>'."\n";
- echo '</div>'."\n";
-}
-?>
+<div id="table-tab" class="container">
+<div class="row">
+<div id="flight_results" name="flight_results" class="col-centered">
 </div>
+</div></div>
+<!--
 <div id="cal-tab">
 <div id="calendar"></div>
+-->
 </div>
 </div>
 </BODY>
