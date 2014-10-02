@@ -80,7 +80,7 @@ if ($_POST['company']=="ALL") {
 }
 
 $query="
-select d.* from ( select a.scrape_time ast, b.scrape_time bst, a.date adt, b.date bdt, c.destination cdst, a.price apr, b.price bpr, a.price+b.price total , (b.date - a.date) dd , e.name,a.dst from flights a
+select d.* from ( select a.scrape_time ast, b.scrape_time bst, a.date adt, b.date bdt, c.destination cdst, a.price apr, b.price bpr, a.price+b.price total , (b.date - a.date) dd , e.name,a.dst, a.dep_time, a.arr_time, b.dep_time, b.arr_time, a.dst from flights a
 join flights b on a.dst=b.dst $flight_join $dates_join
 join companies e on e.id=$companies_join
 join destinations c on a.dst=c.airport and c.company=$destination_join
@@ -121,6 +121,15 @@ while ($row = pg_fetch_row($result)) {
 
 <script>
 
+var Gpage = 1;
+var perPage=10;
+
+function displayPage(page) {
+ Gpage=page;
+ var startI = (page-1)*perPage; 
+ fill_results(startI); 
+}
+
 var weekday = new Array(7);
 weekday[0]=  "Sunday";
 weekday[1] = "Monday";
@@ -136,38 +145,94 @@ var sorted_flights= [
  $first=1;
  while ($row = pg_fetch_row($result)) {
   if ($first==1) { $first=0; } else { echo ", "; }
-  echo '{price:'.$row[7].', company:"'.$row[9].'", outdate:"'.$row[2].'", indate:"'.$row[3].'", outsrc:"Tel Aviv (TLV)", outdst:"'.$row[4].'",outdur:"02:50",indur:"02:40",outarr:"08:10",inarr:"20:00"}'."\n";
+  echo '{price:'.$row[7].', company:"'.$row[9].'", outdate:"'.$row[2].'", indate:"'.$row[3].'", outsrc:"Tel Aviv (TLV)", outdst:"'.$row[4].'", outairport:"'.$row[15].'",outdur:"XXX",indur:"XXX",outdep:"'.$row[11].'",outarr:"'.$row[12].'",indep:"'.$row[13].'",inarr:"'.$row[14].'", special:"", nights:'.$row[8].'}'."\n";
  }
 ?>
 ];
 
-function fill_results() {
- $("#flight_results").hide("slow");
+var pagesN = Math.ceil(sorted_flights.length / perPage);
+
+function fill_results(startI) {
  $("#flight_results").empty();
- for (var f in sorted_flights) {
+ var stopI=startI+perPage;
+ if (stopI > sorted_flights.length) { stopI=sorted_flights.length-1; }
+ for (f=startI ; f<stopI ; f++) {
   var flight = sorted_flights[f];
   var outdate=new Date(flight['outdate']);
   var indate=new Date(flight['indate']);
+  var outdep = flight['outdep'].split(":")[0]+":"+flight['outdep'].split(":")[1]
+  var indep = flight['indep'].split(":")[0]+":"+flight['indep'].split(":")[1]
+  var outarr = flight['outarr'].split(":")[0]+":"+flight['outarr'].split(":")[1]
+  var inarr = flight['inarr'].split(":")[0]+":"+flight['inarr'].split(":")[1]
   var data = 
     '<div class="result_row">'+
-    '<img src="images/flight_card.jpg">'+
+    '<div class="'+flight['special']+'"></div>'+
+    '<img src="images/flight_card.jpg" >'+
     '<div class="result_price"><i class="fa fa-ils"></i>'+flight['price']+'</div>'+
     '<div class="result_company"><img src="images/'+flight['company']+'.jpg" class="cmp_logo"></div>'+
-    '<div class="result_outdate">'+weekday[outdate.getUTCDay()]+" "+outdate.getUTCDate()+"/"+outdate.getUTCMonth()+"/"+outdate.getUTCFullYear()+' 00:00</div>'+
-    '<div class="result_indate">'+weekday[indate.getUTCDay()]+" "+indate.getUTCDate()+"/"+indate.getUTCMonth()+"/"+indate.getUTCFullYear()+' 00:00</div>'+
+    '<div class="result_outdate">'+weekday[outdate.getUTCDay()]+" "+outdate.getUTCDate()+"/"+(outdate.getUTCMonth()+1)+"/"+outdate.getUTCFullYear()+' '+outdep+'</div>'+
+    '<div class="result_indate">'+weekday[indate.getUTCDay()]+" "+indate.getUTCDate()+"/"+(indate.getUTCMonth()+1)+"/"+indate.getUTCFullYear()+' '+indep+'</div>'+
     '<div class="result_outsrc">Tel Aviv (TLV)</div>'+
-    '<div class="result_insrc">'+flight['outdst']+'</div>'+
+    '<div class="result_insrc">'+flight['outdst']+' ('+flight['outairport']+')</div>'+
     '<div class="result_indst">Tel Aviv (TLV)</div>'+
-    '<div class="result_outdst">'+flight['outdst']+'</div>'+
-    '<div class="result_outdur">'+"02:50H"+'</div>'+
-    '<div class="result_indur">'+"02:50H"+'</div>'+
-    '<div class="result_outarr">'+"08:10"+'</div>'+
-    '<div class="result_inarr">'+"20:00"+'</div>'+
+    '<div class="result_outdst">'+flight['outdst']+' ('+flight['outairport']+')</div>'+
+    '<div class="result_outdur">'+flight['outdur']+'H</div>'+
+    '<div class="result_indur">'+flight['indur']+'H</div>'+
+    '<div class="result_outarr">'+outarr+'</div>'+
+    '<div class="result_inarr">'+inarr+'</div>'+
+    '<div class="result_descr">'+flight['outdst']+', '+flight['nights']+' Nights</div>'+
     '<div class="result_icons"><span class="fa-stack fa-2x"><i class="fa fa-suitcase fa-stack-1x"></i><i class="fa fa-ban fa-stack-2x text-white"></i></div>'+
     '</div>';
   $("#flight_results").append(data);
  }
- $("#flight_results").show("fast");
+ fill_pages();
+}
+
+function fill_pages() {
+ $("#pagination").empty();
+ var data = "";
+ var lastdata= "";
+
+ if (Gpage>1) {
+  data=data+'<li><a href="#" onclick="displayPage(Gpage-1);">&laquo;</a></li>';
+ }
+
+ if (Gpage>3) {
+  data=data+'<li><a href="#" onclick="displayPage(1);">1</a></li>';
+  data=data+'<li><a href="#">...</a></li>';
+ } else if (Gpage==3) {
+  data=data+'<li><a href="#" onclick="displayPage(1);">1</a></li>';
+ }
+
+ if (Gpage>1) { 
+  data=data+'<li><a href="#" id="page_'+(Gpage-1)+'" onclick="displayPage('+(Gpage-1)+');">'+(Gpage-1)+'</a></li>'; 
+ } else {
+  data=data+'<li class="disabled"><a href="#" onclick="displayPage(Gpage-1);">&laquo;</a></li>';
+ }
+
+ data=data+'<li class="active"><a href="#" id="page_'+Gpage+'" onclick="displayPage('+Gpage+');" class="active">'+Gpage+'</a></li>';
+
+ if (Gpage<pagesN-1) { 
+  data=data+'<li><a href="#" id="page_'+(Gpage+1)+'" onclick="displayPage('+(Gpage+1)+');">'+(Gpage+1)+'</a></li>'; 
+  lastdata='<li><a href="#" onclick="displayPage('+(Gpage+1)+');">&raquo;</a></li>';
+ } else if (Gpage==pagesN-1) { 
+  lastdata='<li><a href="#" onclick="displayPage('+(Gpage+1)+');">&raquo;</a></li>';
+ } else {
+  lastdata='<li class="disabled"><a href="#" onclick="displayPage('+(Gpage+1)+');">&raquo;</a></li>';
+ }
+
+ if (Gpage < pagesN-2) {
+  data=data+'<li><a href="#">...</a></li>';
+  data=data+'<li><a href="#" onclick="displayPage('+pagesN+');">'+pagesN+'</a></li>';
+ } else {
+  if (Gpage == pagesN-1) {
+   data=data+'<li><a href="#" id="page_'+(Gpage+1)+'" onclick="displayPage('+(Gpage+1)+');">'+(Gpage+1)+'</a></li>';
+  } else if (Gpage != pagesN){
+   data=data+'<li><a href="#" id="page_'+(Gpage+2)+'" onclick="displayPage('+(Gpage+2)+');">'+(Gpage+2)+'</a></li>';
+  }
+ }
+ data=data+lastdata;
+ $("#pagination").append(data);
 }
 
 function SortByprice(a,b) {
@@ -180,6 +245,33 @@ function SortByoutdate(a,b) {
   if (a.outdate < b.outdate) return -1;
   if (a.outdate > b.outdate) return 1;
   return 0;
+}
+
+function mark_tops() {
+ sorted_flights.sort(SortByoutdate);
+ var n=0;
+ var last=0;
+ for (var f in sorted_flights) {
+  var flight = sorted_flights[f];
+  if (flight['outdate'] != last) {
+   last=flight['outdate'];
+   n++;
+  }
+  if (n==4) { break ; }
+  sorted_flights[f]['special']="earliest";
+ }
+ sorted_flights.sort(SortByprice);
+ var n=0;
+ var last=0;
+ for (var f in sorted_flights) {
+  var flight = sorted_flights[f];
+  if (flight['price'] != last) {
+   last=flight['price'];
+   n++;
+  }
+  if (n==4) { break ; }
+  sorted_flights[f]['special']="cheapest";
+ }
 }
 
 $(document).ready(function() {
@@ -229,8 +321,9 @@ pg_result_seek($result, 0);
       "order": [[ 7 ,"asc" ]]
     });
  
-    sorted_flights.sort(SortByprice);
-    fill_results();
+    mark_tops();
+    //sorted_flights.sort(SortByprice);
+    displayPage(1);
 
 });
 
@@ -261,7 +354,7 @@ function sortBy(col) {
  var s = document.getElementById("sb_"+col);
  $(s).addClass("active");
  sorted_flights.sort(eval("SortBy"+col));
- fill_results();
+ displayPage(1);
  
 }
 
@@ -270,10 +363,12 @@ function sortBy(col) {
 </HEAD<BODY>
 <div class="loader"><h2 class="load_center load_txt">Loading your request...</h2><BR><i class="fa fa-spinner fa-5x fa-spin load_center"></i></div>
 <div id="route_wrap">
+<!--
 <ul class="nav nav-pills">
   <li id="table-li" class="active" onclick="ShowTable();"><a href="#">Table View</a></li>
   <li id="cal-li" onclick="ShowCal();"><a href="#">Calendar View</a></li>
 </ul>
+-->
 
 <ul class="nav nav-pills" id="sort_bar">
  <div class="navbar-header">
@@ -283,7 +378,9 @@ function sortBy(col) {
  <li id="sb_outdate" onclick="sortBy('outdate');"><a href="#">Departure Date</a></li>
 </ul>
 
-<div id="table-tab" class="container">
+<div id="table-tab" class="container1">
+<ul id="pagination" class="pagination ">
+</ul>
 <div class="row">
 <div id="flight_results" name="flight_results" class="col-centered">
 </div>

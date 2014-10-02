@@ -32,10 +32,6 @@ position:fixed; left:0px; top:0px; width:100%; height:100%; z-index:1000;
  padding-bottom:100px;
 }
 
-.result_row {
-    position:relative;
-    margin: 10px;
-}
 .result_price {
     z-index:80;
     position:absolute;
@@ -45,7 +41,7 @@ position:fixed; left:0px; top:0px; width:100%; height:100%; z-index:1000;
     top:42px;
 }
 .result_company {
-    z-index:80;
+    z-index:76;
     position:absolute;
     left:120px;
     top:38px;
@@ -124,9 +120,50 @@ position:fixed; left:0px; top:0px; width:100%; height:100%; z-index:1000;
     left:581px;
     top:90px;
 }
+.result_descr {
+    z-index:80;
+    font-weight:bold;
+    position:absolute;
+    font-size:20px;
+    left:10px;
+    top:10px;
+    color: #AD3DF2;
+}
 .result_icons {
     z-index:80;
     position:absolute;
     left:740px;
     top:40px;
+}
+.result_row {
+  position:relative;
+  margin: 15px;
+  box-shadow: 3px 3px 15px #666;
+  cursor: pointer;
+}
+.container1 {
+ width: 935px;
+}
+.row {
+ width: 935px;
+}
+div.cheapest { 
+background: #2EE65C; 
+z-index:79;
+position:absolute;
+top:0px;
+left:0px;
+width:100%;
+height:100%;
+opacity:.1;
+}
+div.earliest { 
+background: #F23D3D; 
+z-index:79;
+position:absolute;
+top:0px;
+left:0px;
+width:100%;
+height:100%;
+opacity:.1;
 }
