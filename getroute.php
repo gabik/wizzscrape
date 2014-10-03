@@ -376,6 +376,13 @@ function sortBy(col) {
  </div>
  <li id="sb_price" class="active" onclick="sortBy('price');"><a href="#">Price</a></li>
  <li id="sb_outdate" onclick="sortBy('outdate');"><a href="#">Departure Date</a></li>
+ 
+ <div class="navbar-header">
+  <a class="navbar-brand" href="#">Currency: </a>
+ </div>
+ <li id="cur_ils" class="active" onclick="setCur('ils');"><a href="#"><i class="fa fa-ils "></i></a></li>
+ <li id="cur_usd" onclick="setCur('usd');"><a href="#"><i class="fa fa-dollar "></i></a></li>
+ <li id="cur_eur" onclick="setCur('usd');"><a href="#"><i class="fa fa-euro"></i></a></li>
 </ul>
 
 <div id="table-tab" class="container1">

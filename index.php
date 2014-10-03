@@ -8,86 +8,8 @@
 <script src="lib/slider/js/bootstrap-slider.js"></script>
 <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <link href="lib/datepicker/css/datepicker3.css" rel="stylesheet">
+<link href="lib/searchMain.css" rel="stylesheet">
 <script src="lib/datepicker/js/bootstrap-datepicker.js"></script>
-
-<style>
-body { width:100%; padding:64px 20px 0 20px;}
-#days { width: 250px; }
-#price { width: 250px; }
-.container {
-   padding-right: 15px;
-   padding-left: 15px;
-   margin-right: 15px;
-   margin-left: 15px;
-   width:100%;
-}
-.jumbotron-form {
- padding-top:0px;
- padding-bottom:10px;
- margin-bottom: 0px;
- border-radius: 10px;
-background: -webkit-linear-gradient(-81deg, #4D90FE, #4D90FE); //#3394de, #2288d5, 4D90FE);
-}
-.custom_btn { width : 250px ; height: 50px ;  margin-top:1px; }
-.custom_btn_col { margin:0px; }
-#adsense-left { padding-top: 10px;}
-#adsense-foot { padding-top: 10px; margin: 20px 0 0 5px;}
-.well { 
- margin-bottom: 5px; 
- padding:10px; 
- background: -webkit-linear-gradient(top, #E6F0FF, #F7FAFF);
-}
-.form-well { 
- background: -webkit-linear-gradient(top, #fff, #fff);
- padding:20px 40px; 
- margin-bottom: 0px; 
-}
-form {
- margin-bottom: 0px; 
-}
-.jumbotron-head {
- margin: 0px; 
- padding:0px;
-}
-.navbar-nav>.active>a { border-radius: 5px; }
-.cnt-head {padding: 0 0 0 60px; width: 100%;}
-.custom-nav {
- padding: 5px 20px 5px 20px ;
- background: -webkit-linear-gradient(top, #fff 0%, #f5f7fa 100%);
-}
-h1.head1 {
- margin-top:5px;
-  background: -webkit-linear-gradient(top, #fff 0%, #f5f7fa 100%);
- //  background: -webkit-linear-gradient(#e3e5ff, #a9b0fc);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
- font-size: 50px;
-}
-
-@media screen and (max-width: 800px) {
- h1.head1 {
-  font-size: 10px; 
- }
-}
-
-.slider-handle {
-width: 25px;
-height: 25px;
-top: -3px;
-}
-.slider-handle.round {
-border-radius: 8px;
-}
-
-.slider-selection {
-background-image: linear-gradient(to bottom, #ABC2FF, #B3B7FF);
-}
-
-.white-txt {
-color:white;
-}
-</style>
-
 
 <?php
  $conn_string = "host=manegerdb.cjjasb6ckbh1.us-east-1.rds.amazonaws.com port=5432 dbname=GabiScrape user=root password=ManegerDB";
@@ -149,11 +71,15 @@ $(document).ready(function() {
       $('#dpd1').removeAttr("disabled");
       $('#dpd2').removeAttr("disabled");
       var todayDate = new Date();
-      var endDate = new Date();
-      endDate.setDays(endDate.getDay() + 1);
       $('#dpd1').datepicker('setDate', todayDate);
-      $('#dpd2').datepicker('setDate', endDate);
+      $('#dpd2').datepicker('setDate', todayDate);
      }
+    });
+
+    $('#dpd1').change( function() {
+      var endDate = new Date($(this).val());
+      endDate.setDate(endDate.getDate() + 1);
+      $('#dpd2').datepicker('setDate', endDate);
     });
  
     $('.dtpicker').datepicker({
@@ -345,9 +271,9 @@ $(document).ready(function() {
      </div>
      <div class="col-sm-8 ">
       <div class="input-group" id="datepicker"> 
-       <span class="input-group-addon">From</span>
+       <span class="input-group-addon datespan">From</span>
        <input type="text" class="form-control dtpicker" name="dpd1" id="dpd1" disabled/> 
-       <span class="input-group-addon">To</span>
+       <span class="input-group-addon datespan">To</span>
        <input type="text" class="form-control dtpicker" name="dpd2" id="dpd2" disabled/> 
       </div>
      </div>
