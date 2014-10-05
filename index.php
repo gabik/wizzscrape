@@ -189,9 +189,10 @@ $(document).ready(function() {
    </div>
    <div class=col-md-4>
     <div id=adsense-left>
-     <!-- 2fly600x300 -->
+     <!-- 2fly600x300 
      <ins class="adsbygoogle" style="display:inline-block;width:300px;height:600px" data-ad-client="ca-pub-3421081986991175" data-ad-slot="8172171649"></ins>
      <script> (adsbygoogle = window.adsbygoogle || []).push({}); </script>
+-->
     </div>
    </div>
    <div class=col-md-6>
@@ -289,9 +290,10 @@ $(document).ready(function() {
     </div>
     <div class=row>
      <div id=adsense-foot>
-      <!-- 2fly-footer -->
+      <!-- 2fly-footer 
       <ins class="adsbygoogle" style="display:inline-block;width:728px;height:90px" data-ad-client="ca-pub-3421081986991175" data-ad-slot="8200694443"></ins>
       <script> (adsbygoogle = window.adsbygoogle || []).push({}); </script>
+-->
      </div>
     </div>
    </div>

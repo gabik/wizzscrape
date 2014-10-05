@@ -1,3 +1,4 @@
+0  0  * * * ec2-user cd /home/ec2-user/wizz ; ./update_currencies.py
 0  1  * * * ec2-user cd /home/ec2-user/wizz ; ./run.sh 0
 30 1  * * * ec2-user cd /home/ec2-user/wizz ; ./run.sh 1
 0  2  * * * ec2-user cd /home/ec2-user/wizz ; ./run.sh 2
