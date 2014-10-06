@@ -18,6 +18,9 @@
 
 
 <?php
+$usd=fgets(fopen("currencies/usd", "r"));
+$eur=fgets(fopen("currencies/eur", "r"));
+
 if (array_key_exists('days', $_POST)) {
  $days_a=explode(",", $_POST['days']);
  $minDays=$days_a[0];
@@ -121,6 +124,9 @@ while ($row = pg_fetch_row($result)) {
 
 <script>
 
+var usd = <?php echo $usd; ?>;
+var eur = <?php echo $eur; ?>;
+var currency = "ils";
 var Gpage = 1;
 var perPage=10;
 
@@ -145,7 +151,7 @@ var sorted_flights= [
  $first=1;
  while ($row = pg_fetch_row($result)) {
   if ($first==1) { $first=0; } else { echo ", "; }
-  echo '{price:'.$row[7].', company:"'.$row[9].'", outdate:"'.$row[2].'", indate:"'.$row[3].'", outsrc:"Tel Aviv (TLV)", outdst:"'.$row[4].'", outairport:"'.$row[15].'",outdur:"XXX",indur:"XXX",outdep:"'.$row[11].'",outarr:"'.$row[12].'",indep:"'.$row[13].'",inarr:"'.$row[14].'", special:"", nights:'.$row[8].'}'."\n";
+  echo '{price:'.$row[7].', company:"'.$row[9].'", outdate:"'.$row[2].'", indate:"'.$row[3].'", outsrc:"Tel Aviv (TLV)", outdst:"'.$row[4].'", outairport:"'.$row[15].'",outdur:"XXX",indur:"XXX",outdep:"'.$row[11].'",outarr:"'.$row[12].'",indep:"'.$row[13].'",inarr:"'.$row[14].'", special:"", nights:'.$row[8].', usd:'.floor($row[7]/$usd).', eur:'.floor($row[7]/$eur).', ils:'.$row[7].'}'."\n";
  }
 ?>
 ];
@@ -164,11 +170,12 @@ function fill_results(startI) {
   var indep = flight['indep'].split(":")[0]+":"+flight['indep'].split(":")[1]
   var outarr = flight['outarr'].split(":")[0]+":"+flight['outarr'].split(":")[1]
   var inarr = flight['inarr'].split(":")[0]+":"+flight['inarr'].split(":")[1]
+  var price= price=flight[currency];
   var data = 
     '<div class="result_row">'+
     '<div class="'+flight['special']+'"></div>'+
     '<img src="images/flight_card.jpg" >'+
-    '<div class="result_price"><i class="fa fa-ils"></i>'+flight['price']+'</div>'+
+    '<div class="result_price"><i class="fa fa-'+currency+'"></i>'+price+'</div>'+
     '<div class="result_company"><img src="images/'+flight['company']+'.jpg" class="cmp_logo"></div>'+
     '<div class="result_outdate">'+weekday[outdate.getUTCDay()]+" "+outdate.getUTCDate()+"/"+(outdate.getUTCMonth()+1)+"/"+outdate.getUTCFullYear()+' '+outdep+'</div>'+
     '<div class="result_indate">'+weekday[indate.getUTCDay()]+" "+indate.getUTCDate()+"/"+(indate.getUTCMonth()+1)+"/"+indate.getUTCFullYear()+' '+indep+'</div>'+
@@ -332,6 +339,19 @@ $(window).load(function() {
 })
 
 
+function changeCur(cur) {
+ currency = cur;
+ displayPage(Gpage);
+ $("#head_bar").find("li").each(function() {
+  var $this = $(this);
+  if ($this.hasClass("cur")) {
+   $this.removeClass("active");
+  }
+ });
+ var s = document.getElementById("cur_"+cur);
+ $(s).addClass("active");
+}
+
 function ShowTable(){ 
  $("#cal-tab").hide("fast") ; 
  $("#table-tab").show("fast"); 
@@ -347,9 +367,11 @@ function ShowCal(){
 }
 
 function sortBy(col) {
- $("#sort_bar").find("li").each(function() {
+ $("#head_bar").find("li").each(function() {
   var $this = $(this);
-  $this.removeClass("active");
+  if ($this.hasClass("sb")) {
+   $this.removeClass("active");
+  }
  });
  var s = document.getElementById("sb_"+col);
  $(s).addClass("active");
@@ -370,19 +392,19 @@ function sortBy(col) {
 </ul>
 -->
 
-<ul class="nav nav-pills" id="sort_bar">
+<ul class="nav nav-pills" id="head_bar">
  <div class="navbar-header">
   <a class="navbar-brand" href="#">Sort By: </a>
  </div>
- <li id="sb_price" class="active" onclick="sortBy('price');"><a href="#">Price</a></li>
- <li id="sb_outdate" onclick="sortBy('outdate');"><a href="#">Departure Date</a></li>
+ <li id="sb_price" class="sb active" onclick="sortBy('price');"><a href="#">Price</a></li>
+ <li id="sb_outdate" class="sb" onclick="sortBy('outdate');"><a href="#">Departure Date</a></li>
  
  <div class="navbar-header">
   <a class="navbar-brand" href="#">Currency: </a>
  </div>
- <li id="cur_ils" class="active" onclick="setCur('ils');"><a href="#"><i class="fa fa-ils "></i></a></li>
- <li id="cur_usd" onclick="setCur('usd');"><a href="#"><i class="fa fa-dollar "></i></a></li>
- <li id="cur_eur" onclick="setCur('usd');"><a href="#"><i class="fa fa-euro"></i></a></li>
+ <li id="cur_ils" class="cur active" onclick="changeCur('ils');"><a href="#"><i class="fa fa-ils "></i></a></li>
+ <li id="cur_usd" class="cur" onclick="changeCur('usd');"><a href="#"><i class="fa fa-dollar "></i></a></li>
+ <li id="cur_eur" class="cur" onclick="changeCur('eur');"><a href="#"><i class="fa fa-euro"></i></a></li>
 </ul>
 
 <div id="table-tab" class="container1">
