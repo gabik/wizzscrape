@@ -21,14 +21,14 @@
 $usd=fgets(fopen("currencies/usd", "r"));
 $eur=fgets(fopen("currencies/eur", "r"));
 
-if (array_key_exists('days', $_POST)) {
- $days_a=explode(",", $_POST['days']);
- $minDays=$days_a[0];
- $maxDays=$days_a[1];
-} else {
+#if (array_key_exists('days', $_POST)) {
+ #$days_a=explode(",", $_POST['days']);
+ #$minDays=$days_a[0];
+ #$maxDays=$days_a[1];
+#} else {
  $minDays=$_POST['minDays'];
  $maxDays=$_POST['maxDays'];
-}
+#}
 
 if (array_key_exists('AllDates', $_POST)) {
  if ($_POST['AllDates']=="on") {
@@ -90,7 +90,7 @@ join destinations c on a.dst=c.airport and c.company=$destination_join
 where a.direction=1 and b.direction=2 and (b.date - a.date)>=".$minDays." and (b.date - a.date)<=".$maxDays." ".$price_join.") d
 ";
 
-#echo $query;
+echo $query;
 
 $result = pg_query($db, $query);
 pg_close();

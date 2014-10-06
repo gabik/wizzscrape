@@ -4,12 +4,16 @@
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
 <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-<link href="lib/slider/css/slider.css" rel="stylesheet">
-<script src="lib/slider/js/bootstrap-slider.js"></script>
+<!-- <link href="lib/slider/css/slider.css" rel="stylesheet">
+<script src="lib/slider/js/bootstrap-slider.js"></script> -->
 <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <link href="lib/datepicker/css/datepicker3.css" rel="stylesheet">
 <link href="lib/searchMain.css" rel="stylesheet">
 <script src="lib/datepicker/js/bootstrap-datepicker.js"></script>
+<script src="lib/jquery.nouislider.min.js"></script>
+<script src="lib/jquery.liblink.js"></script>
+<link href="lib/jquery.nouislider.min.css" rel="stylesheet">
+
 
 <?php
  $conn_string = "host=manegerdb.cjjasb6ckbh1.us-east-1.rds.amazonaws.com port=5432 dbname=GabiScrape user=root password=ManegerDB";
@@ -48,6 +52,7 @@ $(document).ready(function() {
      $('#routeForm')[0].submit();
     });
 
+/*
     $('#price').slider({
     })
     .on('slide', function(e) { 
@@ -62,6 +67,39 @@ $(document).ready(function() {
       $('#price').slider("enable");
      }
     });
+*/
+
+    $('#AllPrice').change(function() {
+     if (this.checked) {
+      $('#priceslider').attr("disabled", 'disabled');
+     } else {
+      $('#priceslider').removeAttr("disabled");
+     }
+    });
+
+$('#priceslider').noUiSlider({
+ start: [ 6 ],
+ range: { 'min': 2, 'max': 200 },
+ connect: 'lower',
+ step: 1,
+ format: { to: function(val) { return parseInt(val)*100; }, from: function(val) { return val; }}
+});
+$('#priceslider').Link('lower').to($('#priceval'));
+$('#priceslider').Link('lower').to($('#price'));
+
+$('#dayslider').noUiSlider({
+ start: [ 4, 6 ],
+ connect: true,
+ range: { 'min': 2, 'max': 20 },
+ step: 1,
+ format: { to: function(val) { return parseInt(val); }, from: function(val) { return val; }}
+});
+$('#dayslider').Link('lower').to($('#minDaysval'));
+$('#dayslider').Link('lower').to($('#minDays'));
+$('#dayslider').Link('upper').to($('#maxDaysval'));
+$('#dayslider').Link('upper').to($('#maxDays'));
+
+
 
     $('#AllDates').change(function() {
      if (this.checked) {
@@ -90,6 +128,7 @@ $(document).ready(function() {
       todayHighlight: true
     });
 
+/*
     $('#days').slider({
     })
     .on('slide', function(e) { 
@@ -97,7 +136,7 @@ $(document).ready(function() {
      $('#minDaysval').text(cur_val[0]);
      $('#maxDaysval').text(cur_val[1]);
     });
-
+*/
     <?php
      $dst_companies = array_keys($destinations);
     ?>
@@ -238,13 +277,14 @@ $(document).ready(function() {
       <b>Nights: </b>
      </div>
      <div class="col-sm-2">
-      Min <span id=minDaysval>4</span>
+      Min <span id=minDaysval>4</span> <input type=hidden name=minDays id=minDays>
      </div>
      <div class="col-sm-6">
-      <input type="text" value="4,6" data-slider-min="2" data-slider-max="14" data-slider-step="1" data-slider-value="[4,6]" id="days" name="days">
+      <div id="dayslider"></div>
+<!--      <input type="text" value="4,6" data-slider-min="2" data-slider-max="14" data-slider-step="1" data-slider-value="[4,6]" id="days" name="days"> -->
      </div>
      <div class="col-sm-2">
-      Max <span id=maxDaysval>6</span>
+      Max <span id=maxDaysval>6</span> <input type=hidden name=maxDays id=maxDays>
      </div>
     </div>
 
@@ -256,10 +296,11 @@ $(document).ready(function() {
       <label> <input type="checkbox" checked id="AllPrice" name="AllPrice">All</label>
      </div>
      <div class="col-sm-2">
-      <span id="priceval">600</span> <i class="fa fa-ils"></i>
+      <span id="priceval"></span><input type="hidden" id="price" name="price"> <i class="fa fa-ils"></i>
      </div>
      <div class="col-sm-6">
-      <input type="text" value="600" data-slider-min="200" data-slider-max="10000" data-slider-step="100" data-slider-value="600" id="price" name="price" data-slider-enabled="false">
+      <div id="priceslider" disabled></div>
+<!--      <input type="text" value="600" data-slider-min="200" data-slider-max="10000" data-slider-step="100" data-slider-value="600" id="price" name="price" data-slider-enabled="false"> -->
      </div>
     </div>
 
