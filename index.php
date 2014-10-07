@@ -251,6 +251,7 @@ $('#dayslider').Link('upper').to($('#maxDays'));
        <option value="easyjet">Easyjet</option>
        <option value="up">Up by Elal</option>
        <option value="elal">Elal</option>
+       <option value="sundor">SunDor</option>
        <option value="airmed">Air Mediterranee</option>
       </select>
      </div>

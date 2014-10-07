@@ -18,7 +18,7 @@ new_year=0
 maxn=31
 arg_month=sys.argv[2]
 Start_orig = datetime.date.today()
-#Start_orig = datetime.date(2015,8,1)
+#Start_orig = datetime.date(2014,11,7)
 Start_orig += datetime.timedelta(days=(int(maxn)-1)*int(arg_month))
 Stop = Start_orig + datetime.timedelta(days=maxn)
 scrape_time = datetime.datetime.today()
@@ -79,13 +79,17 @@ for DST in Dests:
   url3='http://fly2u.sundor.co.il/plnext/SUNDORonlinebooking/Override.action'
   r3=s.post(url3,data=dict)
   if (r3.text.find("generatedJSon") < 0) : 
-   print "No flights for " + str(Start)
    Start=Start + datetime.timedelta(days=1)
    continue
   x=r3.text[r3.text.find("generatedJSon"):r3.text.find("\n", r3.text.find("generatedJSon"))]
   y=x[28:-4]
   w=eval(y.replace('false', 'False').replace('true','True'))
-  d=w['recommendations']
+  if 'recommendations' in w:
+   d=w['recommendations']
+  else:
+   print "New List again..." + str(Start)
+   Start=Start + datetime.timedelta(days=1)
+   continue
   d2 = [[x['keyDate'][0:8], x['keyDate'][8:], x['list_price'][0]['formatted_price'], x['list_price'][1]['formatted_price']] for x in d]
   #d3 = set((x[i],x[i+2],i+1) for i in range(2) for x in d2)
   d3 = [[y+1, x[y], x[y+2]] for x in d2 for y in range(2)]

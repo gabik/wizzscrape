@@ -50,10 +50,12 @@ if ($_POST['company']=="ALL") {
 $query="
 select d.* from ( select a.scrape_time ast, b.scrape_time bst, a.date adt, b.date bdt, c.destination cdst, a.price apr, b.price bpr, a.price+b.price total , (b.date - a.date) dd , e.name,a.dst, a.dep_time, a.arr_time, b.dep_time, b.arr_time, a.dst from flights a
 join flights b on a.dst=b.dst $flight_join $dates_join
-join companies e on e.id=$companies_join
+join companies e on e.id=$companies_join and e.id=a.company and e.id=b.company
 join destinations c on a.dst=c.airport and c.company=$destination_join
 where a.direction=1 and b.direction=2 and (b.date - a.date)>=".$minDays." and (b.date - a.date)<=".$maxDays." ".$price_join.") d
 ";
+
+#echo $query;
 
 $result = pg_query($db, $query);
 pg_close();
