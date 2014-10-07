@@ -6,7 +6,7 @@ import re
 import sys
 import datetime
 from general_scrape import find_all, clean_dup, strip_non_ascii, get_currency, clean_dup_list
-import flyup_scrape_import as up
+import up_scrape_import as up
 
 # ARGS:
 # 1 = DST
