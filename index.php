@@ -84,7 +84,7 @@ $('#priceslider').noUiSlider({
  step: 1,
  format: { to: function(val) { return parseInt(val)*100; }, from: function(val) { return val; }}
 });
-$('#priceslider').Link('lower').to($('#priceval'));
+$("#priceslider").Link('lower').to('-inline-<div class="pricetooltip"></div>', function ( value ) { $(this).html( '<span>' + value + ' <i class="fa fa-ils"></i></span>'); });
 $('#priceslider').Link('lower').to($('#price'));
 
 $('#dayslider').noUiSlider({
@@ -94,9 +94,9 @@ $('#dayslider').noUiSlider({
  step: 1,
  format: { to: function(val) { return parseInt(val); }, from: function(val) { return val; }}
 });
-$('#dayslider').Link('lower').to($('#minDaysval'));
+$("#dayslider").Link('lower').to('-inline-<div class="mindaytip"></div>', function ( value ) { $(this).html( '<span>' + value + ' Nights</i></span>'); });
+$("#dayslider").Link('upper').to('-inline-<div class="maxdaytip"></div>', function ( value ) { $(this).html( '<span>' + value + ' Nights</i></span>'); });
 $('#dayslider').Link('lower').to($('#minDays'));
-$('#dayslider').Link('upper').to($('#maxDaysval'));
 $('#dayslider').Link('upper').to($('#maxDays'));
 
 
@@ -187,37 +187,25 @@ $('#dayslider').Link('upper').to($('#maxDays'));
 
 </SCRIPT>
 </HEAD><BODY>
-<nav class="navbar navbar-default navbar-fixed-top custom-nav" role="navigation">
+<div class="custom-nav" role="navigation">
    <div class="navbar-header">
-      <a class="navbar-brand" href="#">Search By: </a>
+      <a href="/"><img src="images/paperplane.png" width="150px"></a>
    </div>
-   <div>
-      <ul class="nav navbar-nav">
-         <li class="active"><a href="#">Cheapest RoundTrip</a></li>
-         <li><a href="#">One Way Tickets</a></li>
-         <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-               Test
-               <b class="caret"></b>
-            </a>
-            <ul class="dropdown-menu">
-               <li><a href="#">Gabi A</a></li>
-               <li><a href="#">Gabi B</a></li>
-               <li><a href="#">Gabi C</a></li>
-               <li class="divider"></li>
-               <li><a href="#">Gabi D</a></li>
-               <li class="divider"></li>
-               <li><a href="#">Gabi E</a></li>
-            </ul>
-         </li>
-      </ul>
+   <div class="navbar-header navbar-header-txt">
+      <a href="/"><span class="txth1">CHEAPEST </span><span class="txth2">FLIGHTS</span></a>
    </div>
-   <div>
-    <p class="navbar-text navbar-right">Test Right
-     <a href="#" class="navbar-link">Link</a>
-    </p>
-   </div>
-</nav>
+   <span class="bar-square">
+    <span class="square_elem">
+     FLIGHTS
+    </span>
+    <span class="square_elem">
+     HOTELS
+    </span>
+    <span class="square_elem">
+     EXPLORE
+    </span>
+   </span>
+</div>
 <div class=row>
  <div class="jumbotron jumbotron-form">
   <div class=container>
@@ -226,118 +214,151 @@ $('#dayslider').Link('upper').to($('#maxDays'));
      <h1 class="text-capitalize head1"><B>Find The Cheapest Flights From Tel Aviv!</B></h1>
     </div>
    </div>
-   <div class=col-md-4>
-    <div id=adsense-left>
-     <!-- 2fly600x300 
-     <ins class="adsbygoogle" style="display:inline-block;width:300px;height:600px" data-ad-client="ca-pub-3421081986991175" data-ad-slot="8172171649"></ins>
-     <script> (adsbygoogle = window.adsbygoogle || []).push({}); </script>
--->
+   
+   <div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-1 midrow"></div>
+    <div class=col-md-6>
+<link href='http://fonts.googleapis.com/css?family=Roboto:400,300' rel='stylesheet' type='text/css'>
+     <span class="text-capitalize head2">No matter when, No matter where, Only price matter.</span>
+    </div>
+    <div class="col-md-1 midrow"></div>
+    <div class="col-md-2"></div>
+   </div>
+
+   <div class="row">
+    <div class="well form-well">
+     <form name=routeForm method=post action=getroute.php class="form-horizontal" id=routeForm>
+
+      <div class="row">
+       <div class="buttons-one-route">
+        <span class="activebutton"><button type='button' class="roundtripBtn buttonup" id="roundtrip" name="roundtrip"><i class="fa fa-plane fa-lg"></i> Round-trip</button></span><button class="onewayBtn buttonup" id="oneway" name="oneway" type='button'><i class="fa fa-plane fa-lg"></i> One-way</button>
+       </div>
+      </div>
+    
+      <div class="row informrow">
+       <div class="col-sm-4">
+        <div class="input-group" id="companygroup">
+         <span class="input-group-addon companyspan">Airline</span>
+         <select name=company id=company class="form-control">
+          <option value="ALL">All Companies</option>
+          <option value="wizz">WizzAir</option>
+          <option value="easyjet">Easyjet</option>
+          <option value="up">Up by Elal</option>
+          <option value="elal">Elal</option>
+          <option value="sundor">SunDor</option>
+          <option value="airmed">Air Mediterranee</option>
+         </select>
+        </div>
+       </div>
+
+       <div class="col-sm-4">
+        <div class="input-group" id="fromgroup">
+         <span class="input-group-addon fromspan">From</span>
+         <select name=src id=src class="form-control "> <option value="TLV">Tel Aviv (TLV)</option> </select>
+        </div>
+       </div>
+
+       <div class="col-sm-4">
+        <div class="input-group" id="fromgroup">
+         <span class="input-group-addon tospan">To</span>
+         <select name=dst id=dst class="form-control">
+          <option value="ALL">All Destinations</option>
+           <?php
+            foreach ($destinations['ALL'] as $dcmp) { 
+             echo '<option value="'.$dcmp['airport'].'">'.$dcmp['destination'].' ('.$dcmp['airport'].')</option>'."\n";
+            }
+           ?>
+         </select>
+        </div>
+       </div>
+
+      </div>
+
+      <div class="row informrow">
+        <div class="col-lg-12">
+         <div class="input-group" id="datesgroup">
+          <span class="input-group-addon datespan datetxtspan">Dates</span>
+          <div class="datespanin">
+           <div class="row datesrow">
+            <div class="col-lg-2">
+             <div class="checkboxP"><input type="checkbox" checked id="AllDates" name="AllDates"><label for="AllDates"></label><span class="alldatestxt">All</span></div>
+            </div>
+            <div class="col-lg-5">
+             <div class="input-group">
+              <span class="input-group-addon datespans dpd1span">Start</span>
+              <input type="text" class="form-control dtpicker" name="dpd1" id="dpd1" disabled/> 
+             </div>
+            </div>
+            <div class="col-lg-5">
+             <div class="input-group">
+              <span class="input-group-addon datespane dpd2span">End</span>
+              <input type="text" class="form-control dtpicker" name="dpd2" id="dpd2" disabled/> 
+             </div>
+            </div>
+           </div>
+          </div>
+         </div>
+        </div>
+      </div>
+
+      <div class="row informrow">
+        <div class="col-lg-12">
+         <div class="input-group" id="nightsgroup">
+          <span class="input-group-addon nightspan nightstxtspan">Nights</span>
+          <div class="nightspanin">
+           <div class="row nightsrow">
+            <div class="col-sm-1">
+            </div>
+            <div class="col-sm-10">
+             <div id="dayslider"></div>
+             <input type='hidden' id='minDays' name='minDays'>
+             <input type='hidden' id='maxDays' name='maxDays'>
+            </div>
+            <div class="col-sm-1">
+            </div>
+           </div>
+          </div>
+         </div>
+        </div>
+      </div>
+
+      <div class="row informrow">
+        <div class="col-lg-12">
+         <div class="input-group" id="pricegroup">
+          <span class="input-group-addon pricespan pricetxtspan">Price</span>
+          <div class="pricespanin">
+           <div class="row pricerow">
+            <div class="col-lg-2">
+             <div class="checkboxP"><input type="checkbox" checked id="AllPrice" name="AllPrice"><label for="AllPrice"></label><span class="allpricetxt">All</span></div>
+            </div>
+       <div class="col-sm-8">
+        <div id="priceslider" disabled></div>
+        <input type='hidden' id='price' name='price'>
+       </div>
+           </div>
+          </div>
+         </div>
+        </div>
+      </div>
+  
+      <div class="form-group custom_btn_col">
+       <div class="col-sm-12 text-center">
+        <button id='submitSearch' class="btn btn-primary btn-lg search_btn custom_btn form-control"> SEARCH FLIGHTS <i class="fa fa-paper-plane-o"></i> </button>
+       </div>
+
+       <div class="row">
+        <div class="col-sm-12">
+         <div class="form-footer">
+          Bla Bla Bla
+         </div>
+        </div>
+       </div>
+      </div>
+  
+     </form>
     </div>
    </div>
-   <div class=col-md-6>
-    <p class="lead text-capitalize white-txt">No matter when, No matter where, Only price matter.</p>
-
-    <div class="well form-well">
-    <form name=routeForm method=post action=getroute.php class="form-horizontal" id=routeForm>
-
-    <div class="form-group well">
-     <div class=col-sm-2>
-      <label for="company" class="control-label">Company: </label>
-     </div>
-     <div class="col-sm-10">
-      <select name=company id=company class="form-control">
-       <option value="ALL">All Companies</option>
-       <option value="wizz">WizzAir</option>
-       <option value="easyjet">Easyjet</option>
-       <option value="up">Up by Elal</option>
-       <option value="elal">Elal</option>
-       <option value="sundor">SunDor</option>
-       <option value="airmed">Air Mediterranee</option>
-      </select>
-     </div>
-    </div>
-
-    <div class="form-group well">
-     <div class=col-sm-2>
-      <label for="dst" class="control-label">Destination:</label><BR>
-     </div>
-     <div class="col-sm-10">
-      <select name=dst id=dst class="form-control">
-       <option value="ALL">All Destinations</option>
-       <?php
-        foreach ($destinations['ALL'] as $dcmp) { 
-         echo '<option value="'.$dcmp['airport'].'">'.$dcmp['destination'].' ('.$dcmp['airport'].')</option>'."\n";
-        }
-       ?>
-      </select>
-     </div>
-    </div>
-
-    <div class="well form-group">
-     <div class=col-sm-2>
-      <b>Nights: </b>
-     </div>
-     <div class="col-sm-2">
-      Min <span id=minDaysval>4</span> <input type=hidden name=minDays id=minDays>
-     </div>
-     <div class="col-sm-6">
-      <div id="dayslider"></div>
-<!--      <input type="text" value="4,6" data-slider-min="2" data-slider-max="14" data-slider-step="1" data-slider-value="[4,6]" id="days" name="days"> -->
-     </div>
-     <div class="col-sm-2">
-      Max <span id=maxDaysval>6</span> <input type=hidden name=maxDays id=maxDays>
-     </div>
-    </div>
-
-    <div class="well form-group">
-     <div class=col-sm-2>
-      <b>Price: </b>
-     </div>
-     <div class=col-sm-2 style=" padding-top: 6px;">
-      <label> <input type="checkbox" checked id="AllPrice" name="AllPrice">All</label>
-     </div>
-     <div class="col-sm-2">
-      <span id="priceval"></span><input type="hidden" id="price" name="price"> <i class="fa fa-ils"></i>
-     </div>
-     <div class="col-sm-6">
-      <div id="priceslider" disabled></div>
-<!--      <input type="text" value="600" data-slider-min="200" data-slider-max="10000" data-slider-step="100" data-slider-value="600" id="price" name="price" data-slider-enabled="false"> -->
-     </div>
-    </div>
-
-    <div class="well form-group">
-     <div class=col-sm-2 style=" padding-top: 6px;">
-      <b>Dates: </b>
-     </div>
-     <div class=col-sm-2 style=" padding-top: 6px;">
-      <label> <input type="checkbox" checked id="AllDates" name="AllDates">All</label>
-     </div>
-     <div class="col-sm-8 ">
-      <div class="input-group" id="datepicker"> 
-       <span class="input-group-addon datespan">From</span>
-       <input type="text" class="form-control dtpicker" name="dpd1" id="dpd1" disabled/> 
-       <span class="input-group-addon datespan">To</span>
-       <input type="text" class="form-control dtpicker" name="dpd2" id="dpd2" disabled/> 
-      </div>
-     </div>
-    </div>
-
-    <div class="form-group custom_btn_col">
-     <div class="col-sm-12 text-center">
-      <button id='submitSearch' class="btn btn-primary btn-lg custom_btn form-control"> Search <i class="fa fa-paper-plane-o"></i> </button>
-     </div>
-    </div>
-
-    </form>
-    </div>
-    <div class=row>
-     <div id=adsense-foot>
-      <!-- 2fly-footer 
-      <ins class="adsbygoogle" style="display:inline-block;width:728px;height:90px" data-ad-client="ca-pub-3421081986991175" data-ad-slot="8200694443"></ins>
-      <script> (adsbygoogle = window.adsbygoogle || []).push({}); </script>
--->
-     </div>
-    </div>
    </div>
   </div>
  </div>

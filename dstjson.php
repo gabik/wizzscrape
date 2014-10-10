@@ -3,7 +3,13 @@
 $conn_string = "host=manegerdb.cjjasb6ckbh1.us-east-1.rds.amazonaws.com port=5432 dbname=GabiScrape user=root password=ManegerDB";
 $db = pg_pconnect($conn_string);
 
-$query="select * from destinations";
+if (array_key_exists('company', $_POST)) {
+  $where_cmp = " where company='".$_POST['company']."'";
+} else {
+  $where_cmp = "";
+}
+
+$query="select * from destinations".$where_cmp;
 $result = pg_query($db, $query);
 
 pg_close();
