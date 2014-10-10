@@ -99,20 +99,27 @@ $("#dayslider").Link('upper').to('-inline-<div class="maxdaytip"></div>', functi
 $('#dayslider').Link('lower').to($('#minDays'));
 $('#dayslider').Link('upper').to($('#maxDays'));
 
-
-
     $('#AllDates').change(function() {
      if (this.checked) {
       $('#dpd1').attr("disabled", "disabled");
       $('#dpd2').attr("disabled", "disabled");
+      $('.datecalicon1').addClass('datecalicondi');
+      $('.datecalicon2').addClass('datecalicondi');
+      $('.datecalicon1').removeClass('datecaliconen');
+      $('.datecalicon2').removeClass('datecaliconen');
      } else {
       $('#dpd1').removeAttr("disabled");
       $('#dpd2').removeAttr("disabled");
       var todayDate = new Date();
       $('#dpd1').datepicker('setDate', todayDate);
       $('#dpd2').datepicker('setDate', todayDate);
+      $('.datecalicon1').addClass('datecaliconen');
+      $('.datecalicon2').addClass('datecaliconen');
+      $('.datecalicon1').removeClass('datecalicondi');
+      $('.datecalicon2').removeClass('datecalicondi');
      }
     });
+
 
     $('#dpd1').change( function() {
       var endDate = new Date($(this).val());
@@ -207,8 +214,8 @@ $('#dayslider').Link('upper').to($('#maxDays'));
    </span>
 </div>
 <div class=row>
- <div class="jumbotron jumbotron-form">
-  <div class=container>
+ <div class="jumbotron-form">
+  <div class="container-form">
    <div class="row">
     <div class="col-md-12">
      <h1 class="text-capitalize head1"><B>Find The Cheapest Flights From Tel Aviv!</B></h1>
@@ -218,7 +225,7 @@ $('#dayslider').Link('upper').to($('#maxDays'));
    <div class="row">
     <div class="col-md-2"></div>
     <div class="col-md-1 midrow"></div>
-    <div class=col-md-6>
+    <div class="col-md-6 head2col">
 <link href='http://fonts.googleapis.com/css?family=Roboto:400,300' rel='stylesheet' type='text/css'>
      <span class="text-capitalize head2">No matter when, No matter where, Only price matter.</span>
     </div>
@@ -288,12 +295,14 @@ $('#dayslider').Link('upper').to($('#maxDays'));
              <div class="input-group">
               <span class="input-group-addon datespans dpd1span">Start</span>
               <input type="text" class="form-control dtpicker" name="dpd1" id="dpd1" disabled/> 
+              <span class="input-group-addon datecalicon datecalicon1 datecalicondi"><i class="fa fa-calendar"></i></span>
              </div>
             </div>
             <div class="col-lg-5">
              <div class="input-group">
               <span class="input-group-addon datespane dpd2span">End</span>
               <input type="text" class="form-control dtpicker" name="dpd2" id="dpd2" disabled/> 
+              <span class="input-group-addon datecalicon datecalicon2 datecalicondi"><i class="fa fa-calendar"></i></span>
              </div>
             </div>
            </div>
@@ -363,4 +372,196 @@ $('#dayslider').Link('upper').to($('#maxDays'));
   </div>
  </div>
 </div>
+
+<link href='http://fonts.googleapis.com/css?family=Signika' rel='stylesheet' type='text/css'>
+<div class="row">
+ <div class="jumbotron-deals">
+  <div class="container-deals">
+   <div class="row">
+    <div class="col-md-12">
+     <div class="dealstxt"><span class="dealstxtL">LATEST </span><span class="dealstxtB">DEALS</span></div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-10"><hr class="dealshr"></div>
+    <div class="col-md-1"></div>
+   </div>
+
+   <div class="row dealsrow">
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
+     <div class="row">
+      <div class="col-md-4">
+       <div class="dealbox">
+        <div class="dealimgd"><img class="dealimg" src="images/dealbox1.jpg"></div>
+        <div class="dealtxt">
+         <div class="dealmid">FROM <b>TEL-AVIV</B> TO <B>LONDON</B></div>
+         <hr class="dealtxthr">
+         <div class="dealftr">
+          <div class="row">
+           <div class="col-md-6 dealprice"><span class="fa fa-ils fa-ils-deal"></span>9999</div>
+           <div class="col-md-6 dealpricetxt">
+            <div class="row dealpricetxtup">SPECIAL OFFER</div>
+            <div class="row dealpricetxtdown">FOR SPECIAL CLIENTS</div>
+           </div>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+      <div class="col-md-4">
+       <div class="dealbox">
+        <div class="dealimgd"><img class="dealimg" src="images/dealbox1.jpg"></div>
+        <div class="dealtxt">
+         <div class="dealmid">FROM <b>TEL-AVIV</B> TO <B>AMSTERDAM</B></div>
+         <hr class="dealtxthr">
+         <div class="dealftr">
+          <div class="row">
+           <div class="col-md-6 dealprice"><span class="fa fa-ils fa-ils-deal"></span>199</div>
+           <div class="col-md-6 dealpricetxt">
+            <div class="row dealpricetxtup">SPECIAL OFFER</div>
+            <div class="row dealpricetxtdown">FOR SPECIAL CLIENTS</div>
+           </div>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+      <div class="col-md-4">
+       <div class="dealbox">
+        <div class="dealimgd"><img class="dealimg" src="images/dealbox1.jpg"></div>
+        <div class="dealtxt">
+         <div class="dealmid">FROM <b>TEL-AVIV</B> TO <B>AMSTERDAM</B></div>
+         <hr class="dealtxthr">
+         <div class="dealftr">
+          <div class="row">
+           <div class="col-md-6 dealprice"><span class="fa fa-ils fa-ils-deal"></span>199</div>
+           <div class="col-md-6 dealpricetxt">
+            <div class="row dealpricetxtup">SPECIAL OFFER</div>
+            <div class="row dealpricetxtdown">FOR SPECIAL CLIENTS</div>
+           </div>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+    <div class="col-md-1"></div>
+   </div>
+
+   <div class="row dealsrow">
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
+     <div class="row">
+      <div class="col-md-4">
+       <div class="dealbox">
+        <div class="dealimgd"><img class="dealimg" src="images/dealbox1.jpg"></div>
+        <div class="dealtxt">
+         <div class="dealmid">FROM <b>TEL-AVIV</B> TO <B>LONDON</B></div>
+         <hr class="dealtxthr">
+         <div class="dealftr">
+          <div class="row">
+           <div class="col-md-6 dealprice"><span class="fa fa-ils fa-ils-deal"></span>9999</div>
+           <div class="col-md-6 dealpricetxt">
+            <div class="row dealpricetxtup">SPECIAL OFFER</div>
+            <div class="row dealpricetxtdown">FOR SPECIAL CLIENTS</div>
+           </div>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+      <div class="col-md-4">
+       <div class="dealbox">
+        <div class="dealimgd"><img class="dealimg" src="images/dealbox1.jpg"></div>
+        <div class="dealtxt">
+         <div class="dealmid">FROM <b>TEL-AVIV</B> TO <B>LONDON</B></div>
+         <hr class="dealtxthr">
+         <div class="dealftr">
+          <div class="row">
+           <div class="col-md-6 dealprice"><span class="fa fa-ils fa-ils-deal"></span>9999</div>
+           <div class="col-md-6 dealpricetxt">
+            <div class="row dealpricetxtup">SPECIAL OFFER</div>
+            <div class="row dealpricetxtdown">FOR SPECIAL CLIENTS</div>
+           </div>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+      <div class="col-md-4">
+       <div class="dealbox">
+        <div class="dealimgd"><img class="dealimg" src="images/dealbox1.jpg"></div>
+        <div class="dealtxt">
+         <div class="dealmid">FROM <b>TEL-AVIV</B> TO <B>LONDON</B></div>
+         <hr class="dealtxthr">
+         <div class="dealftr">
+          <div class="row">
+           <div class="col-md-6 dealprice"><span class="fa fa-ils fa-ils-deal"></span>9999</div>
+           <div class="col-md-6 dealpricetxt">
+            <div class="row dealpricetxtup">SPECIAL OFFER</div>
+            <div class="row dealpricetxtdown">FOR SPECIAL CLIENTS</div>
+           </div>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+    <div class="col-md-1"></div>
+   </div>
+  </div>
+ </div>
+</div>
+
+<div class="row">
+ <div class="container-footer">
+  <div class="row">
+   <div class="col-md-1"></div>
+   <div class="col-md-10">
+    <hr class="footerhr1">
+    <div class="row">
+     <div class="footerlinks">
+      <a href="#" class="footerlinka">
+       CITIES
+      </a>
+      <a href="#" class="footerlinka">
+       AIRPORTS
+      </a>
+      <a href="#" class="footerlinka">
+       COUNTRIES
+      </a>
+      <a href="#" class="footerlinka">
+       AIRLINES
+      </a>
+      <a href="#" class="footerlinka">
+       FLIGHTS 
+      </a>
+      <a href="#" class="footerlinka">
+       HOTELS
+      </a>
+      <a href="#" class="footerlinka">
+       CAR HIRE
+      </a>
+     </div>
+    </div>
+    <hr class="footerhr2">
+    <div class="row">
+     <div class="col-md-2"></div>
+     <div class="col-md-8">
+      <div class="footerlast">
+       <a href="/"><img src="images/paperplane.png" width="70px"><span class="text-uppercase footerfoortxt">© Cheap flights from tel-aviv all rights reserved</span></a>
+      </div>
+     </div>
+     <div class="col-md-2"></div>
+    </div>
+   </div>
+   <div class="col-md-1"></div>
+  </div>
+ </div>
+</div>
+
 </BODY></HTML>
