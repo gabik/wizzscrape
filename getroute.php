@@ -90,7 +90,7 @@ join destinations c on a.dst=c.airport and c.company=$destination_join
 where a.direction=1 and b.direction=2 and (b.date - a.date)>=".$minDays." and (b.date - a.date)<=".$maxDays." ".$price_join.") d
 ";
 
-#echo $query;
+echo $query;
 
 $result = pg_query($db, $query);
 pg_close();
@@ -98,13 +98,6 @@ pg_close();
 function rand_color() {
     return sprintf('#%06X', mt_rand(0, 0xFFFFFF));
 }
-
-#$base_colors=array('#3F5D7D', '#279B61', '#993333', '#A3E496', '#95CAE4', '#FFCC33', '#CC6699', '#CC3333', '#008AB8', '#FFFF7A');
-#$i=0;
-#$colors=array();
-#while ($row = pg_fetch_row($result)) {
-# if ($color[$row[4]] == "" ) { $color[$row[4]]=rand_color(); } #$base_colors[$i]; $i+=1; }
-#}
 
 pg_result_seek($result, 0);
 $events=array();

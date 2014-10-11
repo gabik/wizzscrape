@@ -38,7 +38,43 @@ while ($row = pg_fetch_row($all_dst_r)) {
  $cur_dst=array("airport" => $row[0], "destination" => $row[1]);
  array_push($destinations['ALL'], $cur_dst);
 }
- 
+
+$delaquery="
+ select distinct d2.mttl , e2.destination, d2.adst from
+ (select d.adst, min(d.total) mttl from ( select a.date adt, b.date bdt, a.price+b.price total , (b.date - a.date) dd , a.dst adst, a.company company
+ from flights a join flights b on a.dst=b.dst and a.company=b.company where a.direction=1 and b.direction=2 and (b.date - a.date)>=2 and (b.date - a.date)<=9 and (a.price+b.price)<=1000 order by total) d
+ group by adst order by mttl limit 3 ) d2 join destinations e2 on d2.adst=e2.airport order by mttl
+";
+$dealsresult=pg_query($db, $delaquery); 
+$deals=array();
+while ($row = pg_fetch_row($dealsresult)) {
+ $cur_deal=array("airport" => $row[2], "destination" => $row[1], "price" => $row[0]);
+ array_push($deals, $cur_deal);
+}
+
+$constdealq="
+select mttl, destination, adst from (
+ select distinct d2.mttl , e2.destination, d2.adst from (
+  select d.adst, min(d.total) mttl from ( 
+
+   select s.* from (
+    select a.date adt, b.date bdt, a.price+b.price total , (b.date - a.date) dd , a.dst adst, a.company company from flights a join flights b on a.dst=b.dst and a.company=b.company where a.direction=1 and b.direction=2 and (b.date - a.date)>=4 and (b.date - a.date)<=9  and (a.dst='LGW' or a.dst='LTN') order by total limit 1) s union all
+
+   select s.* from (
+    select a.date adt, b.date bdt, a.price+b.price total , (b.date - a.date) dd , a.dst adst, a.company company from flights a join flights b on a.dst=b.dst and a.company=b.company where a.direction=1 and b.direction=2 and (b.date - a.date)>=4 and (b.date - a.date)<=9  and (a.dst='NYC') order by total limit 1) s union all
+
+   select s.* from (
+    select a.date adt, b.date bdt, a.price+b.price total , (b.date - a.date) dd , a.dst adst, a.company company from flights a join flights b on a.dst=b.dst and a.company=b.company where a.direction=1 and b.direction=2 and (b.date - a.date)>=4 and (b.date - a.date)<=9  and (a.dst='BCN') order by total limit 1) s  
+
+) d group by adst order by mttl ) d2 join destinations e2 on d2.adst=e2.airport order by mttl
+) d3 
+";
+$constdealr=pg_query($db, $constdealq); 
+$constdeals=array();
+while ($row = pg_fetch_row($constdealr)) {
+ $cur_deal=array("airport" => $row[2], "destination" => $row[1], "price" => $row[0]);
+ array_push($constdeals, $cur_deal);
+}
 ?>
  
 <script>
@@ -48,26 +84,19 @@ var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(),
 
 $(document).ready(function() {
 
-    $('#submitSearch').click(function() {
+    $('.dealbox').click(function() {
+     $('#company').val('ALL');
+     $('#dst').val(this.id);
+     $('#AllDates').prop('checked', true);
+     $('#AllPrice').prop('checked', true);
+     $('#minDays').val(2);
+     $('#maxDays').val(9);
      $('#routeForm')[0].submit();
     });
 
-/*
-    $('#price').slider({
-    })
-    .on('slide', function(e) { 
-     var cur_val=$('#price').val();
-     $('#priceval').text(cur_val);
+    $('#submitSearch').click(function() {
+     $('#routeForm')[0].submit();
     });
-
-    $('#AllPrice').change(function() {
-     if (this.checked) {
-      $('#price').slider("disable");
-     } else {
-      $('#price').slider("enable");
-     }
-    });
-*/
 
     $('#AllPrice').change(function() {
      if (this.checked) {
@@ -77,27 +106,27 @@ $(document).ready(function() {
      }
     });
 
-$('#priceslider').noUiSlider({
- start: [ 6 ],
- range: { 'min': 2, 'max': 200 },
- connect: 'lower',
- step: 1,
- format: { to: function(val) { return parseInt(val)*100; }, from: function(val) { return val; }}
-});
-$("#priceslider").Link('lower').to('-inline-<div class="pricetooltip"></div>', function ( value ) { $(this).html( '<span>' + value + ' <i class="fa fa-ils"></i></span>'); });
-$('#priceslider').Link('lower').to($('#price'));
-
-$('#dayslider').noUiSlider({
- start: [ 4, 6 ],
- connect: true,
- range: { 'min': 2, 'max': 20 },
- step: 1,
- format: { to: function(val) { return parseInt(val); }, from: function(val) { return val; }}
-});
-$("#dayslider").Link('lower').to('-inline-<div class="mindaytip"></div>', function ( value ) { $(this).html( '<span>' + value + ' Nights</i></span>'); });
-$("#dayslider").Link('upper').to('-inline-<div class="maxdaytip"></div>', function ( value ) { $(this).html( '<span>' + value + ' Nights</i></span>'); });
-$('#dayslider').Link('lower').to($('#minDays'));
-$('#dayslider').Link('upper').to($('#maxDays'));
+    $('#priceslider').noUiSlider({
+     start: [ 9.6 ],
+     range: { 'min': 2, 'max': 200 },
+     connect: 'lower',
+     step: 1,
+     format: { to: function(val) { return parseInt(val)*100; }, from: function(val) { return val; }}
+    });
+    $("#priceslider").Link('lower').to('-inline-<div class="pricetooltip"></div>', function ( value ) { $(this).html( '<span>' + value + ' <i class="fa fa-ils"></i></span>'); });
+    $('#priceslider').Link('lower').to($('#price'));
+    
+    $('#dayslider').noUiSlider({
+     start: [ 4, 6 ],
+     connect: true,
+     range: { 'min': 2, 'max': 20 },
+     step: 1,
+     format: { to: function(val) { return parseInt(val); }, from: function(val) { return val; }}
+    });
+    $("#dayslider").Link('lower').to('-inline-<div class="mindaytip"></div>', function ( value ) { $(this).html( '<span>' + value + ' Nights</i></span>'); });
+    $("#dayslider").Link('upper').to('-inline-<div class="maxdaytip"></div>', function ( value ) { $(this).html( '<span>' + value + ' Nights</i></span>'); });
+    $('#dayslider').Link('lower').to($('#minDays'));
+    $('#dayslider').Link('upper').to($('#maxDays'));
 
     $('#AllDates').change(function() {
      if (this.checked) {
@@ -135,15 +164,6 @@ $('#dayslider').Link('upper').to($('#maxDays'));
       todayHighlight: true
     });
 
-/*
-    $('#days').slider({
-    })
-    .on('slide', function(e) { 
-     var cur_val=$('#days').val().split(",");
-     $('#minDaysval').text(cur_val[0]);
-     $('#maxDaysval').text(cur_val[1]);
-    });
-*/
     <?php
      $dst_companies = array_keys($destinations);
     ?>
@@ -172,22 +192,11 @@ $('#dayslider').Link('upper').to($('#maxDays'));
      var $select_dst = $("#dst");
      $select_dst.empty();
      $select_dst.append($("<option></option>").attr("value", "ALL").text("All Destinations"));
- //    if ($(this).val()=="ALL") {
- //     var cur_key;
- //     for (cur_key in destinations) {
- //      var cur_cmp = destinations[cur_key];
- //      var x;
- //      for (x in cur_cmp) {
- //       $select_dst.append($("<option></option>").attr("value", x).text(cur_cmp[x]+" ("+x+")"));
- //      }
- //     }
- //    } else {
-      var cur_cmp = destinations[$(this).val()];
-      var x;
-      for (x in cur_cmp) {
-       $select_dst.append($("<option></option>")
-        .attr("value", x).text(cur_cmp[x]+" ("+x+")"));
- //     }
+     var cur_cmp = destinations[$(this).val()];
+     var x;
+     for (x in cur_cmp) {
+      $select_dst.append($("<option></option>")
+       .attr("value", x).text(cur_cmp[x]+" ("+x+")"));
      }
     }); 
 });
@@ -339,10 +348,10 @@ $('#dayslider').Link('upper').to($('#maxDays'));
           <div class="pricespanin">
            <div class="row pricerow">
             <div class="col-lg-2">
-             <div class="checkboxP"><input type="checkbox" checked id="AllPrice" name="AllPrice"><label for="AllPrice"></label><span class="allpricetxt">All</span></div>
+             <div class="checkboxP"><input type="checkbox" id="AllPrice" name="AllPrice"><label for="AllPrice"></label><span class="allpricetxt">All</span></div>
             </div>
        <div class="col-sm-8">
-        <div id="priceslider" disabled></div>
+        <div id="priceslider" ></div>
         <input type='hidden' id='price' name='price'>
        </div>
            </div>
@@ -392,60 +401,29 @@ $('#dayslider').Link('upper').to($('#maxDays'));
     <div class="col-md-1"></div>
     <div class="col-md-10">
      <div class="row">
-      <div class="col-md-4">
-       <div class="dealbox">
-        <div class="dealimgd"><img class="dealimg" src="images/dealbox1.jpg"></div>
-        <div class="dealtxt">
-         <div class="dealmid">FROM <b>TEL-AVIV</B> TO <B>LONDON</B></div>
-         <hr class="dealtxthr">
-         <div class="dealftr">
-          <div class="row">
-           <div class="col-md-6 dealprice"><span class="fa fa-ils fa-ils-deal"></span>9999</div>
-           <div class="col-md-6 dealpricetxt">
-            <div class="row dealpricetxtup">SPECIAL OFFER</div>
-            <div class="row dealpricetxtdown">FOR SPECIAL CLIENTS</div>
+      <?php 
+      for ($i=0; $i<3; $i++) {
+       echo '
+       <div class="col-md-4">
+        <div class="dealbox" name="'.$deals[$i]['airport'].'" id="'.$deals[$i]['airport'].'">
+         <div class="dealimgd"><img class="dealimg" src="images/dst/'.$deals[$i]['airport'].'.jpg"></div>
+         <div class="dealtxt">
+          <div class="dealmid text-uppercase">FROM <b>TEL-AVIV</B> TO <B>'.$deals[$i]['destination'].'</B></div>
+          <hr class="dealtxthr">
+          <div class="dealftr">
+           <div class="row">
+            <div class="col-md-6 dealprice"><span class="fa fa-ils fa-ils-deal"></span>'.$deals[$i]['price'].'</div>
+            <div class="col-md-6 dealpricetxt">
+             <div class="row dealpricetxtup">SPECIAL OFFER</div>
+             <div class="row dealpricetxtdown">FOR SPECIAL CLIENTS</div>
+            </div>
            </div>
           </div>
          </div>
         </div>
        </div>
-      </div>
-      <div class="col-md-4">
-       <div class="dealbox">
-        <div class="dealimgd"><img class="dealimg" src="images/dealbox1.jpg"></div>
-        <div class="dealtxt">
-         <div class="dealmid">FROM <b>TEL-AVIV</B> TO <B>AMSTERDAM</B></div>
-         <hr class="dealtxthr">
-         <div class="dealftr">
-          <div class="row">
-           <div class="col-md-6 dealprice"><span class="fa fa-ils fa-ils-deal"></span>199</div>
-           <div class="col-md-6 dealpricetxt">
-            <div class="row dealpricetxtup">SPECIAL OFFER</div>
-            <div class="row dealpricetxtdown">FOR SPECIAL CLIENTS</div>
-           </div>
-          </div>
-         </div>
-        </div>
-       </div>
-      </div>
-      <div class="col-md-4">
-       <div class="dealbox">
-        <div class="dealimgd"><img class="dealimg" src="images/dealbox1.jpg"></div>
-        <div class="dealtxt">
-         <div class="dealmid">FROM <b>TEL-AVIV</B> TO <B>AMSTERDAM</B></div>
-         <hr class="dealtxthr">
-         <div class="dealftr">
-          <div class="row">
-           <div class="col-md-6 dealprice"><span class="fa fa-ils fa-ils-deal"></span>199</div>
-           <div class="col-md-6 dealpricetxt">
-            <div class="row dealpricetxtup">SPECIAL OFFER</div>
-            <div class="row dealpricetxtdown">FOR SPECIAL CLIENTS</div>
-           </div>
-          </div>
-         </div>
-        </div>
-       </div>
-      </div>
+       '; 
+      } ?>
      </div>
     </div>
     <div class="col-md-1"></div>
@@ -455,60 +433,30 @@ $('#dayslider').Link('upper').to($('#maxDays'));
     <div class="col-md-1"></div>
     <div class="col-md-10">
      <div class="row">
-      <div class="col-md-4">
-       <div class="dealbox">
-        <div class="dealimgd"><img class="dealimg" src="images/dealbox1.jpg"></div>
-        <div class="dealtxt">
-         <div class="dealmid">FROM <b>TEL-AVIV</B> TO <B>LONDON</B></div>
-         <hr class="dealtxthr">
-         <div class="dealftr">
-          <div class="row">
-           <div class="col-md-6 dealprice"><span class="fa fa-ils fa-ils-deal"></span>9999</div>
-           <div class="col-md-6 dealpricetxt">
-            <div class="row dealpricetxtup">SPECIAL OFFER</div>
-            <div class="row dealpricetxtdown">FOR SPECIAL CLIENTS</div>
+      <?php
+       for ($i=0;$i<3;$i++) {
+       echo '
+        <div class="col-md-4">
+         <div class="dealbox" name="'.$constdeals[$i]['airport'].'" id="'.$constdeals[$i]['airport'].'">
+          <div class="dealimgd"><img class="dealimg" src="images/dst/'.$constdeals[$i]['airport'].'.jpg"></div>
+          <div class="dealtxt">
+           <div class="dealmid text-uppercase">FROM <b>TEL-AVIV</B> TO <B>'.$constdeals[$i]['destination'].'</B></div>
+           <hr class="dealtxthr">
+           <div class="dealftr">
+            <div class="row">
+             <div class="col-md-6 dealprice"><span class="fa fa-ils fa-ils-deal"></span>'.$constdeals[$i]['price'].'</div>
+             <div class="col-md-6 dealpricetxt">
+              <div class="row dealpricetxtup">SPECIAL OFFER</div>
+              <div class="row dealpricetxtdown">FOR SPECIAL CLIENTS</div>
+             </div>
+            </div>
            </div>
           </div>
          </div>
         </div>
-       </div>
-      </div>
-      <div class="col-md-4">
-       <div class="dealbox">
-        <div class="dealimgd"><img class="dealimg" src="images/dealbox1.jpg"></div>
-        <div class="dealtxt">
-         <div class="dealmid">FROM <b>TEL-AVIV</B> TO <B>LONDON</B></div>
-         <hr class="dealtxthr">
-         <div class="dealftr">
-          <div class="row">
-           <div class="col-md-6 dealprice"><span class="fa fa-ils fa-ils-deal"></span>9999</div>
-           <div class="col-md-6 dealpricetxt">
-            <div class="row dealpricetxtup">SPECIAL OFFER</div>
-            <div class="row dealpricetxtdown">FOR SPECIAL CLIENTS</div>
-           </div>
-          </div>
-         </div>
-        </div>
-       </div>
-      </div>
-      <div class="col-md-4">
-       <div class="dealbox">
-        <div class="dealimgd"><img class="dealimg" src="images/dealbox1.jpg"></div>
-        <div class="dealtxt">
-         <div class="dealmid">FROM <b>TEL-AVIV</B> TO <B>LONDON</B></div>
-         <hr class="dealtxthr">
-         <div class="dealftr">
-          <div class="row">
-           <div class="col-md-6 dealprice"><span class="fa fa-ils fa-ils-deal"></span>9999</div>
-           <div class="col-md-6 dealpricetxt">
-            <div class="row dealpricetxtup">SPECIAL OFFER</div>
-            <div class="row dealpricetxtdown">FOR SPECIAL CLIENTS</div>
-           </div>
-          </div>
-         </div>
-        </div>
-       </div>
-      </div>
+       ';
+      } ?>
+
      </div>
     </div>
     <div class="col-md-1"></div>
