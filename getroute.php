@@ -90,7 +90,7 @@ join destinations c on a.dst=c.airport and c.company=$destination_join
 where a.direction=1 and b.direction=2 and (b.date - a.date)>=".$minDays." and (b.date - a.date)<=".$maxDays." ".$price_join.") d
 ";
 
-echo $query;
+#echo $query;
 
 $result = pg_query($db, $query);
 pg_close();
