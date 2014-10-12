@@ -263,6 +263,7 @@ $(document).ready(function() {
           <option value="up">Up by Elal</option>
           <option value="elal">Elal</option>
           <option value="sundor">SunDor</option>
+          <option value="vueling">Vueling</option>
           <option value="airmed">Air Mediterranee</option>
          </select>
         </div>
