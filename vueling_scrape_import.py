@@ -3,86 +3,58 @@ import re
 from HTMLParser import HTMLParser
 import sys
 import datetime
-from general_scrape import find_all, clean_dup, strip_non_ascii
+from general_scrape import strip_non_ascii , get_currency
 
-viewstate=""
-
-class getViewState(HTMLParser):
- _viewstate = ""
- def __init__(self):
-  self._vals={}
-  HTMLParser.__init__(self)
- def handle_starttag(self, tag, attrs):
-  if tag=="input":
-   for i in attrs:
-    if i[0]=="id":
-     self._vals['id'] = i[1]
-    if i[0]=="type":
-     self._vals['type'] = i[1]
-    if i[0]=="value":
-     self._vals['value'] = i[1]
-   if (self._vals['type'] == "hidden" and self._vals['id'] == "viewState") : 
-    if self._vals['value'] != "":
-     self._viewstate=self._vals['value']
+eur=get_currency("eur")
 
 class getFlight(HTMLParser):
- def __init__(self, req_date):
+ def __init__(self):
   self.price=0
-  self.date=0
-  self.time = 0
   self.data = []
   self._vals = {}
-  self.tmp_date = ""
+  self.dep_date = ""
+  self.arr_date = ""
   self.header = 0
-  self.deep = 0
   self.direction = 0
-  self.req_date=req_date
+  self.tmp_direction=""
+  self.tmp_price=""
   HTMLParser.__init__(self)
  def handle_starttag(self, tag, attrs):
-  if tag == "h3":
-   self.header+=1
-  if tag == "h2":
-   self.direction+=1
-  if self.header > 0 : return
-  if tag == "label" : self.deep+=1
-  if tag != "br":
-   self.date=0
-   self.time = 0
-  if tag=="span":
+  if tag=="tr":
    for a,b in attrs:
-    if a=="class" and b=="flight-fare-wizzclub sub": self.price=1
-    if a=="class" and b=="price" and self.price == 1: self.price=2
-    if a=="class" and b=="flight-date": self.date+=1
-    if a=="class" and b=="flight-time": self.time+=1
+    if a=="basicpriceroute" : self.header=1
+   if self.header==1:
+    for a,b in attrs:
+     if a=="departuretime" : self.dep_date = b
+     if a=="arrivaltime"   : self.arr_date = b
+  if tag=="td" and self.header==1:
+   for a,b in attrs:
+    if a=="class" and b=="routeCell": self.direction=1
+    if a=="class" and b.split(' ')[0]=="price": self.price=1
  def handle_data(self, data):
-  if self.price == 2: 
-   tmpprice = strip_non_ascii(data)
-   tmpprice = tmpprice[0:tmpprice.find('.')]
-   self._vals['price'] = tmpprice
-   self.price=0
-  if self.date == 1: 
-   self.tmp_date += data + " "
-  if self.time == 1: 
-   self._vals['dep_time'] = strip_non_ascii(data).split()[0]
-   self._vals['arr_time'] = strip_non_ascii(data).split()[1]
+  if self.price == 1: 
+   self.tmp_price+=data+" "
+  if self.direction == 1:
+   self.tmp_direction+=data+" "
  def handle_endtag(self, tag):
-  if tag == "h3" : self.header=0
-  if tag == "span":
-   if self.date == 1:
-    tmp_year=int(self.req_date.split("-")[2])
-    tmp_mon=int(self.req_date.split("-")[1])
-    if (tmp_mon==1) and ("Dec" in self.tmp_date): tmp_year-=1
-    if (tmp_mon==12) and ("Jan" in self.tmp_date): tmp_year+=1
-    self._vals['year'] = str(tmp_year)
-    tmp_full_date = strip_non_ascii(self.tmp_date).split() 
-    self._vals['weekday'] = tmp_full_date[0]
-    self._vals['day'] = tmp_full_date[1]
-    self._vals['month'] = datetime.datetime.strptime(tmp_full_date[2], "%b").strftime("%m") 
-  if tag == "label":
-   if self._vals:
-    self._vals['direction'] = self.direction
-    self.data.append(self._vals)
-    self.deep=0
-    self._vals={}
-    self.tmp_date = ""
+  if tag == "td" and self.header==1: 
+   self.direction=0
+   self.price=0
+  if tag == "tr" and self.header==1: 
+   self._vals['date'] = self.dep_date.split('T')[0]
+   self._vals['dep_time'] = ":".join(self.dep_date.split('T')[1].split(":")[0:2])
+   self._vals['arr_time'] = ":".join(self.arr_date.split('T')[1].split(":")[0:2])
+   self._vals['price'] = int((min([int(strip_non_ascii(p.split()[0])[0:-2])+1 for p in [" ".join(y.split()) for y in [x for x in self.tmp_price.split('\r\n')[1:]]]])*eur)+0.5)
+   if "TLV" in [strip_non_ascii(x.replace(' ','')) for x in self.tmp_direction.split('\r\n')[1:5]][0] : self._vals['direction']=1
+   if "TLV" in [strip_non_ascii(x.replace(' ','')) for x in self.tmp_direction.split('\r\n')[1:5]][2] : self._vals['direction']=2
+   self.header=0
+   self.data.append(self._vals)
+   self._vals = {}
+   self.tmp_price=""
+   self.tmp_direction=""
+   self.direction = 0
+   self.price=0
+   self.dep_date = ""
+   self.arr_date = ""
+
 
