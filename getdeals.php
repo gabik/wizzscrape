@@ -25,7 +25,7 @@ select mttl, destination, adst from (
     select a.date adt, b.date bdt, a.price+b.price total , (b.date - a.date) dd , a.dst adst, a.company company from flights a join flights b on a.dst=b.dst and a.company=b.company where a.direction=1 and b.direction=2 and (b.date - a.date)>=4 and (b.date - a.date)<=9  and (a.dst='LGW' or a.dst='LTN') order by total limit 1) s union all
 
    select s.* from (
-    select a.date adt, b.date bdt, a.price+b.price total , (b.date - a.date) dd , a.dst adst, a.company company from flights a join flights b on a.dst=b.dst and a.company=b.company where a.direction=1 and b.direction=2 and (b.date - a.date)>=4 and (b.date - a.date)<=9  and (a.dst='NYC') order by total limit 1) s union all
+    select a.date adt, b.date bdt, a.price+b.price total , (b.date - a.date) dd , a.dst adst, a.company company from flights a join flights b on a.dst=b.dst and a.company=b.company where a.direction=1 and b.direction=2 and (b.date - a.date)>=4 and (b.date - a.date)<=9  and (a.dst='BER' or a.dst='SXF') order by total limit 1) s union all
 
    select s.* from (
     select a.date adt, b.date bdt, a.price+b.price total , (b.date - a.date) dd , a.dst adst, a.company company from flights a join flights b on a.dst=b.dst and a.company=b.company where a.direction=1 and b.direction=2 and (b.date - a.date)>=4 and (b.date - a.date)<=9  and (a.dst='BCN') order by total limit 1) s
