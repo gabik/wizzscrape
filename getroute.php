@@ -169,7 +169,7 @@ function fill_results(startI) {
     '<div class="'+flight['special']+'"></div>'+
     '<img src="images/flight_card.jpg" >'+
     '<div class="result_price"><i class="fa fa-'+currency+'"></i>'+price+'</div>'+
-    '<div class="result_company"><img src="images/'+flight['company']+'.jpg" class="cmp_logo"></div>'+
+    '<div class="result_company"><img src="images/airlines/'+flight['company']+'.jpg" class="cmp_logo"></div>'+
     '<div class="result_outdate">'+weekday[outdate.getUTCDay()]+" "+outdate.getUTCDate()+"/"+(outdate.getUTCMonth()+1)+"/"+outdate.getUTCFullYear()+' '+outdep+'</div>'+
     '<div class="result_indate">'+weekday[indate.getUTCDay()]+" "+indate.getUTCDate()+"/"+(indate.getUTCMonth()+1)+"/"+indate.getUTCFullYear()+' '+indep+'</div>'+
     '<div class="result_outsrc">Tel Aviv (TLV)</div>'+
