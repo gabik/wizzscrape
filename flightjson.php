@@ -1,5 +1,8 @@
 <?php
 
+$usd=fgets(fopen("currencies/usd", "r"));
+$eur=fgets(fopen("currencies/eur", "r"));
+
 $json=array();
 $i=1;
 $na = 'N/A';
@@ -61,7 +64,7 @@ if ($_POST['kind'] == 2) {
 
  $result = pg_query($db, $query);
  while ($row = pg_fetch_row($result)) {
-  $cur_elem=array('id' => $i, 'company' => $row[9], 'destination' => $row[4], 'airport' => $row[10], 'outdate' => $row[2], 'indate' => $row[3], 'outprice' => $row[5], 'inprice' => $row[6], 'total' => $row[7], 'nights' => $row[8], 'outarr' => $row[12],'inarr' => $row[14],'outdep' => $row[11],'indep' => $row[13], 'indur' => 'N/A', 'outdur' => 'N/A', 'direction' => $na );
+  $cur_elem=array('id' => $i, 'company' => $row[9], 'destination' => $row[4], 'airport' => $row[10], 'outdate' => $row[2], 'indate' => $row[3], 'outprice' => $row[5], 'inprice' => $row[6], 'total' => $row[7], 'nights' => $row[8], 'outarr' => $row[12],'inarr' => $row[14],'outdep' => $row[11],'indep' => $row[13], 'indur' => 'N/A', 'outdur' => 'N/A', 'direction' => $na , 'ils' => $row[7], 'eur' => floor($row[7]/$eur), 'usd' => floor($row[7]/$usd));
   array_push($json, $cur_elem);
   $i+=1;
  }
@@ -107,7 +110,7 @@ if ($_POST['kind'] == 2) {
 
  $result = pg_query($db, $query);
  while ($row = pg_fetch_row($result)) {
-  $cur_elem=array('id' => $i, 'company' => $row[8], 'destination' => $row[9], 'airport' => $row[2], 'outdate' => $row[4], 'indate' => $na, 'outprice' => $row[3], $na => $row[5], 'total' => $na, 'nights' => $na, 'outarr' => $row[6],'inarr' => $na,'outdep' => $row[5],'indep' => $na, 'indur' => $na, 'outdur' => 'N/A', 'direction' => $row[7] );
+  $cur_elem=array('id' => $i, 'company' => $row[8], 'destination' => $row[9], 'airport' => $row[2], 'outdate' => $row[4], 'indate' => $na, 'outprice' => $row[3], $na => $row[5], 'total' => $na, 'nights' => $na, 'outarr' => $row[6],'inarr' => $na,'outdep' => $row[5],'indep' => $na, 'indur' => $na, 'outdur' => 'N/A', 'direction' => $row[7], 'ils' => $row[7], 'eur' => floor($row[7]/$eur), 'usd' => floor($row[7]/$usd) );
   array_push($json, $cur_elem);
   $i+=1;
  }
