@@ -369,6 +369,7 @@ font-weight: bold;
  border: 1px;
  width: 96%;
  margin: 0 auto;
+ cursor: pointer;
 }
 .dealsrow {
  margin: 60px auto;

@@ -264,6 +264,7 @@ $(document).ready(function() {
           <option value="elal">Elal</option>
           <option value="sundor">SunDor</option>
           <option value="vueling">Vueling</option>
+          <option value="norwegian">Norwegian</option>
           <option value="airmed">Air Mediterranee</option>
          </select>
         </div>
