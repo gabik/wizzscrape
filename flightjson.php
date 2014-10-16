@@ -1,59 +1,11 @@
 <?php
 
-$usd=fgets(fopen("currencies/usd", "r"));
-$eur=fgets(fopen("currencies/eur", "r"));
-
-$json=array();
-$i=1;
-$na = 'N/A';
-
-$conn_string = "host=manegerdb.cjjasb6ckbh1.us-east-1.rds.amazonaws.com port=5432 dbname=GabiScrape user=root password=ManegerDB";
-$db = pg_pconnect($conn_string);
+include 'query_head.php';
 
 if ($_POST['kind'] == 2) {
 
- if ($_POST['AllDates']=="1") {
-  $dates_join="";
- } else {
-  $dates_join="1";
- }
- 
- if ($_POST['AllPrice']=="1") {
-  $price_join="";
- } else {
-  $price_join=" and (a.price+b.price)<=".$_POST['price'];
- }
- 
- if ($dates_join=="1"){
-  $dates_join=" and a.date>='".$_POST['start']."' and a.date<='".$_POST['stop']."'";
- }
- 
- $flight_join=" ";
- $companies_join="";
- $destination_join="";
- 
- $minDays=$_POST['minDays'];
- $maxDays=$_POST['maxDays'];
- 
- if ($_POST['company']=="ALL") {
-  $flight_join=" and a.company=b.company";
-  $companies_join="a.company";
-  $destination_join="e.name";
- } else {
-  $query="select id from companies where name='".$_POST['company']."'";
-  $result = pg_query($db, $query);
-  $company_id_a=pg_fetch_row($result);
-  $company_id = $company_id_a[0];
- 
-  $companies_join="'".$company_id."'";
-  $destination_join="'".$_POST['company']."'";
- }
- 
- 
- if ($_POST['dst']!=="ALL") {
-  $flight_join=$flight_join." and a.dst='".$_POST['dst']."'";
- }
- 
+ include 'query_builder_route.php'; 
+
  $query="
   select d.* from ( select a.scrape_time ast, b.scrape_time bst, a.date adt, b.date bdt, c.destination cdst, a.price apr, b.price bpr, a.price+b.price total , (b.date - a.date) dd , e.name,a.dst, a.dep_time, a.arr_time, b.dep_time, b.arr_time, a.dst from flights a
   join flights b on a.dst=b.dst $flight_join $dates_join
@@ -71,34 +23,7 @@ if ($_POST['kind'] == 2) {
 
 } else if ($_POST['kind'] == 1) {
 
- if ($_POST['AllPrice']=="1") {
-  $price_filter="";
- } else {
-  $price_filter=" and a.price<=".$_POST['price'];
- }
-
- if ($_POST['AllDates']=="1") {
-  $dates_filter=" ";
- } else {
-  $dates_filter=" and a.date>='".$_POST['start']."' and a.date<='".$_POST['stop']."'";
- }
-
- if ($_POST['company']=="ALL") {
-  $companies_filter=" ";
- } else {
-  $query="select id from companies where name='".$_POST['company']."'";
-  $result = pg_query($db, $query);
-  $company_id_a=pg_fetch_row($result);
-  $company_id = $company_id_a[0];
-
-  $companies_filter=" and a.company=".$company_id;
- }
-
- if ($_POST['dst']=="ALL") {
-  $destination_filter=" ";
- } else {
-  $destination_filter=" and a.dst='".$_POST['dst']."'";
- }
+ include 'query_builder_oneway.php'; 
 
  $query="
   select a.company acmp, a.direction adir, a.dst adst, a.price aprice, a.date adt, a.dep_time adep, a.arr_time aarr, d.direction ddir, c.name cname, b.destination bdst from flights a

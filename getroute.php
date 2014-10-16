@@ -20,100 +20,7 @@
 <?php
 $usd=fgets(fopen("currencies/usd", "r"));
 $eur=fgets(fopen("currencies/eur", "r"));
-
-#if (array_key_exists('days', $_POST)) {
- #$days_a=explode(",", $_POST['days']);
- #$minDays=$days_a[0];
- #$maxDays=$days_a[1];
-#} else {
- $minDays=$_POST['minDays'];
- $maxDays=$_POST['maxDays'];
-#}
-
-if (array_key_exists('AllDates', $_POST)) {
- if ($_POST['AllDates']=="on") {
-  $dates_join="";
- } else {
-  $dates_join="1";
- }
-} else {
- $dates_join="1";
-}
-
-if (array_key_exists('AllPrice', $_POST)) {
- if ($_POST['AllPrice']=="on") {
-  $price_join="";
- } else {
-  $price_join=" and (a.price+b.price)<=".$_POST['price'];
- }
-} else {
- $price_join=" and (a.price+b.price)<=".$_POST['price'];
-}
-
-
-$conn_string = "host=manegerdb.cjjasb6ckbh1.us-east-1.rds.amazonaws.com port=5432 dbname=GabiScrape user=root password=ManegerDB";
-$db = pg_pconnect($conn_string);
-
-$query="select id from companies where name='".$_POST['company']."'";
-$result = pg_query($db, $query);
-$company_id_a=pg_fetch_row($result);
-$company_id = $company_id_a[0];
-
-$flight_join="";
-$companies_join="";
-$destination_join="";
-if ($dates_join=="1"){
- $dates_join=" and a.date>='".$_POST['dpd1']."' and a.date<='".$_POST['dpd2']."'";
-}
-
-if ($_POST['company']=="ALL") {
- $flight_join=" and a.company=b.company";
- $companies_join="a.company";
- $destination_join="e.name";
- if ($_POST['dst']!=="ALL") {
-  $flight_join=$flight_join." and a.dst='".$_POST['dst']."'";
- }
-} else {
- $flight_join=" ";
- $companies_join="'".$company_id."'";
- $destination_join="'".$_POST['company']."'";
- if ($_POST['dst']!="ALL") {
-  $flight_join=$flight_join." and a.dst='".$_POST['dst']."'";
- }
-}
-
-$query="
-select d.* from ( select a.scrape_time ast, b.scrape_time bst, a.date adt, b.date bdt, c.destination cdst, a.price apr, b.price bpr, a.price+b.price total , (b.date - a.date) dd , e.name,a.dst, a.dep_time, a.arr_time, b.dep_time, b.arr_time, a.dst from flights a
-join flights b on a.dst=b.dst $flight_join $dates_join
-join companies e on e.id=$companies_join and e.id=a.company and e.id=b.company
-join destinations c on a.dst=c.airport and c.company=$destination_join
-where a.direction=1 and b.direction=2 and (b.date - a.date)>=".$minDays." and (b.date - a.date)<=".$maxDays." ".$price_join.") d
-";
-
-#echo $query;
-
-$result = pg_query($db, $query);
-pg_close();
-
-function rand_color() {
-    return sprintf('#%06X', mt_rand(0, 0xFFFFFF));
-}
-
-pg_result_seek($result, 0);
-$events=array();
-while ($row = pg_fetch_row($result)) {
- $title=$row[4].": ".$row[7];
- #$cur_event=array("title" => $title, "start" => $row[2], "end" => $row[3], "color" => $color[$row[4]]);
- $cur_event=array("title" => $title, "start" => $row[2], "end" => $row[3], "color" => rand_color());
- if ($events[$row[4]] == "") { 
-  $events[$row[4]]=array();
- } 
- array_push($events[$row[4]], $cur_event);
-}
-
 ?>
-
-
 
 <script>
 
@@ -138,19 +45,10 @@ weekday[4] = "Thursday";
 weekday[5] = "Friday";
 weekday[6] = "Saturday";
 
-var sorted_flights= [
-<?php
- pg_result_seek($result, 0);
- $first=1;
- while ($row = pg_fetch_row($result)) {
-  if ($first==1) { $first=0; } else { echo ", "; }
-  echo '{price:'.$row[7].', company:"'.$row[9].'", outdate:"'.$row[2].'", indate:"'.$row[3].'", outsrc:"Tel Aviv (TLV)", outdst:"'.$row[4].'", outairport:"'.$row[15].'",outdur:"XXX",indur:"XXX",outdep:"'.$row[11].'",outarr:"'.$row[12].'",indep:"'.$row[13].'",inarr:"'.$row[14].'", special:"", nights:'.$row[8].', usd:'.floor($row[7]/$usd).', eur:'.floor($row[7]/$eur).', ils:'.$row[7].'}'."\n";
- }
-?>
-];
-var all_flights = sorted_flights;
+var sorted_flights= [];
+var all_flights = [];
 
-var pagesN = Math.ceil(sorted_flights.length / perPage);
+var pagesN = 0;
 
 function fill_results(startI) {
  pagesN = Math.ceil(sorted_flights.length / perPage);
@@ -165,7 +63,7 @@ function fill_results(startI) {
   var indep = flight['indep'].split(":")[0]+":"+flight['indep'].split(":")[1]
   var outarr = flight['outarr'].split(":")[0]+":"+flight['outarr'].split(":")[1]
   var inarr = flight['inarr'].split(":")[0]+":"+flight['inarr'].split(":")[1]
-  var price= price=flight[currency];
+  var price=flight[currency];
   var data = 
     '<div class="result_row">'+
     '<div class="'+flight['special']+'"></div>'+
@@ -175,14 +73,14 @@ function fill_results(startI) {
     '<div class="result_outdate">'+weekday[outdate.getUTCDay()]+" "+outdate.getUTCDate()+"/"+(outdate.getUTCMonth()+1)+"/"+outdate.getUTCFullYear()+' '+outdep+'</div>'+
     '<div class="result_indate">'+weekday[indate.getUTCDay()]+" "+indate.getUTCDate()+"/"+(indate.getUTCMonth()+1)+"/"+indate.getUTCFullYear()+' '+indep+'</div>'+
     '<div class="result_outsrc">Tel Aviv (TLV)</div>'+
-    '<div class="result_insrc">'+flight['outdst']+' ('+flight['outairport']+')</div>'+
+    '<div class="result_insrc">'+flight['destination']+' ('+flight['airport']+')</div>'+
     '<div class="result_indst">Tel Aviv (TLV)</div>'+
-    '<div class="result_outdst">'+flight['outdst']+' ('+flight['outairport']+')</div>'+
+    '<div class="result_outdst">'+flight['destination']+' ('+flight['airport']+')</div>'+
     '<div class="result_outdur">'+flight['outdur']+'H</div>'+
     '<div class="result_indur">'+flight['indur']+'H</div>'+
     '<div class="result_outarr">'+outarr+'</div>'+
     '<div class="result_inarr">'+inarr+'</div>'+
-    '<div class="result_descr">'+flight['outdst']+', '+flight['nights']+' Nights</div>'+
+    '<div class="result_descr">'+flight['destination']+', '+flight['nights']+' Nights</div>'+
     '<div class="result_icons"><span class="fa-stack fa-2x"><i class="fa fa-suitcase fa-stack-1x"></i><i class="fa fa-ban fa-stack-2x text-white"></i></div>'+
     '</div>';
   $("#flight_results").append(data);
@@ -238,8 +136,8 @@ function fill_pages() {
 }
 
 function SortByprice(a,b) {
-  if (a.price < b.price) return -1;
-  if (a.price > b.price) return 1;
+  if (a.total < b.total) return -1;
+  if (a.total > b.total) return 1;
   return 0;
 }
 
@@ -267,8 +165,8 @@ function mark_tops() {
  var last=0;
  for (var f in sorted_flights) {
   var flight = sorted_flights[f];
-  if (flight['price'] != last) {
-   last=flight['price'];
+  if (flight['total'] != last) {
+   last=flight['total'];
    n++;
   }
   if (n==4) { break ; }
@@ -292,40 +190,21 @@ $(document).ready(function() {
      'title': "Order This Flight Now!"
     });
 
-    $('#calendar').fullCalendar({
-        height: "auto",
-        events: [
-<?php
-/*
-#while ($row = pg_fetch_row($result)) {
-foreach ($events as $event) {
- foreach ($event as $cur_e) {
-  echo "{\n";
-  echo "title : '".$cur_e['title']."',\n";
-  echo "start : '".$cur_e['start']."',\n";
-  echo "end:    '".$cur_e['end']."',\n";
-  echo "color:  '".$cur_e['color']."'\n";
-  echo "},\n";
- }
-}
-*/
-pg_result_seek($result, 0);
-?>
-        ],
-    eventRender: function(event, element) {
-     element.qtip({content: event.tooltip, style: {padding: 5, background: '#A2D959', color: 'black', color: 'black', border: {width: 7,radius: 5,color: '#A2D959'}}});
-    }
-    });
 
-    $("table").DataTable(
-    {
-      "iDisplayLength": 50,
-      "order": [[ 7 ,"asc" ]]
-    });
- 
-    mark_tops();
-    //sorted_flights.sort(SortByprice);
-    displayPage(1);
+    $.ajax( {
+        url: "http://2fly.cheap/flightjson.php",
+        type: 'post',
+        data: <?php echo json_encode($_POST); ?>,
+        success: function(data) {
+         sorted_flights = jQuery.parseJSON(data);
+         all_flights = sorted_flights;
+         pagesN = Math.ceil(sorted_flights.length / perPage);
+         sortBy('price');
+         mark_tops();
+         displayPage(1);
+	 $(".loader").fadeOut("slow");
+        } } ) ;
+
 
     $.ajax( { 
         url: "http://2fly.cheap/dstsumjson.php",
@@ -348,11 +227,6 @@ pg_result_seek($result, 0);
          } } }) ;
 
 });
-
-$(window).load(function() {
-	$(".loader").fadeOut("slow");
-})
-
 
 function changeCur(cur) {
  currency = cur;
@@ -403,7 +277,7 @@ function filterBy(kind, filter) {
  if (filter!="clear") { 
   for (var i in cur_flights) {
    if (kind=="dst") {
-    if (cur_flights[i].outairport==filter) {
+    if (cur_flights[i].airport==filter) {
      sorted_flights.push(cur_flights[i]);
     }
    } else if (kind=="date") {
@@ -432,13 +306,6 @@ function filterBy(kind, filter) {
 </HEAD<BODY>
 <div class="loader"><h2 class="load_center load_txt">Loading your request...</h2><BR><i class="fa fa-spinner fa-5x fa-spin load_center"></i></div>
 <div id="route_wrap">
-<!--
-<ul class="nav nav-pills">
-  <li id="table-li" class="active" onclick="ShowTable();"><a href="#">Table View</a></li>
-  <li id="cal-li" onclick="ShowCal();"><a href="#">Calendar View</a></li>
-</ul>
--->
-
 <ul class="nav nav-pills" id="head_bar">
  <div class="navbar-header">
   <a class="navbar-brand" href="#">Sort By: </a>
