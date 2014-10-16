@@ -7,8 +7,8 @@ if ($_POST['kind'] == 2) {
  include 'query_builder_route.php';
  
  $query="
-select f.adt, min(f.total) total from (
- select date_part('year', d.adt) || '-' || date_part('month', d.adt) adt, d.total total from (
+select f.adt adt, min(f.total) total from (
+ select date_part('year', d.adt) || '-' || TO_CHAR(date_part('month', d.adt), 'fm00') adt, d.total total from (
   select a.date adt, b.date bdt, c.destination cdst,a.price+b.price total,(b.date - a.date) dd ,e.name,a.dst dst from flights a
    join flights b on a.dst=b.dst $flight_join $dates_join
    join companies e on e.id=$companies_join and e.id=a.company and e.id=b.company

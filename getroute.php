@@ -282,7 +282,12 @@ function filterBy(kind, filter) {
     }
    } else if (kind=="date") {
     var cur_date = new Date(cur_flights[i].outdate);
-    var cur_month = cur_date.getUTCFullYear().toString()+"-"+(cur_date.getUTCMonth()+1).toString();
+    var cur_month;
+    if (cur_date.getUTCMonth()+1<10) {
+     cur_month = cur_date.getUTCFullYear().toString()+"-0"+(cur_date.getUTCMonth()+1).toString();
+    } else {
+     cur_month = cur_date.getUTCFullYear().toString()+"-"+(cur_date.getUTCMonth()+1).toString();
+    }
     if (cur_month==filter) {
      sorted_flights.push(cur_flights[i]);
     }
