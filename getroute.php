@@ -148,10 +148,12 @@ var sorted_flights= [
  }
 ?>
 ];
+var all_flights = sorted_flights;
 
 var pagesN = Math.ceil(sorted_flights.length / perPage);
 
 function fill_results(startI) {
+ pagesN = Math.ceil(sorted_flights.length / perPage);
  $("#flight_results").empty();
  var stopI=startI+perPage;
  if (stopI > sorted_flights.length) { stopI=sorted_flights.length-1; }
@@ -325,20 +327,25 @@ pg_result_seek($result, 0);
     //sorted_flights.sort(SortByprice);
     displayPage(1);
 
-    //$.getJSON("dstsumjson.php",<?php echo json_encode($_POST); ?>, function(data){alert (data);});
-    $.ajax( 
-    { 
+    $.ajax( { 
         url: "http://2fly.cheap/dstsumjson.php",
         type: 'post',
-        data: {company:"ALL",dst:"ALL",AllDates:1,minDays:4,maxDays:6,price:1600,kind:2},
+        data: <?php echo json_encode($_POST); ?>,
         success: function(data) { 
-         $('#dstsum').append('<li><a href="#" onclick="alert(\'ALL\');">All Destinations</a></li>' );
          var json = jQuery.parseJSON(data); 
          for (var s in json) {
-          $('#dstsum').append('<li><a href="#" onclick="alert(\''+json[s].airport+'\');">' + json[s].destination + " : "+ json[s].total + ' <i class="fa fa-ils "></i></a></li>' );
-         }
-        }
-    }) ;
+          $('#dstsum').append('<li><a href="#" onclick="filterBy(\'dst\',\''+json[s].airport+'\');"><table style="width:200px;"><tr><td>' + json[s].destination + "</td><td style='text-align:right;'>"+ json[s].total + ' <i class="fa fa-ils "></i></td></tr></table></a></li>' );
+         } } }) ;
+
+    $.ajax( { 
+        url: "http://2fly.cheap/datesumjson.php",
+        type: 'post',
+        data: <?php echo json_encode($_POST); ?>,
+        success: function(data) {
+         var json = jQuery.parseJSON(data); 
+         for (var s in json) {
+          $('#datesum').append('<li><a href="#" onclick="filterBy(\'date\',\''+json[s].ddate+'\');"><table style="width:200px;"><tr><td>' + json[s].ddate + "</td><td style='text-align:right;'>"+ json[s].total + ' <i class="fa fa-ils "></i></td></tr></table></a></li>' );
+         } } }) ;
 
 });
 
@@ -388,6 +395,38 @@ function sortBy(col) {
  
 }
 
+function filterBy(kind, filter) {
+ var s = document.getElementById("fb_"+kind);
+ $(s).addClass("active");
+ var cur_flights = sorted_flights;
+ sorted_flights = [];
+ if (filter!="clear") { 
+  for (var i in cur_flights) {
+   if (kind=="dst") {
+    if (cur_flights[i].outairport==filter) {
+     sorted_flights.push(cur_flights[i]);
+    }
+   } else if (kind=="date") {
+    var cur_date = new Date(cur_flights[i].outdate);
+    var cur_month = cur_date.getUTCFullYear().toString()+"-"+(cur_date.getUTCMonth()+1).toString();
+    if (cur_month==filter) {
+     sorted_flights.push(cur_flights[i]);
+    }
+   }
+  }
+ } else { 
+  sorted_flights = all_flights; 
+  $("#head_bar").find("li").each(function() {
+   var $this = $(this);
+   if ($this.hasClass("fb")) {
+    $this.removeClass("active");
+   }
+  });
+ }
+ mark_tops();
+ sortBy('price');
+}
+
 </script>
 
 </HEAD<BODY>
@@ -418,11 +457,17 @@ function sortBy(col) {
  <div class="navbar-header">
   <a class="navbar-brand" href="#">Filters: </a>
  </div>
- <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown">Select Destination<span class="caret"></span></a>
+ <li class="dropdown fb" id="fb_dst" >
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown">By Destination<span class="caret"></span></a>
   <ul class="dropdown-menu" role="menu" id="dstsum" name="dstsum">
   </ul>
  </li>
+ <li class="dropdown fb" id="fb_date">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown">By Month<span class="caret"></span></a>
+  <ul class="dropdown-menu" role="menu" id="datesum" name="datesum">
+  </ul>
+ </li>
+ <li onclick="filterBy('', 'clear');"><a href="#">Clear Filters</a></li>
 </ul>
 
 <div id="table-tab" class="container1">

@@ -245,6 +245,7 @@ $(document).ready(function() {
    <div class="row">
     <div class="well form-well">
      <form name=routeForm method=post action=getroute.php class="form-horizontal" id=routeForm>
+      <input type=hidden name=kind id=kind value=2>
 
       <div class="row">
        <div class="buttons-one-route">
