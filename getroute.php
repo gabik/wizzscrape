@@ -325,6 +325,21 @@ pg_result_seek($result, 0);
     //sorted_flights.sort(SortByprice);
     displayPage(1);
 
+    //$.getJSON("dstsumjson.php",<?php echo json_encode($_POST); ?>, function(data){alert (data);});
+    $.ajax( 
+    { 
+        url: "http://2fly.cheap/dstsumjson.php",
+        type: 'post',
+        data: {company:"ALL",dst:"ALL",AllDates:1,minDays:4,maxDays:6,price:1600,kind:2},
+        success: function(data) { 
+         $('#dstsum').append('<li><a href="#" onclick="alert(\'ALL\');">All Destinations</a></li>' );
+         var json = jQuery.parseJSON(data); 
+         for (var s in json) {
+          $('#dstsum').append('<li><a href="#" onclick="alert(\''+json[s].airport+'\');">' + json[s].destination + " : "+ json[s].total + ' <i class="fa fa-ils "></i></a></li>' );
+         }
+        }
+    }) ;
+
 });
 
 $(window).load(function() {
@@ -391,6 +406,7 @@ function sortBy(col) {
  </div>
  <li id="sb_price" class="sb active" onclick="sortBy('price');"><a href="#">Price</a></li>
  <li id="sb_outdate" class="sb" onclick="sortBy('outdate');"><a href="#">Departure Date</a></li>
+
  
  <div class="navbar-header">
   <a class="navbar-brand" href="#">Currency: </a>
@@ -398,6 +414,15 @@ function sortBy(col) {
  <li id="cur_ils" class="cur active" onclick="changeCur('ils');"><a href="#"><i class="fa fa-ils "></i></a></li>
  <li id="cur_usd" class="cur" onclick="changeCur('usd');"><a href="#"><i class="fa fa-dollar "></i></a></li>
  <li id="cur_eur" class="cur" onclick="changeCur('eur');"><a href="#"><i class="fa fa-euro"></i></a></li>
+
+ <div class="navbar-header">
+  <a class="navbar-brand" href="#">Filters: </a>
+ </div>
+ <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown">Select Destination<span class="caret"></span></a>
+  <ul class="dropdown-menu" role="menu" id="dstsum" name="dstsum">
+  </ul>
+ </li>
 </ul>
 
 <div id="table-tab" class="container1">
