@@ -30,7 +30,7 @@ if ($_POST['kind'] == 2) {
   join companies c on c.id=a.company
   join directions d on d.id=a.direction
   join destinations b on a.dst=b.airport
-  where 1=1 $price_filter $dates_filter $companies_filter $destination_filter
+  where 1=1 $price_join $dates_join $companies_join $destination_join
  ";
 
  $result = pg_query($db, $query);

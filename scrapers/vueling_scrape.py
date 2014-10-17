@@ -60,6 +60,7 @@ while Stop > Start:
 
  dep_cur_m=getblankdays(Start.month, depcal)
  arr_cur_m=getblankdays(Start.month, arrcal)
+ if dep_cur_m == [y for y in range(dep_cur_m[0],dep_cur_m[-1]+1)] : break
  while Start.day in dep_cur_m:
   Start= Start + datetime.timedelta(days=1)
   n+=1
