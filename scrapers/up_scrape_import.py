@@ -8,6 +8,7 @@ from general_scrape import find_all, clean_dup, strip_non_ascii
 fullpostdict={}
 
 def clean_dup_max(lst, direction):
+ if not lst : return []
  lst.sort(key=lambda x: str(x['year'])+str(x['month'])+str(x['day']))
  newlst=[]
  last_elem=lst[0]
