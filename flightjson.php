@@ -7,7 +7,7 @@ if ($_POST['kind'] == 2) {
  include 'query_builder_route.php'; 
 
  $query="
-  select d.* from ( select a.scrape_time ast, b.scrape_time bst, a.date adt, b.date bdt, c.destination cdst, a.price apr, b.price bpr, a.price+b.price total , (b.date - a.date) dd , e.name,a.dst, a.dep_time, a.arr_time, b.dep_time, b.arr_time, a.dst from flights a
+  select d.* from ( select a.scrape_time ast, b.scrape_time bst, a.date adt, b.date bdt, c.destination cdst, a.price apr, b.price bpr, a.price+b.price total , (b.date - a.date) dd , e.name,a.dst, a.dep_time, a.arr_time, b.dep_time, b.arr_time, a.dst, a.dur_time adurtime, b.dur_time bdurtime from flights a
   join flights b on a.dst=b.dst $flight_join $dates_join
   join companies e on e.id=$companies_join and e.id=a.company and e.id=b.company
   join destinations c on a.dst=c.airport and c.company=$destination_join
@@ -16,7 +16,11 @@ if ($_POST['kind'] == 2) {
 
  $result = pg_query($db, $query);
  while ($row = pg_fetch_row($result)) {
-  $cur_elem=array('id' => $i, 'company' => $row[9], 'destination' => $row[4], 'airport' => $row[10], 'outdate' => $row[2], 'indate' => $row[3], 'outprice' => $row[5], 'inprice' => $row[6], 'total' => $row[7], 'nights' => $row[8], 'outarr' => $row[12],'inarr' => $row[14],'outdep' => $row[11],'indep' => $row[13], 'indur' => 'N/A', 'outdur' => 'N/A', 'direction' => $na , 'ils' => $row[7], 'eur' => floor($row[7]/$eur), 'usd' => floor($row[7]/$usd));
+  $outdur = "";
+  $indur = "";
+  if ($row[16]=="") { $outdur = 'N/A'; } else {list($a,$b)=explode(':', $row[16]); $outdur=$a.':'.$b; }
+  if ($row[17]=="") { $indur = 'N/A'; } else {list($a,$b)=explode(':', $row[17]); $indur=$a.':'.$b; }
+  $cur_elem=array('id' => $i, 'company' => $row[9], 'destination' => $row[4], 'airport' => $row[10], 'outdate' => $row[2], 'indate' => $row[3], 'outprice' => $row[5], 'inprice' => $row[6], 'total' => $row[7], 'nights' => $row[8], 'outarr' => $row[12],'inarr' => $row[14],'outdep' => $row[11],'indep' => $row[13], 'indur' => $indur, 'outdur' => $outdur, 'direction' => $na , 'ils' => $row[7], 'eur' => floor($row[7]/$eur), 'usd' => floor($row[7]/$usd));
   array_push($json, $cur_elem);
   $i+=1;
  }
@@ -26,7 +30,7 @@ if ($_POST['kind'] == 2) {
  include 'query_builder_oneway.php'; 
 
  $query="
-  select a.company acmp, a.direction adir, a.dst adst, a.price aprice, a.date adt, a.dep_time adep, a.arr_time aarr, d.direction ddir, c.name cname, b.destination bdst from flights a
+  select a.company acmp, a.direction adir, a.dst adst, a.price aprice, a.date adt, a.dep_time adep, a.arr_time aarr, d.direction ddir, c.name cname, b.destination bdst, a.dur_time adurtime from flights a
   join companies c on c.id=a.company
   join directions d on d.id=a.direction
   join destinations b on a.dst=b.airport

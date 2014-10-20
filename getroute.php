@@ -136,8 +136,10 @@ function fill_pages() {
 }
 
 function SortByprice(a,b) {
-  if (a.total < b.total) return -1;
-  if (a.total > b.total) return 1;
+  var inta = parseInt(a.total);
+  var intb = parseInt(b.total);
+  if (inta < intb) return -1;
+  if (inta > intb) return 1;
   return 0;
 }
 
