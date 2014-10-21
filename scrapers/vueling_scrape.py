@@ -28,6 +28,7 @@ if arg_month==0: Start_orig = Start_orig + datetime.timedelta(days=1)
 Stop = Start_orig + datetime.timedelta(days=maxn)
 scrape_time = datetime.datetime.today()
 
+
 DST = sys.argv[1]
 if len(sys.argv) >= 4 :
  if sys.argv[3] == "debug" : debug_flag=True
@@ -40,6 +41,7 @@ viewstate=r1.text[vsi:vse]
 Start = Start_orig
 flightsList = []
 n=0
+
 
 depurl='http://public.vueling.com/Vueling.Cache.WCF.REST.WebService/BlankDaysService.svc/Get?callback=SKYSALES_Util_checkRoutesAndPromoUniversalDepartureCallback&departure=TLV&arrival='+DST+'&year='+str(Start_orig.year)+'&month='+str(Start_orig.month)+'&monthsRange=2'
 arrurl='http://public.vueling.com/Vueling.Cache.WCF.REST.WebService/BlankDaysService.svc/Get?callback=SKYSALES_Util_checkRoutesAndPromoUniversalDepartureCallback&departure='+DST+'&arrival=TLV&year='+str(Start_orig.year)+'&month='+str(Start_orig.month)+'&monthsRange=2'
