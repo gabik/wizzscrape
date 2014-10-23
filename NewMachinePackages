@@ -12,6 +12,8 @@ sudo rm -f /etc/localtime
 sudo ln -s /usr/share/zoneinfo/Asia/Jerusalem /etc/localtime
 sudo ln -s /home/ec2-user/wizz/cron /etc/cron.d/scrape
 sudo chown root /home/ec2-user/wizz/cron
+sudo chmod 640 /home/ec2-user/wizz/cron
 sudo service crond restart
 echo 'rdsdb.co0sypz2znrv.us-east-1.rds.amazonaws.com:5432:GabiScrape:root:ManegerDB' > ~/.pgpass
 chmod 600 ~/.pgpass
+sudo vim /etc/sysconfig/network #Change hostname to SM?.localdomain
