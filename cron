@@ -1,16 +1,16 @@
-0  0  * * * ec2-user cd /home/ec2-user/wizz/scripts ; ./update_currencies.py
-0  1  * * * ec2-user cd ~ ; SM=`cat SM` ; cd /home/ec2-user/wizz/scripts/SM$SM ; ./run.sh 0
-45 1  * * * ec2-user cd ~ ; SM=`cat SM` ; cd /home/ec2-user/wizz/scripts/SM$SM ; ./run.sh 1
-30 2  * * * ec2-user cd ~ ; SM=`cat SM` ; cd /home/ec2-user/wizz/scripts/SM$SM ; ./run.sh 2
-15 3  * * * ec2-user cd ~ ; SM=`cat SM` ; cd /home/ec2-user/wizz/scripts/SM$SM ; ./run.sh 3
-0  4  * * * ec2-user cd ~ ; SM=`cat SM` ; cd /home/ec2-user/wizz/scripts/SM$SM ; ./run.sh 4
-45 4  * * * ec2-user cd ~ ; SM=`cat SM` ; cd /home/ec2-user/wizz/scripts/SM$SM ; ./run.sh 5
-30 5  * * * ec2-user cd ~ ; SM=`cat SM` ; cd /home/ec2-user/wizz/scripts/SM$SM ; ./run.sh 6
-15 6  * * * ec2-user cd ~ ; SM=`cat SM` ; cd /home/ec2-user/wizz/scripts/SM$SM ; ./run.sh 7
-0  7  * * * ec2-user cd ~ ; SM=`cat SM` ; cd /home/ec2-user/wizz/scripts/SM$SM ; ./run.sh 8
-45 7  * * * ec2-user cd ~ ; SM=`cat SM` ; cd /home/ec2-user/wizz/scripts/SM$SM ; ./run.sh 9
-30 8  * * * ec2-user cd ~ ; SM=`cat SM` ; cd /home/ec2-user/wizz/scripts/SM$SM ; ./run.sh 10
-15 9  * * * ec2-user cd ~ ; SM=`cat SM` ; cd /home/ec2-user/wizz/scripts/SM$SM ; ./run.sh 11
+0  0   * * * ec2-user cd /home/ec2-user/wizz/scripts ; ./update_currencies.py
+0  1   * * * ec2-user cd ~ ; SM=`cat SM` ; cd /home/ec2-user/wizz/scripts/SM$SM ; ./run.sh 0
+45 1   * * * ec2-user cd ~ ; SM=`cat SM` ; cd /home/ec2-user/wizz/scripts/SM$SM ; ./run.sh 1
+30 2   * * * ec2-user cd ~ ; SM=`cat SM` ; cd /home/ec2-user/wizz/scripts/SM$SM ; ./run.sh 2
+15 3   * * * ec2-user cd ~ ; SM=`cat SM` ; cd /home/ec2-user/wizz/scripts/SM$SM ; ./run.sh 3
+0  4   * * * ec2-user cd ~ ; SM=`cat SM` ; cd /home/ec2-user/wizz/scripts/SM$SM ; ./run.sh 4
+45 4   * * * ec2-user cd ~ ; SM=`cat SM` ; cd /home/ec2-user/wizz/scripts/SM$SM ; ./run.sh 5
+30 5   * * * ec2-user cd ~ ; SM=`cat SM` ; cd /home/ec2-user/wizz/scripts/SM$SM ; ./run.sh 6
+15 6   * * * ec2-user cd ~ ; SM=`cat SM` ; cd /home/ec2-user/wizz/scripts/SM$SM ; ./run.sh 7
+0  7   * * * ec2-user cd ~ ; SM=`cat SM` ; cd /home/ec2-user/wizz/scripts/SM$SM ; ./run.sh 8
+45 7   * * * ec2-user cd ~ ; SM=`cat SM` ; cd /home/ec2-user/wizz/scripts/SM$SM ; ./run.sh 9
+30 8   * * * ec2-user cd ~ ; SM=`cat SM` ; cd /home/ec2-user/wizz/scripts/SM$SM ; ./run.sh 10
+15 9   * * * ec2-user cd ~ ; SM=`cat SM` ; cd /home/ec2-user/wizz/scripts/SM$SM ; ./run.sh 11
 0  10  * * * ec2-user cd ~ ; SM=`cat SM` ; cd /home/ec2-user/wizz/scripts/SM$SM ; ./run.sh 12
 45 10  * * * ec2-user cd ~ ; SM=`cat SM` ; cd /home/ec2-user/wizz/scripts/SM$SM ; ./run.sh 13
 30 11  * * * ec2-user cd ~ ; SM=`cat SM` ; cd /home/ec2-user/wizz/scripts/SM$SM ; ./run.sh 14

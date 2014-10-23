@@ -7,7 +7,7 @@ import sys
 import datetime
 import time
 from easyjet_scrape_import import getFlight
-from general_scrape import find_all, clean_dup, strip_non_ascii
+from general_scrape import find_all, clean_dup, strip_non_ascii, db
 
 # ARGS:
 # 1 = DST
