@@ -1,0 +1,3 @@
+yum install git
+yum install mail
+yum install postgresql
