@@ -5,6 +5,7 @@ sudo yum install postgresql-devel postgresql-lib
 sudo yum install python-devel
 sudo yum install python-pip
 sudo yum install gcc
+sudo yum install expect
 sudo pip install psycopg2
 sudo pip install requests
 sudo rm -f /etc/localtime
