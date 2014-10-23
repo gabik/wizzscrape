@@ -1,11 +1,16 @@
-yum install git
-yum install mail
-yum install postgresql
-yum install postgresql-devel postgresql-lib
-yum install python-devel
-yum install python-pip
-yum install gcc
-pip install psycopg2
-pip install requests
-rm -f /etc/localtime
-ln -s /usr/share/zoneinfo/Asia/Jerusalem /etc/localtime
+sudo yum install git
+sudo yum install mail
+sudo yum install postgresql
+sudo yum install postgresql-devel postgresql-lib
+sudo yum install python-devel
+sudo yum install python-pip
+sudo yum install gcc
+sudo pip install psycopg2
+sudo pip install requests
+sudo rm -f /etc/localtime
+sudo ln -s /usr/share/zoneinfo/Asia/Jerusalem /etc/localtime
+sudo ln -s /home/ec2-user/wizz/cron /etc/cron.d/scrape
+sudo chown root /home/ec2-user/wizz/cron
+sudo service crond restart
+echo 'rdsdb.co0sypz2znrv.us-east-1.rds.amazonaws.com:5432:GabiScrape:root:ManegerDB' > ~/.pgpass
+chmod 600 ~/.pgpass
