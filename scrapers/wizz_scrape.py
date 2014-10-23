@@ -123,7 +123,7 @@ for DST in Dests:
   print "Debug: After sorting: Out, Inc: "
   print Out
   print Inc
- db= psycopg2.connect( host="manegerdb.cjjasb6ckbh1.us-east-1.rds.amazonaws.com", database="GabiScrape", user="root", password="ManegerDB")
+ #db= psycopg2.connect( host="manegerdb.cjjasb6ckbh1.us-east-1.rds.amazonaws.com", database="GabiScrape", user="root", password="ManegerDB")
  curs = db.cursor()
  curs.execute("select id from companies where name='wizz'")
  company_id=curs.fetchone()[0]

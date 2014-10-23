@@ -1,6 +1,6 @@
 <?php
 
-$conn_string = "host=manegerdb.cjjasb6ckbh1.us-east-1.rds.amazonaws.com port=5432 dbname=GabiScrape user=root password=ManegerDB";
+include 'db_con_string.php';
 
 $db = pg_pconnect($conn_string);
 $query="select id from companies where name='".$_POST['company']."'";

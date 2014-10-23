@@ -1,1 +1,2 @@
-pg_dump93 -hmanegerdb.cjjasb6ckbh1.us-east-1.rds.amazonaws.com -Uroot GabiScrape -f ~/`date +%d_%m_%Y`.dump
+. ../env.sh
+pg_dump93 -h$DB_HOST -Uroot GabiScrape -f ~/`date +%d_%m_%Y`.dump
