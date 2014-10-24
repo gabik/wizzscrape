@@ -38,6 +38,7 @@ def strip_non_ascii(string):
  return re.sub(',', '', newstr)
 
 def get_currency(cur):
- r=requests.get('http://fx-rate.net/'+str(cur)+'/ils')
+ #r=requests.get('http://fx-rate.net/'+str(cur)+'/ils')
  #return float(r.text[r.text.find('<div style="font-size:25px;color:black;margin-top:5px">'):r.text.find('<div style="font-size:25px;color:black;margin-top:5px">')+80].split('>')[1].split()[0])
- return float(r.text[r.text.find('Today = ')+8:r.text.find('Today = ')+13].split('<')[0])
+ #return float(r.text[r.text.find('Today = ')+8:r.text.find('Today = ')+13].split('<')[0])
+ return open("../currencies/"+str(cur),"r").read()
