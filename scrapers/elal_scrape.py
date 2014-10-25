@@ -102,8 +102,8 @@ while Stop > Start:
      if cur_date:
       tmpd4={}
       tmpd4['direction']=dirc
-      tmpd4['price']=int(min_price*usd+0.5)
-      tmpd4['maxprice']=int(max_price*usd+0.5)
+      tmpd4['price']=int(float(min_price)*float(usd)+0.5)
+      tmpd4['maxprice']=int(float(max_price)*float(usd)+0.5)
       tmpd4['year']=cur_date[0:4]
       tmpd4['month']=cur_date[4:6]
       tmpd4['day']=cur_date[6:]
