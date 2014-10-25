@@ -3,7 +3,7 @@
 <script src='lib/analytics.js'></script>
 <script src='lib/jquery.min.js'></script>
 <script src="lib/jquery.dataTables.min.js"></script>
-<link rel="stylesheet" type="text/css" href="lib/table.css">
+<!--<link rel="stylesheet" type="text/css" href="lib/table.css">-->
 <link rel="stylesheet" type="text/css" href="lib/jquery.dataTables.min.css">
 <link rel='stylesheet' href='lib/fullcalendar.min.css' />
 <script src='lib/jquery.qtip.min.js'></script>
@@ -29,6 +29,8 @@ var eur = <?php echo $eur; ?>;
 var currency = "ils";
 var Gpage = 1;
 var perPage=25;
+var onload = 1;
+var TO_load = function() { if (onload==1) { $(".longwait").show(1500); } };
 
 function displayPage(page) {
  Gpage=page;
@@ -178,6 +180,10 @@ function mark_tops() {
 
 $(document).ready(function() {
 
+    setTimeout(TO_load, 10000); 
+
+    $("#waitcancel").click(function() { location.href='/';});
+
     $('.wizz1Remark').tooltip({
      'show': true,
      html: true,
@@ -205,6 +211,7 @@ $(document).ready(function() {
          mark_tops();
          displayPage(1);
 	 $(".loader").fadeOut("slow");
+         onload=0;
         } } ) ;
 
 
@@ -311,7 +318,12 @@ function filterBy(kind, filter) {
 </script>
 
 </HEAD<BODY>
-<div class="loader"><h2 class="load_center load_txt">Loading your request...</h2><BR><i class="fa fa-spinner fa-5x fa-spin load_center"></i></div>
+<div class="loader"><h2 class="load_center load_txt">Loading your request...</h2><BR><i class="fa fa-spinner fa-5x fa-spin load_center load_fa"></i>
+ <div class=" load_center longwait" style="display:none;">
+  Your Request still under control.<BR>It can take few more minutes.<BR>You can cancel the request and run another one with more filters to get it faster,<BR>Or, you can just wait...<BR><button id="waitcancel" name="waitcancel" class="btn btn-primary ">Cancel and Go Back</button>
+ </div>
+</div>
+
 <div id="route_wrap">
 <ul class="nav nav-pills" id="head_bar">
  <div class="navbar-header">
