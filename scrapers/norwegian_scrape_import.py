@@ -61,7 +61,7 @@ class getFlight(HTMLParser):
    self.direction = 0
   if tag == "tr" and self.row>0: 
    if self.row>=3:
-    if self.prices: self._vals['price'] = int(min(self.prices)*eur)
+    if self.prices: self._vals['price'] = int(float(min(self.prices))*float(eur))
     self.prices=[]
     if self._vals: 
      self._vals['date'] = self.start if self._vals['direction']==1 else self.ret
