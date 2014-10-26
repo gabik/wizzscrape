@@ -42,3 +42,6 @@ def get_currency(cur):
  #return float(r.text[r.text.find('<div style="font-size:25px;color:black;margin-top:5px">'):r.text.find('<div style="font-size:25px;color:black;margin-top:5px">')+80].split('>')[1].split()[0])
  #return float(r.text[r.text.find('Today = ')+8:r.text.find('Today = ')+13].split('<')[0])
  return float(open("../currencies/"+str(cur),"r").read())
+
+def clean_full_month(company, dst, start, end, scrape_time)
+ return ("delete from flights where company=%s and dst=%s and date>=$s and date<=$s and scrape_time<%s", (company, dst, start, end, scrape_time))
