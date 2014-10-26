@@ -57,7 +57,7 @@ class getFlight(HTMLParser):
     self._vals['weekday']=self.tmp_date.split()[0]
     self._vals['day']=self.tmp_date.split()[1]
     self._vals['month']=datetime.datetime.strptime(self.tmp_date.split()[2], "%b").strftime("%m")
-    self._vals['price']=int(float(strip_non_ascii(self.tmp_price))*eur+0.5)
+    self._vals['price']=int(float(strip_non_ascii(self.tmp_price))*float(eur)+0.5)
     self._vals['priceE']=strip_non_ascii(self.tmp_price)
     self._vals['direction']=self.direction
     self._vals['dep_time']=self.tmp_time.split()[1]
