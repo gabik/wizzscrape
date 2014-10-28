@@ -203,25 +203,7 @@ $(document).ready(function() {
 
 </SCRIPT>
 </HEAD><BODY>
-<div class="custom-nav" role="navigation">
-   <div class="navbar-header">
-      <a href="/"><img src="images/paperplane.png" width="150px"></a>
-   </div>
-   <div class="navbar-header navbar-header-txt">
-      <a href="/"><span class="txth1">CHEAPEST </span><span class="txth2">FLIGHTS</span></a>
-   </div>
-   <span class="bar-square">
-    <span class="square_elem">
-     FLIGHTS
-    </span>
-    <span class="square_elem">
-     HOTELS
-    </span>
-    <span class="square_elem">
-     EXPLORE
-    </span>
-   </span>
-</div>
+<?php include('header.html'); ?>
 <div class=row>
  <div class="jumbotron-form">
   <div class="container-form">
@@ -235,7 +217,6 @@ $(document).ready(function() {
     <div class="col-md-2"></div>
     <div class="col-md-1 midrow"></div>
     <div class="col-md-6 head2col">
-<link href='http://fonts.googleapis.com/css?family=Roboto:400,300' rel='stylesheet' type='text/css'>
      <span class="text-capitalize head2">No matter when, No matter where, Only price matter.</span>
     </div>
     <div class="col-md-1 midrow"></div>
@@ -468,51 +449,6 @@ $(document).ready(function() {
  </div>
 </div>
 
-<div class="row">
- <div class="container-footer">
-  <div class="row">
-   <div class="col-md-1"></div>
-   <div class="col-md-10">
-    <hr class="footerhr1">
-    <div class="row">
-     <div class="footerlinks">
-      <a href="#" class="footerlinka">
-       CITIES
-      </a>
-      <a href="#" class="footerlinka">
-       AIRPORTS
-      </a>
-      <a href="#" class="footerlinka">
-       COUNTRIES
-      </a>
-      <a href="#" class="footerlinka">
-       AIRLINES
-      </a>
-      <a href="#" class="footerlinka">
-       FLIGHTS 
-      </a>
-      <a href="#" class="footerlinka">
-       HOTELS
-      </a>
-      <a href="#" class="footerlinka">
-       CAR HIRE
-      </a>
-     </div>
-    </div>
-    <hr class="footerhr2">
-    <div class="row">
-     <div class="col-md-2"></div>
-     <div class="col-md-8">
-      <div class="footerlast">
-       <a href="/"><img src="images/paperplane.png" width="70px"><span class="text-uppercase footerfoortxt">© Cheap flights from tel-aviv all rights reserved</span></a>
-      </div>
-     </div>
-     <div class="col-md-2"></div>
-    </div>
-   </div>
-   <div class="col-md-1"></div>
-  </div>
- </div>
-</div>
+<?php include('footer.html'); ?>
 
 </BODY></HTML>

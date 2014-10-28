@@ -15,6 +15,7 @@
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 <script src="lib/dataTables.bootstrap.js"></script>
+<link href="lib/hover-min.css" rel="stylesheet" media="all">
 
 
 <?php
@@ -67,10 +68,10 @@ function fill_results(startI) {
   var inarr = flight['inarr'].split(":")[0]+":"+flight['inarr'].split(":")[1]
   var price=flight[currency];
   var data = 
-    '<div class="result_row">'+
+    '<div class="result_row text-center hover-shadow glow">'+
     '<div class="'+flight['special']+'"></div>'+
-    '<img src="images/flight_card.jpg" >'+
-    '<div class="result_price"><i class="fa fa-'+currency+'"></i>'+price+'</div>'+
+    '<img src="images/flight_card.jpg" class="flightcard">'+
+    '<div class="result_price"><span class="fa_cur"><i class="fa fa-'+currency+'"></i></span> '+price+'</div>'+
     '<div class="result_company"><img src="images/airlines/'+flight['company']+'.jpg" class="cmp_logo"></div>'+
     '<div class="result_outdate">'+weekday[outdate.getUTCDay()]+" "+outdate.getUTCDate()+"/"+(outdate.getUTCMonth()+1)+"/"+outdate.getUTCFullYear()+' '+outdep+'</div>'+
     '<div class="result_indate">'+weekday[indate.getUTCDay()]+" "+indate.getUTCDate()+"/"+(indate.getUTCMonth()+1)+"/"+indate.getUTCFullYear()+' '+indep+'</div>'+
@@ -318,6 +319,7 @@ function filterBy(kind, filter) {
 </script>
 
 </HEAD<BODY>
+<?php include('header.html'); ?>
 <div class="loader"><h2 class="load_center load_txt">Loading your request...</h2><BR><i class="fa fa-spinner fa-5x fa-spin load_center load_fa"></i>
  <div class=" load_center longwait" style="display:none;">
   Your Request still under control.<BR>It can take few more minutes.<BR>You can cancel the request and run another one with more filters to get it faster,<BR>Or, you can just wait...<BR><button id="waitcancel" name="waitcancel" class="btn btn-primary ">Cancel and Go Back</button>
@@ -325,6 +327,8 @@ function filterBy(kind, filter) {
 </div>
 
 <div id="route_wrap">
+<h1 class="h1txt"> SEARCH RESULTS </H1>
+<div class="h1hr1"></div>
 <ul class="nav nav-pills" id="head_bar">
  <div class="navbar-header">
   <a class="navbar-brand" href="#">Sort By: </a>
@@ -369,5 +373,7 @@ function filterBy(kind, filter) {
 -->
 </div>
 </div>
+<?php include('footer.html'); ?>
+
 </BODY>
 </HTML>
