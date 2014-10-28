@@ -58,7 +58,7 @@ top: 51%;
     position:absolute;
     font-size:26px;
     font-weight:bold;
-    left:43px;
+    left: 4%;
     top:65px;
     color: white;
 }
@@ -66,7 +66,7 @@ top: 51%;
 .result_company {
     z-index:76;
     position:absolute;
-    left:160px;
+    left:13.5%;
     top:58px;
 }
 .result_outdate {
@@ -74,74 +74,74 @@ top: 51%;
     position:absolute;
     font-size:14px;
     font-weight:bold;
-    left:295px;
+    left:29%;
     top:15px;
 }
 .result_outdur {
     z-index:80;
     position:absolute;
     font-size:14px;
-    left:492px;
+    left:51%;
     top:22px;
 }
 .result_indur {
     z-index:80;
     position:absolute;
     font-size:14px;
-    left:492px;
-    top:84px;
+    left:51%;
+    top:100px;
 }
 .result_indate {
     z-index:80;
     position:absolute;
     font-size:14px;
     font-weight:bold;
-    left:295px;
-    top:75px;
+    left:29%;
+    top:90px;
 }
 .result_inarr {
     z-index:80;
     position:absolute;
     font-size:14px;
     font-weight:bold;
-    left:581px;
-    top:76px;
+    left:66%;
+    top:90px;
 }
 .result_outarr {
     z-index:80;
     position:absolute;
     font-size:14px;
     font-weight:bold;
-    left:581px;
+    left:66%;
     top:16px;
 }
 .result_outsrc {
     z-index:80;
     position:absolute;
     font-size:14px;
-    left:295px;
+    left:29%;
     top:30px;
 }
 .result_insrc {
     z-index:80;
     position:absolute;
     font-size:14px;
-    left:295px;
-    top:90px;
+    left:29%;
+    top:105px;
 }
 .result_outdst {
     z-index:80;
     position:absolute;
     font-size:14px;
-    left:581px;
+    left:66%;
     top:30px;
 }
 .result_indst {
     z-index:80;
     position:absolute;
     font-size:14px;
-    left:581px;
-    top:90px;
+    left:66%;
+    top:105px;
 }
 .result_descr {
     z-index:80;
@@ -150,12 +150,17 @@ top: 51%;
     font-size:20px;
     left:10px;
     top:10px;
-    color: #AD3DF2;
+}
+.result_descr_dst {
+    color: #428bca;
+}
+.result_descr_nights {
+ color: #989a9b;
 }
 .result_icons {
     z-index:80;
     position:absolute;
-    left:740px;
+    left:85%;
     top:40px;
 }
 .result_row {

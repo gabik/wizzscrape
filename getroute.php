@@ -83,7 +83,7 @@ function fill_results(startI) {
     '<div class="result_indur">'+flight['indur']+'H</div>'+
     '<div class="result_outarr">'+outarr+'</div>'+
     '<div class="result_inarr">'+inarr+'</div>'+
-    '<div class="result_descr">'+flight['destination']+', '+flight['nights']+' Nights</div>'+
+    '<div class="result_descr"><span class="result_descr_dst">'+flight['destination']+', </span><span class="result_descr_nights">'+flight['nights']+' Nights</span></div>'+
     '<div class="result_icons"><span class="fa-stack fa-2x"><i class="fa fa-suitcase fa-stack-1x"></i><i class="fa fa-ban fa-stack-2x text-white"></i></div>'+
     '</div>';
   $("#flight_results").append(data);
