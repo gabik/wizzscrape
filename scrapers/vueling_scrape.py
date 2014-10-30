@@ -19,6 +19,7 @@ def getblankdays(m, cal):
   if i['Month']==m:
    return i['BlankDays']
 
+cleandone=1
 debug_flag=False
 maxn=31
 arg_month=sys.argv[2]
@@ -111,7 +112,12 @@ while Stop > Start:
  dict['pageToken'] = ""
 
  r2 = s.post('http://tickets.vueling.com/XmlSearch.aspx', data=dict, headers=headers)
- cleanr2=r2.text[sorted(list(find_all(r2.text, "basicPriceRoute")))[0]-5:r2.text.find('</tbody>', sorted(list(find_all(r2.text, "basicPriceRoute")))[-1])]
+ try:
+  cleanr2=r2.text[sorted(list(find_all(r2.text, "basicPriceRoute")))[0]-5:r2.text.find('</tbody>', sorted(list(find_all(r2.text, "basicPriceRoute")))[-1])]
+ except IndexError :
+  print r2.text
+  cleandone=0
+  continue
 
  prP = getFlight()
  prP.feed(cleanr2)
@@ -149,5 +155,6 @@ for i in flightsList:
 
 db.commit()
 
-print "Done!"
+if cleandone==1:
+ print "Done!"
 print datetime.datetime.now()
