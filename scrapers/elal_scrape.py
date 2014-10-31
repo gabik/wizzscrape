@@ -34,6 +34,7 @@ flightsList = []
 n=0
 print DST
 print str(scrape_time)
+print str(Start_orig)
 
 if int(arg_month)>12: Start=Stop
 while Stop > Start:

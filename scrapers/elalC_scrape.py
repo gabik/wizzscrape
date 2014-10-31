@@ -38,6 +38,7 @@ for DST in Dests:
  n=0
  print DST
  print str(scrape_time)
+ print str(Start_orig)
  while Stop > Start:
   n+=1
   if debug_flag:
