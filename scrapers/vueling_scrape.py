@@ -115,7 +115,7 @@ while Stop > Start:
  try:
   cleanr2=r2.text[sorted(list(find_all(r2.text, "basicPriceRoute")))[0]-5:r2.text.find('</tbody>', sorted(list(find_all(r2.text, "basicPriceRoute")))[-1])]
  except IndexError :
-  print r2.text
+  print str(Start), str(Ret)
   cleandone=0
   continue
 
