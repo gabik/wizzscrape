@@ -43,4 +43,9 @@
  if ($_POST['dst']!="ALL") {
   $destination_join=" and a.dst='".$_POST['dst']."'";
  }
+
+ $direction_join="";
+ if (isset($_POST['direction']) ){
+  $direction_join=" and a.direction=".$_POST['direction'];
+ }
 ?>
