@@ -9,7 +9,7 @@ if (array_key_exists('company', $_POST)) {
   $where_cmp = "";
 }
 
-$query="select * from destinations".$where_cmp;
+$query="select distinct destination, airport from destinations".$where_cmp;
 $result = pg_query($db, $query);
 
 pg_close();
@@ -18,7 +18,7 @@ pg_close();
 $json=array();
 $i=1;
 while ($row = pg_fetch_row($result)) {
- $cur_elem=array('id' => $i, 'company' => $row[0], 'destination' => $row[2], 'airport' => $row[1] );
+ $cur_elem=array('id' => $i, 'destination' => $row[0], 'airport' => $row[1] );
  array_push($json, $cur_elem);
  $i+=1;
 }

@@ -15,7 +15,6 @@
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 <script src="lib/dataTables.bootstrap.js"></script>
-<link href="lib/hover-min.css" rel="stylesheet" media="all">
 
 
 <?php
@@ -68,19 +67,19 @@ function fill_results(startI) {
   var inarr = flight['inarr'].split(":")[0]+":"+flight['inarr'].split(":")[1]
   var price=flight[currency];
   var data = 
-    '<div class="result_row text-center hover-shadow glow">'+
+    '<div class="result_row text-center ">'+
     '<div class="'+flight['special']+'"></div>'+
     '<img src="images/flight_card.jpg" class="flightcard">'+
     '<div class="result_price"><span class="fa_cur"><i class="fa fa-'+currency+'"></i></span> '+price+'</div>'+
     '<div class="result_company"><img src="images/airlines/'+flight['company']+'.jpg" class="cmp_logo"></div>'+
     '<div class="result_outdate">'+weekday[outdate.getUTCDay()]+" "+outdate.getUTCDate()+"/"+(outdate.getUTCMonth()+1)+"/"+outdate.getUTCFullYear()+' '+outdep+'</div>'+
     '<div class="result_indate">'+weekday[indate.getUTCDay()]+" "+indate.getUTCDate()+"/"+(indate.getUTCMonth()+1)+"/"+indate.getUTCFullYear()+' '+indep+'</div>'+
-    '<div class="result_outsrc">Tel Aviv (TLV)</div>'+
-    '<div class="result_insrc">'+flight['destination']+' ('+flight['airport']+')</div>'+
-    '<div class="result_indst">Tel Aviv (TLV)</div>'+
-    '<div class="result_outdst">'+flight['destination']+' ('+flight['airport']+')</div>'+
-    '<div class="result_outdur">'+flight['outdur']+'H</div>'+
-    '<div class="result_indur">'+flight['indur']+'H</div>'+
+    '<div class="result_outsrc">Tel Aviv <b>(TLV)</b></div>'+
+    '<div class="result_insrc">'+flight['destination']+' <B>('+flight['airport']+')</B></div>'+
+    '<div class="result_indst">Tel Aviv <B>(TLV)</B></div>'+
+    '<div class="result_outdst">'+flight['destination']+' <B>('+flight['airport']+')</B></div>'+
+    '<div class="result_outdur"><B>'+flight['outdur']+'</B> HRS</div>'+
+    '<div class="result_indur"><B>'+flight['indur']+'</B> HRS</div>'+
     '<div class="result_outarr">'+outarr+'</div>'+
     '<div class="result_inarr">'+inarr+'</div>'+
     '<div class="result_descr"><span class="result_descr_dst">'+flight['destination']+', </span><span class="result_descr_nights">'+flight['nights']+' Nights</span></div>'+
@@ -223,7 +222,7 @@ $(document).ready(function() {
         success: function(data) { 
          var json = jQuery.parseJSON(data); 
          for (var s in json) {
-          $('#dstsum').append('<li><a href="#" onclick="filterBy(\'dst\',\''+json[s].airport+'\');"><table style="width:200px;"><tr><td>' + json[s].destination + "</td><td style='text-align:right;'>"+ json[s].total + ' <i class="fa fa-ils "></i></td></tr></table></a></li>' );
+          $('#dstsum').append('<li><a href="#" onclick="filterBy(\'dst\',\''+json[s].airport+'\');"><table style="width:200px;"><tr><td>' + json[s].destination + "</td><td style='text-align:right;'><i class='fa fa-ils '></i> "+ json[s].total + '</td></tr></table></a></li>' );
          } } }) ;
 
     $.ajax( { 
@@ -233,7 +232,7 @@ $(document).ready(function() {
         success: function(data) {
          var json = jQuery.parseJSON(data); 
          for (var s in json) {
-          $('#datesum').append('<li><a href="#" onclick="filterBy(\'date\',\''+json[s].ddate+'\');"><table style="width:200px;"><tr><td>' + json[s].ddate + "</td><td style='text-align:right;'>"+ json[s].total + ' <i class="fa fa-ils "></i></td></tr></table></a></li>' );
+          $('#datesum').append('<li><a href="#" onclick="filterBy(\'date\',\''+json[s].ddate+'\');"><table style="width:200px;"><tr><td>' + json[s].ddate + "</td><td style='text-align:right;'><i class='fa fa-ils '></i> "+ json[s].total + '</td></tr></table></a></li>' );
          } } }) ;
 
 });
@@ -241,14 +240,14 @@ $(document).ready(function() {
 function changeCur(cur) {
  currency = cur;
  displayPage(Gpage);
- $("#head_bar").find("li").each(function() {
+ $("#head_bar_cur").find("a").each(function() {
   var $this = $(this);
-  if ($this.hasClass("cur")) {
-   $this.removeClass("active");
+  if ($this.hasClass("cur_nav_e")) {
+   $this.removeClass("cur_active");
   }
  });
  var s = document.getElementById("cur_"+cur);
- $(s).addClass("active");
+ $(s).addClass("cur_active");
 }
 
 function ShowTable(){ 
@@ -269,11 +268,11 @@ function sortBy(col) {
  $("#head_bar").find("li").each(function() {
   var $this = $(this);
   if ($this.hasClass("sb")) {
-   $this.removeClass("active");
+   $this.removeClass("bar-active");
   }
  });
  var s = document.getElementById("sb_"+col);
- $(s).addClass("active");
+ $(s).addClass("bar-active");
  sorted_flights.sort(eval("SortBy"+col));
  displayPage(1);
  
@@ -281,7 +280,7 @@ function sortBy(col) {
 
 function filterBy(kind, filter) {
  var s = document.getElementById("fb_"+kind);
- $(s).addClass("active");
+ $(s).addClass("bar-active");
  var cur_flights = sorted_flights;
  sorted_flights = [];
  if (filter!="clear") { 
@@ -308,7 +307,7 @@ function filterBy(kind, filter) {
   $("#head_bar").find("li").each(function() {
    var $this = $(this);
    if ($this.hasClass("fb")) {
-    $this.removeClass("active");
+    $this.removeClass("bar-active");
    }
   });
  }
@@ -327,37 +326,41 @@ function filterBy(kind, filter) {
 </div>
 
 <div id="route_wrap">
-<h1 class="h1txt"> SEARCH RESULTS </H1>
+<div class="row header_cur_row">
+<span class="h1txt"> SEARCH RESULTS </span>
+<ul class="nav nav-pills cur_nav" id="head_bar_cur">
+ <div class="navbar-header">
+  <a class="navbar-brand nav_header" href="#">SELECT CURRENCY</a>
+ </div>
+ <li onclick="changeCur('ils');"><a id="cur_ils" href="#" class="cur_nav_e cur_active"><i class="fa fa-ils "></i></a></li>
+ <li onclick="changeCur('usd');"><a id="cur_usd" href="#" class="cur_nav_e"><i class="fa fa-dollar "></i></a></li>
+ <li onclick="changeCur('eur');"><a id="cur_eur" href="#" class="cur_nav_e"><i class="fa fa-euro"></i></a></li>
+</ul>
+</div>
 <div class="h1hr1"></div>
+
 <ul class="nav nav-pills" id="head_bar">
  <div class="navbar-header">
-  <a class="navbar-brand" href="#">Sort By: </a>
+  <a class="navbar-brand nav_header nav_header_row" href="#">SORT BY: </a>
  </div>
- <li id="sb_price" class="sb active" onclick="sortBy('price');"><a href="#">Price</a></li>
- <li id="sb_outdate" class="sb" onclick="sortBy('outdate');"><a href="#">Departure Date</a></li>
+ <li id="sb_price" class="sb bar-active" onclick="sortBy('price');"><a href="#"><span class="fa-stack fa-lg"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-ils fa-stack-1x fa-inverse"></i></span>Price</a></li>
+ <li id="sb_outdate" class="sb" onclick="sortBy('outdate');"><a href="#"><span class="fa-stack fa-lg"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-calendar fa-stack-1x fa-inverse"></i></span>Departure Date</a></li>
 
  
  <div class="navbar-header">
-  <a class="navbar-brand" href="#">Currency: </a>
- </div>
- <li id="cur_ils" class="cur active" onclick="changeCur('ils');"><a href="#"><i class="fa fa-ils "></i></a></li>
- <li id="cur_usd" class="cur" onclick="changeCur('usd');"><a href="#"><i class="fa fa-dollar "></i></a></li>
- <li id="cur_eur" class="cur" onclick="changeCur('eur');"><a href="#"><i class="fa fa-euro"></i></a></li>
-
- <div class="navbar-header">
-  <a class="navbar-brand" href="#">Filters: </a>
+  <a class="navbar-brand nav_header nav_header_row nav_header_row_f" href="#">FILTERS: </a>
  </div>
  <li class="dropdown fb" id="fb_dst" >
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown">By Destination<span class="caret"></span></a>
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="fa-stack fa-lg"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-plane fa-stack-1x fa-inverse"></i></span>By Destination<span class="caret"></span></a>
   <ul class="dropdown-menu" role="menu" id="dstsum" name="dstsum">
   </ul>
  </li>
  <li class="dropdown fb" id="fb_date">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown">By Month<span class="caret"></span></a>
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="fa-stack fa-lg"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-calendar-o fa-stack-1x fa-inverse"></i></span>By Month<span class="caret"></span></a>
   <ul class="dropdown-menu" role="menu" id="datesum" name="datesum">
   </ul>
  </li>
- <li onclick="filterBy('', 'clear');"><a href="#">Clear Filters</a></li>
+ <li onclick="filterBy('', 'clear');" ><a href="#" class="clear_filters">Clear Filters</a></li>
 </ul>
 
 <div id="table-tab" class="container1">
