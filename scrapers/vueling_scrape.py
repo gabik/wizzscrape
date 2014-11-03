@@ -68,11 +68,13 @@ while Stop > Start:
  if dep_cur_m == [y for y in range(dep_cur_m[0],dep_cur_m[-1]+1)] : break
  while Start.day in dep_cur_m:
   Start= Start + datetime.timedelta(days=1)
+  dep_cur_m=getblankdays(Start.month, depcal)
   n+=1
 
  Ret = Start + datetime.timedelta(days=1)
  while Ret.day in arr_cur_m:
   Ret = Ret + datetime.timedelta(days=1)
+  arr_cur_m=getblankdays(Start.month, arrcal)
 
  if debug_flag:
   print "Progress: " + str(n) + "/" + str(maxn)
