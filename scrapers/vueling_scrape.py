@@ -121,6 +121,7 @@ while Stop > Start:
  except IndexError :
   print str(Start), str(Ret)
   cleandone=0
+  Start=Start + datetime.timedelta(days=1)
   continue
 
  prP = getFlight()
