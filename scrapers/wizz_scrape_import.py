@@ -36,13 +36,14 @@ class getFlight(HTMLParser):
   self.header = 0
   self.deep = 0
   self.direction = 0
+  self.directionval = 0
   self.req_date=req_date
   HTMLParser.__init__(self)
  def handle_starttag(self, tag, attrs):
   if tag == "h3":
    self.header+=1
   if tag == "h2":
-   self.direction+=1
+   self.direction=1
   if self.header > 0 : return
   if tag == "label" : self.deep+=1
   if tag != "br":
@@ -65,8 +66,12 @@ class getFlight(HTMLParser):
   if self.time == 1: 
    self._vals['dep_time'] = strip_non_ascii(data).split()[0]
    self._vals['arr_time'] = strip_non_ascii(data).split()[1]
+  if self.direction == 1:
+   if data[0:8] == 'Tel-Aviv' : self.directionval=1;
+   if data[-8:] == 'Tel-Aviv' : self.directionval=2;
  def handle_endtag(self, tag):
   if tag == "h3" : self.header=0
+  if tag == "h2" : self.direction=0
   if tag == "span":
    if self.date == 1:
     tmp_year=int(self.req_date.split("-")[2])
@@ -80,7 +85,7 @@ class getFlight(HTMLParser):
     self._vals['month'] = datetime.datetime.strptime(tmp_full_date[2], "%b").strftime("%m") 
   if tag == "label":
    if self._vals:
-    self._vals['direction'] = self.direction
+    self._vals['direction'] = self.directionval
     self.data.append(self._vals)
     self.deep=0
     self._vals={}
