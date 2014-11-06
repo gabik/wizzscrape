@@ -44,8 +44,8 @@ flightsList = []
 n=0
 
 
-depurl='http://public.vueling.com/Vueling.Cache.WCF.REST.WebService/BlankDaysService.svc/Get?callback=SKYSALES_Util_checkRoutesAndPromoUniversalDepartureCallback&departure=TLV&arrival='+DST+'&year='+str(Start_orig.year)+'&month='+str(Start_orig.month)+'&monthsRange=2'
-arrurl='http://public.vueling.com/Vueling.Cache.WCF.REST.WebService/BlankDaysService.svc/Get?callback=SKYSALES_Util_checkRoutesAndPromoUniversalDepartureCallback&departure='+DST+'&arrival=TLV&year='+str(Start_orig.year)+'&month='+str(Start_orig.month)+'&monthsRange=2'
+depurl='http://public.vueling.com/Vueling.Cache.WCF.REST.WebService/BlankDaysService.svc/Get?callback=SKYSALES_Util_checkRoutesAndPromoUniversalDepartureCallback&departure=TLV&arrival='+DST+'&year='+str(Start_orig.year)+'&month='+str(Start_orig.month)+'&monthsRange=3'
+arrurl='http://public.vueling.com/Vueling.Cache.WCF.REST.WebService/BlankDaysService.svc/Get?callback=SKYSALES_Util_checkRoutesAndPromoUniversalDepartureCallback&departure='+DST+'&arrival=TLV&year='+str(Start_orig.year)+'&month='+str(Start_orig.month)+'&monthsRange=3'
 rdepcal=s.get(depurl)
 rarrcal=s.get(arrurl)
 depcal=eval(rdepcal.text[rdepcal.text.find('(')+1:rdepcal.text.find(')')].replace('null','""'))['Calendar']
@@ -64,10 +64,12 @@ while Stop > Start:
  n+=1
 
  dep_cur_m=getblankdays(Start.month, depcal)
+ if debug_flag:  print dep_cur_m
  arr_cur_m=getblankdays(Start.month, arrcal)
  if dep_cur_m == [y for y in range(dep_cur_m[0],dep_cur_m[-1]+1)] : break
  while Start.day in dep_cur_m:
   Start= Start + datetime.timedelta(days=1)
+  if Start > Stop : continue
   dep_cur_m=getblankdays(Start.month, depcal)
   n+=1
 
