@@ -38,9 +38,10 @@ NameVirtualHost *:80
     ErrorLog logs/wizz.gabi.ninja-error_log
     CustomLog logs/wizz.gabi.ninja-access_log common
 </VirtualHost>
-sudo service httpd restart
 sudo chkconfig httpd on
 sudo yum install -y php-pgsql
+sudo service httpd restart
 
 # back to ALL:
 sudo service crond restart
+cd /home/ec2-user/wizz/scripts ; ./update_currencies.py
