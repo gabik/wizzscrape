@@ -3,7 +3,7 @@ psql -t -h$DB_HOST -Uroot -w GabiScrape << EOF
 delete from flights where date<(now() - '0 day'::INTERVAL) ;
 EOF
 
-today=`date +%Y-%m-%d`
+today=`date +%Y-%m-%d -d "yesterday"`
 q=`mktemp`
 psql -t -h$DB_HOST -Uroot -w GabiScrape << EOF > $q
 select * from flights where scrape_time<'$today' order by scrape_time
