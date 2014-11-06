@@ -1,19 +1,52 @@
-sudo yum install git
-sudo yum install mail
-sudo yum install postgresql
-sudo yum install postgresql-devel postgresql-lib
-sudo yum install python-devel
-sudo yum install python-pip
-sudo yum install gcc
-sudo yum install expect
+sudo yum install -y git
+sudo yum install -y mail
+sudo yum install -y postgresql
+sudo yum install -y postgresql-devel postgresql-lib
+sudo yum install -y python-devel
+sudo yum install -y python-pip
+sudo yum install -y gcc
+sudo yum install -y expect
 sudo pip install psycopg2
 sudo pip install requests
 sudo rm -f /etc/localtime
 sudo ln -s /usr/share/zoneinfo/Asia/Jerusalem /etc/localtime
+ssh-keygen
+cat ~/.ssh/id_rsa.pub
+# add it to github
+git clone git@github.com:gabik/wizzscrape.git wizz
+echo 'gabiscrape.c8f6qy9d6xm4.us-west-2.rds.amazonaws.com:5432:GabiScrape:root:ManegerDB' > ~/.pgpass
+chmod 600 ~/.pgpass
+sudo vim /etc/sysconfig/network #Change hostname to SM?.localdomain
+sudo hostname SM?
+
+# on SM : 
+echo 1 > ~/SM
 sudo ln -s /home/ec2-user/wizz/cron /etc/cron.d/scrape
 sudo chown root /home/ec2-user/wizz/cron
 sudo chmod 640 /home/ec2-user/wizz/cron
+
+# on web:
+sudo yum install -y httpd
+sudo yum install -y php
+sudo echo '10 0  * * * ec2-user cd /home/ec2-user/wizz/scripts ; ./clean_flights.sh
+0  0  * * * ec2-user cd /home/ec2-user/wizz/scripts ; ./update_currencies.py' > /etc/cron.d/site_commands
+# sudo vim /etc/httpd/conf/httpd.conf
+NameVirtualHost *:80
+<VirtualHost *:80>
+    DocumentRoot /home/ec2-user/wizz/
+    ServerName 2fly.cheap
+    <Directory "/home/ec2-user/wizz/output/">
+        Options All Indexes FollowSymLinks
+        Order allow,deny
+        Allow from all
+    </Directory>
+    ErrorLog logs/wizz.gabi.ninja-error_log
+    CustomLog logs/wizz.gabi.ninja-access_log common
+</VirtualHost>
+sudo chkconfig httpd on
+sudo yum install -y php-pgsql
+sudo service httpd restart
+
+# back to ALL:
 sudo service crond restart
-echo 'rdsdb.co0sypz2znrv.us-east-1.rds.amazonaws.com:5432:GabiScrape:root:ManegerDB' > ~/.pgpass
-chmod 600 ~/.pgpass
-sudo vim /etc/sysconfig/network #Change hostname to SM?.localdomain
+cd /home/ec2-user/wizz/scripts ; ./update_currencies.py
