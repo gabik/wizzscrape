@@ -40,6 +40,7 @@ NameVirtualHost *:80
 </VirtualHost>
 sudo service httpd restart
 sudo chkconfig httpd on
+sudo yum install -y php-pgsql
 
 # back to ALL:
 sudo service crond restart
