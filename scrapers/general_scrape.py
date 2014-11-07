@@ -3,7 +3,7 @@ import requests
 import psycopg2
 from psycopg2 import extras
 
-db= psycopg2.connect( host="rdsdb.co0sypz2znrv.us-east-1.rds.amazonaws.com", database="GabiScrape", user="root", password="ManegerDB")
+db= psycopg2.connect( host="gabiscrape.c8f6qy9d6xm4.us-west-2.rds.amazonaws.com", database="GabiScrape", user="root", password="ManegerDB")
 
 def find_all(a_str, sub):
  start = 0
