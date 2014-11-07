@@ -1,1 +1,1 @@
-DB_HOST="rdsdb.co0sypz2znrv.us-east-1.rds.amazonaws.com"
+DB_HOST="gabiscrape.c8f6qy9d6xm4.us-west-2.rds.amazonaws.com"
