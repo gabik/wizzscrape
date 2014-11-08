@@ -48,6 +48,7 @@ print DST
 print str(scrape_time)
 print str(Start_orig), str(arg_month)
 
+cleandone=1
 retries=0
 while Stop > Start:
  n+=1
@@ -142,5 +143,5 @@ for i in flightsList:
 curs.execute("delete from flights where company=%s and dst=%s and date>=%s and date<%s and scrape_time<%s", (str(company_id), DST, str(Start_orig.strftime("%Y-%m-%d")), str(Stop.strftime("%Y-%m-%d")), str(scrape_time)))
 db.commit()
 
-print "Done!"
+if cleandone==1: print "Done!"
 print datetime.datetime.now()
