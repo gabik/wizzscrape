@@ -34,10 +34,11 @@ flightsList = []
 n=0
 print DST
 print str(scrape_time)
-print str(Start_orig)
+print str(Start_orig), str(arg_month)
 
 if int(arg_month)>12: Start=Stop
 while Stop > Start:
+ if Start > datetime.date.today()+datetime.timedelta(days=362) : break
  n+=1
  if debug_flag:
   print "Progress: " + str(n) + "/" + str(maxn)

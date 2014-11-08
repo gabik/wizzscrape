@@ -58,7 +58,7 @@ headers['User-Agent']='Agent:Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537
 
 print DST
 print str(scrape_time)
-print str(Start_orig)
+print str(Start_orig), str(arg_month)
 
 while Stop > Start:
  n+=1

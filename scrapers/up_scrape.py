@@ -5,7 +5,7 @@ from psycopg2 import extras
 import re
 import sys
 import datetime
-from general_scrape import find_all, clean_dup, strip_non_ascii, get_currency, clean_dup_list, db
+from general_scrape import find_all, clean_dup, strip_non_ascii, get_currency, clean_dup_list, db, max_retries
 import up_scrape_import as up
 
 # ARGS:
@@ -36,8 +36,10 @@ flightsList = []
 n=0
 print DST
 print str(scrape_time)
-print str(Start_orig)
+print str(Start_orig), str(arg_month)
+retries=0
 while Stop > Start:
+ if Start > datetime.date.today()+datetime.timedelta(days=362) : break 
  n+=1
  if debug_flag:
   print "Progress: " + str(n) + "/" + str(maxn)
@@ -87,12 +89,15 @@ while Stop > Start:
  try:
   w=eval(y.replace('false', 'False').replace('true','True'))
  except SyntaxError:
-  print str(Start), str(Ret)
-  print x
-  cleandone=0
-  Start=Start + datetime.timedelta(days=1)
+  retries+=1
+  if retries>max_retries:
+   print str(Start), str(Ret)
+   print x
+   cleandone=0
+   Start=Start + datetime.timedelta(days=1)
   continue
 
+ retries=0
  d=w['recommendations']
  d2 = [[x['keyDate'][0:8], x['keyDate'][8:], x['list_price'][0]['formatted_price'], x['list_price'][1]['formatted_price']] for x in d]
  #d3 = set((x[i],x[i+2],i+1) for i in range(2) for x in d2)
