@@ -7,7 +7,7 @@ import sys
 import datetime
 import time
 from wizz_scrape_import import getViewState, getFlight
-from general_scrape import find_all, clean_dup, strip_non_ascii, db
+from general_scrape import find_all, clean_dup, strip_non_ascii, db, max_retries
 
 # ARGS:
 # 1 = DST
@@ -27,7 +27,16 @@ scrape_time = datetime.datetime.today()
 DST = sys.argv[1]
 if len(sys.argv) >= 4 :
  if sys.argv[3] == "debug" : debug_flag=True
-r1 = requests.get('http://wizzair.com/en-GB/Search')
+gotit=0
+retries=0
+while gotit!=1: 
+ try:
+  r1 = requests.get('http://wizzair.com/en-GB/Search')
+  gotit=1
+ except requests.exceptions.ConnectionError:
+  retries+=1
+  if retries < max_retries: raise error('Cannot connect on first POST!');
+
 vsP = getViewState()
 vsP.feed(r1.text)
 viewstate=vsP._viewstate
@@ -39,6 +48,7 @@ print DST
 print str(scrape_time)
 print str(Start_orig), str(arg_month)
 
+retries=0
 while Stop > Start:
  n+=1
  if debug_flag:
@@ -58,7 +68,17 @@ while Stop > Start:
  dict['ControlGroupRibbonAnonHomeView$AvailabilitySearchInputRibbonAnonHomeView$ButtonSubmit'] = "Search"
  dict['__EVENTTARGET'] = "ControlGroupRibbonAnonHomeView_AvailabilitySearchInputRibbonAnonHomeView_ButtonSubmit"
  dict['__VIEWSTATE'] = viewstate
- r2 = requests.post('http://wizzair.com/en-GB/Search', data=dict)
+ try:
+  r2 = requests.post('http://wizzair.com/en-GB/Search', data=dict)
+ except requests.exceptions.ConnectionError:
+  retries+=1
+  if retries>max_retries:
+   print str(Start), str(Ret)
+   print x
+   cleandone=0
+   Start=Start + datetime.timedelta(days=1)
+  continue
+
  cur_date=Start.strftime("%d-%m-%Y")
  prP = getFlight(cur_date)
  prP.feed(r2.text)
