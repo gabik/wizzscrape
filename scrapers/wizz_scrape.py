@@ -1,4 +1,5 @@
 import requests
+from requests.exceptions import ConnectionError
 import psycopg2
 from psycopg2 import extras
 import re
@@ -33,9 +34,11 @@ while gotit!=1:
  try:
   r1 = requests.get('http://wizzair.com/en-GB/Search')
   gotit=1
- except requests.exceptions.ConnectionError:
+ except ConnectionError:
+  time.sleep(30)
   retries+=1
-  if retries < max_retries: raise error('Cannot connect on first POST!');
+  print "1 ConnectionError " + str(retries)
+  if retries < max_retries: raise Exception('Cannot connect on first POST!');
 
 vsP = getViewState()
 vsP.feed(r1.text)
@@ -71,8 +74,10 @@ while Stop > Start:
  dict['__VIEWSTATE'] = viewstate
  try:
   r2 = requests.post('http://wizzair.com/en-GB/Search', data=dict)
- except requests.exceptions.ConnectionError:
+ except ConnectionError:
+  time.sleep(30)
   retries+=1
+  print "2 ConnectionError " + str(retries)
   if retries>max_retries:
    print str(Start), str(Ret)
    print x

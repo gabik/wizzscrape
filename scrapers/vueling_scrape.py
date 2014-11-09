@@ -7,7 +7,7 @@ import sys
 import datetime
 import time
 from vueling_scrape_import import getFlight
-from general_scrape import find_all, clean_dup, strip_non_ascii, db
+from general_scrape import find_all, clean_dup, strip_non_ascii, db, max_retries
 
 # ARGS:
 # 1 = DST
@@ -60,6 +60,7 @@ print DST
 print str(scrape_time)
 print str(Start_orig), str(arg_month)
 
+retries=0
 while Stop > Start:
  n+=1
 
@@ -121,11 +122,14 @@ while Stop > Start:
  try:
   cleanr2=r2.text[sorted(list(find_all(r2.text, "basicPriceRoute")))[0]-5:r2.text.find('</tbody>', sorted(list(find_all(r2.text, "basicPriceRoute")))[-1])]
  except IndexError :
-  print str(Start), str(Ret)
-  cleandone=0
-  Start=Start + datetime.timedelta(days=1)
+  retries+=1
+  if retries>max_retries:
+   print str(Start), str(Ret)
+   cleandone=0
+   Start=Start + datetime.timedelta(days=1)
   continue
 
+ retries=0
  prP = getFlight()
  prP.feed(cleanr2)
 
