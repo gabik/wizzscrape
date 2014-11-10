@@ -5,7 +5,7 @@ from psycopg2 import extras
 import re
 import sys
 import datetime
-from general_scrape import find_all, clean_dup, strip_non_ascii, get_currency, clean_dup_list, db, max_replies
+from general_scrape import find_all, clean_dup, strip_non_ascii, get_currency, clean_dup_list, db, max_retries
 import up_scrape_import as up
 
 # ARGS:
