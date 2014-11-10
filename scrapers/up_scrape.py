@@ -1,4 +1,5 @@
 import requests
+import socket
 import psycopg2
 import codecs
 from psycopg2 import extras
@@ -70,29 +71,29 @@ while Stop > Start:
  urlT='http://booking.elal.co.il/newBooking/JavaScriptServlet'
  url1='http://booking.elal.co.il/newBooking/elalInit.do?LANG=IL&systemId=24&campaignCode=04535'
  s=requests.session()
- rT=s.get(urlT)
- token=rT.text[rT.text.find("OWASP_CSRFTOKEN")+19:rT.text.find("OWASP_CSRFTOKEN")+58]
- r1=s.get(url1)
- url2='http://booking.elal.co.il/newBooking/urlDirector.do?OWASP_CSRFTOKEN='+token
- r2=s.post(url2,data=dict)
- posts=up.getPostVals()
- posts.feed(r2.text)
- dict={}
- for i in posts.inputs:
-  if 'id' in i:
-   dict[i['id']]=i['val']
- 
- url3='http://fly.elal.co.il/plnext/ELALspof/Override.action'
- r3=s.post(url3,data=dict)
- x=r3.text[r3.text.find("generatedJSon"):r3.text.find("\n", r3.text.find("generatedJSon"))]
- y=x[28:-4]
  try:
+  rT=s.get(urlT)
+  token=rT.text[rT.text.find("OWASP_CSRFTOKEN")+19:rT.text.find("OWASP_CSRFTOKEN")+58]
+  r1=s.get(url1)
+  url2='http://booking.elal.co.il/newBooking/urlDirector.do?OWASP_CSRFTOKEN='+token
+  r2=s.post(url2,data=dict)
+  posts=up.getPostVals()
+  posts.feed(r2.text)
+  dict={}
+  for i in posts.inputs:
+   if 'id' in i:
+    dict[i['id']]=i['val']
+  
+  url3='http://fly.elal.co.il/plnext/ELALspof/Override.action'
+  r3=s.post(url3,data=dict)
+  x=r3.text[r3.text.find("generatedJSon"):r3.text.find("\n", r3.text.find("generatedJSon"))]
+  y=x[28:-4]
   w=eval(y.replace('false', 'False').replace('true','True'))
- except SyntaxError:
+ except (SyntaxError, socket.error), e:
   retries+=1
   if retries>max_retries:
    print str(Start), str(Ret)
-   print x
+   print e
    cleandone=0
    Start=Start + datetime.timedelta(days=1)
   continue
