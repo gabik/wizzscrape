@@ -38,7 +38,7 @@ while gotit!=1:
   time.sleep(30)
   retries+=1
   print "1 ConnectionError " + str(retries)
-  if retries < max_retries: raise Exception('Cannot connect on first POST!');
+  if retries > max_retries: raise Exception('Cannot connect on first POST!');
 
 vsP = getViewState()
 vsP.feed(r1.text)
