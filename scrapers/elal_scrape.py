@@ -5,7 +5,7 @@ from psycopg2 import extras
 import re
 import sys
 import datetime
-from general_scrape import find_all, clean_dup, strip_non_ascii, get_currency, clean_dup_list, db
+from general_scrape import find_all, clean_dup, strip_non_ascii, get_currency, clean_dup_list, db, max_replies
 import up_scrape_import as up
 
 # ARGS:
@@ -36,6 +36,7 @@ print DST
 print str(scrape_time)
 print str(Start_orig), str(arg_month)
 
+retries=0
 if int(arg_month)>12: Start=Stop
 while Stop > Start:
  if Start > datetime.date.today()+datetime.timedelta(days=362) : break
@@ -67,18 +68,18 @@ while Stop > Start:
  dict['coupons']=""
  s=requests.session()
  url2='http://booking.elal.co.il/newBooking/urlDirector.do' #?OWASP_CSRFTOKEN='+token
- r2=s.post(url2,data=dict)
- posts=up.getPostVals()
- posts.feed(r2.text)
- dict={}
- for i in posts.inputs:
-  if 'id' in i:
-   dict[i['id']]=i['val']
-
- url3='http://fly.elal.co.il/plnext/ELALonlinebooking/Override.action'
- r3=s.post(url3,data=dict)
- d3=[]
  try:
+  r2=s.post(url2,data=dict)
+  posts=up.getPostVals()
+  posts.feed(r2.text)
+  dict={}
+  for i in posts.inputs:
+   if 'id' in i:
+    dict[i['id']]=i['val']
+ 
+  url3='http://fly.elal.co.il/plnext/ELALonlinebooking/Override.action'
+  r3=s.post(url3,data=dict)
+  d3=[]
   x=r3.text[r3.text.find("generatedJSon"):r3.text.find("\n", r3.text.find("generatedJSon"))]
   y=x[28:-4]
   w=eval(y.replace('false', 'False').replace('true','True'))
@@ -87,7 +88,15 @@ while Stop > Start:
   #d3 = set((x[i],x[i+2],i+1) for i in range(2) for x in d2)
   d3 = [[y+1, x[y], x[y+2]] for x in d2 for y in range(2)]
  except Exception ,e :
-  print str(e)
+  retries+=1
+  if retries>max_retries:
+   print str(Start), str(Ret)
+   print str(e)
+   cleandone=0
+   Start=Start + datetime.timedelta(days=1)
+  continue
+
+ retries=0
  d3=clean_dup_list(d3)
  d3.sort(key=lambda x: x[1])
  d4=[]
