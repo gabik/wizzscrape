@@ -9,8 +9,10 @@ psql -t -h$DB_HOST -Uroot -w GabiScrape << EOF > $q
 select * from flights where scrape_time<'$today' order by scrape_time
 EOF
 q1=$(mktemp)
-sed 's/^M//g' $q > $q1
-new_logs=`date +%d%m%H%M`
-mail -r "ScrapersManager@2fly.cheap" -s "Beta daily status - `date`" 2flycheap@kazav.net < $q1
+if [[ $(cat $q) != "" ]] ; then
+ sed 's/^M//g' $q > $q1
+ new_logs=`date +%d%m%H%M`
+ mail -r "ScrapersManager@2fly.cheap" -s "Beta daily status - `date`" 2flycheap@kazav.net < $q1
+fi
 rm -f $q $q1
 
