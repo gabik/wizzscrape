@@ -42,7 +42,13 @@ while Stop > Start:
   sys.stdout.write(" Progress: %d/%d   \r" % (n,maxn) )
   sys.stdout.flush()
  Ret = Start + datetime.timedelta(days=1)
- r1 = s.get('https://www.norwegian.com/en/flight/select-flight/?D_City=TLV&A_City='+DST+'&TripType=2&D_Day='+str(Start.day)+'&D_Month='+str(Start.year)+str(Start.month)+'&R_Day='+str(Ret.day)+'&R_Month='+str(Ret.year)+str(Ret.month)+'&AdultCount=1&ChildCount=0&InfantCount=0&IncludeTransit=false')
+ RetYM=str(Ret.year)+"{0:0>2d}".format(Ret.month)
+ StartYM=str(Start.year)+"{0:0>2d}".format(Start.month)
+ RetD="{0:0>2d}".format(Ret.day)
+ StartD="{0:0>2d}".format(Start.day)
+ url='https://www.norwegian.com/en/flight/select-flight/?D_City=TLV&A_City='+DST+'&TripType=2&D_Day='+str(StartD)+'&D_Month='+str(StartYM)+'&R_Day='+str(RetD)+'&R_Month='+str(RetYM)+'&AdultCount=1&ChildCount=0&InfantCount=0&IncludeTransit=false'
+ if debug_flag: print url
+ r1 = s.get(url)
 
  if debug_flag:
   print Start.strftime("%d/%m/%Y")
@@ -58,9 +64,12 @@ while Stop > Start:
  flightsList.extend(prP.data)
  Start=Ret 
 print ""
+if debug_flag:
+ print "Debug: Before clean_dup: "
+ for i in flightsList: print i
 flightsList=clean_dup(flightsList)
 if debug_flag:
- print "Debug: After clean_dup: Out, Inc: "
+ print "Debug: After clean_dup: "
  for i in flightsList: print i
 
 #db= psycopg2.connect( host="manegerdb.cjjasb6ckbh1.us-east-1.rds.amazonaws.com", database="GabiScrape", user="root", password="ManegerDB")
