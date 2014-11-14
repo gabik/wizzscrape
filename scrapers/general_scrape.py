@@ -70,7 +70,7 @@ def get_flight_time(flight, airport):
  deputc=tz_to_utc(depapt, datetime.datetime.strptime(depstr, '%Y-%m-%d %H:%M'))
  arrutc=tz_to_utc(arrapt, datetime.datetime.strptime(arrstr, '%Y-%m-%d %H:%M'))
  dur=arrutc-deputc
- dur+=datetime.timedelta(days=1) if dur.days<0 else 0
+ dur+=datetime.timedelta(days=1) if dur.days<0 else datetime.timedelta(days=0)
  return ':'.join(str(dur).split(':')[0:2])
 
 #import codecs
