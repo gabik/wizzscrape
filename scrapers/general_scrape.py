@@ -62,8 +62,9 @@ def check_if_tz_is_const(airport, start, end):
  return False
 
 def get_flight_time(flight, airport): 
- depstr=str(flight['date']) + " " + str(flight['dep_time'])
- arrstr=str(flight['date']) + " " + str(flight['arr_time'])
+ date=str(flight['year'])+"-"+str(flight['month'])+"-"+str(flight['day'])
+ depstr=str(date) + " " + str(flight['dep_time'])
+ arrstr=str(date) + " " + str(flight['arr_time'])
  depapt='TLV' if flight['direction'] == 1 else airport
  arrapt=airport if flight['direction'] == 1 else 'TLV'
  deputc=tz_to_utc(depapt, datetime.datetime.strptime(depstr, '%Y-%m-%d %H:%M'))

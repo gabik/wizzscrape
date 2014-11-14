@@ -9,10 +9,12 @@ viewstate=""
 
 class getViewState(HTMLParser):
  _viewstate = ""
+ _newtoken  = ""
  def __init__(self):
   self._vals={}
   HTMLParser.__init__(self)
  def handle_starttag(self, tag, attrs):
+  self._vals={}
   if tag=="input":
    for i in attrs:
     if i[0]=="id":
@@ -21,9 +23,14 @@ class getViewState(HTMLParser):
      self._vals['type'] = i[1]
     if i[0]=="value":
      self._vals['value'] = i[1]
-   if (self._vals['type'] == "hidden" and self._vals['id'] == "viewState") : 
-    if self._vals['value'] != "":
-     self._viewstate=self._vals['value']
+   if ('id' in self._vals ):
+    if (self._vals['type'] == "hidden" and self._vals['id'] == "viewState") : 
+     if self._vals['value'] != "":
+      self._viewstate=self._vals['value']
+   else:
+    if (self._vals['type'] == "hidden" ):
+     if self._vals['value'] != "":
+      self._newtoken=self._vals['value']
 
 class getFlight(HTMLParser):
  def __init__(self, req_date):

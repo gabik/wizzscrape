@@ -43,6 +43,7 @@ while gotit!=1:
 vsP = getViewState()
 vsP.feed(r1.text)
 viewstate=vsP._viewstate
+new_token=vsP._newtoken
 Start = Start_orig
 
 flightsList = []
