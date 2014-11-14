@@ -6,8 +6,10 @@ sudo yum install -y python-devel
 sudo yum install -y python-pip
 sudo yum install -y gcc
 sudo yum install -y expect
+sudo yum install -y postgresql93.x86_64
 sudo pip install psycopg2
 sudo pip install requests
+sudo pip install pytz
 sudo rm -f /etc/localtime
 sudo ln -s /usr/share/zoneinfo/Asia/Jerusalem /etc/localtime
 ssh-keygen

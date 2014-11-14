@@ -5,7 +5,7 @@ from psycopg2 import extras
 import re
 import sys
 import datetime
-from general_scrape import find_all, clean_dup, strip_non_ascii, get_currency, clean_dup_list, db
+from general_scrape import find_all, clean_dup, strip_non_ascii, get_currency, clean_dup_list, db, get_flight_time
 import flyup_scrape_import as up
 
 # ARGS:
@@ -146,8 +146,8 @@ for DST in Dests:
   curs.execute("select * FROM flights WHERE direction=%s and dst=%s and date=%s and dep_time=%s and company=%s", (i['direction'],DST,str(i['year'])+"-"+str(i['month'])+"-"+str(i['day']),'00:00',str(company_id)))
   if (len(curs.fetchall()) > 0):
    curs.execute("DELETE FROM flights WHERE direction=%s and dst=%s and date=%s and dep_time=%s and company=%s", (i['direction'],DST,str(i['year'])+"-"+str(i['month'])+"-"+str(i['day']),'00:00',str(company_id)))
-  curs.execute("INSERT INTO flights (company, scrape_time, direction, dst, price, dep_time, arr_time, date) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)", (str(company_id), str(scrape_time), i['direction'], DST, int(i['price']), '00:00', '00:00', str(i['year'])+"-"+str(i['month'])+"-"+str(i['day'])))
-  curs.execute("INSERT INTO archive_flights (company, scrape_time, direction, dst, price, dep_time, arr_time, date) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)", (str(company_id), str(scrape_time), i['direction'], DST, int(i['price']), '00:00', '00:00', str(i['year'])+"-"+str(i['month'])+"-"+str(i['day'])))
+  curs.execute("INSERT INTO flights (company, scrape_time, direction, dst, price, dep_time, arr_time, date, dur_time) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)", (str(company_id), str(scrape_time), i['direction'], DST, int(i['price']), '00:00', '00:00', str(i['year'])+"-"+str(i['month'])+"-"+str(i['day']), get_flight_time(i, DST)))
+  curs.execute("INSERT INTO archive_flights (company, scrape_time, direction, dst, price, dep_time, arr_time, date, dur_time) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)", (str(company_id), str(scrape_time), i['direction'], DST, int(i['price']), '00:00', '00:00', str(i['year'])+"-"+str(i['month'])+"-"+str(i['day']), get_flight_time(i, DST)))
 
  db.commit()
 

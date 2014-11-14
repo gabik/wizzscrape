@@ -7,7 +7,7 @@ import sys
 import datetime
 import time
 from vueling_scrape_import import getFlight
-from general_scrape import find_all, clean_dup, strip_non_ascii, db, max_retries
+from general_scrape import find_all, clean_dup, strip_non_ascii, db, max_retries, get_flight_time
 
 # ARGS:
 # 1 = DST
@@ -161,8 +161,8 @@ for i in flightsList:
  curs.execute("select * FROM flights WHERE direction=%s and dst=%s and date=%s and dep_time>%s and dep_time<%s and company=%s", (i['direction'],DST,str(i['date']),depm1,depp1,str(company_id)))
  if (len(curs.fetchall()) > 0):
   curs.execute("DELETE FROM flights WHERE direction=%s and dst=%s and date=%s and dep_time>%s and dep_time<%s and company=%s",  (i['direction'],DST,str(i['date']),depm1,depp1,str(company_id)))
- curs.execute("INSERT INTO flights         (company, scrape_time, direction, dst, price, dep_time, arr_time, date) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)", (str(company_id),str(scrape_time), i['direction'], DST, int(i['price']), i['dep_time'], i['arr_time'],str(i['date'])))
- curs.execute("INSERT INTO archive_flights (company, scrape_time, direction, dst, price, dep_time, arr_time, date) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)", (str(company_id),str(scrape_time), i['direction'], DST, int(i['price']), i['dep_time'], i['arr_time'],str(i['date'])))
+ curs.execute("INSERT INTO flights         (company, scrape_time, direction, dst, price, dep_time, arr_time, date, dur_time) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)", (str(company_id),str(scrape_time), i['direction'], DST, int(i['price']), i['dep_time'], i['arr_time'],str(i['date']), get_flight_time(i, DST)))
+ curs.execute("INSERT INTO archive_flights (company, scrape_time, direction, dst, price, dep_time, arr_time, date, dur_time) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)", (str(company_id),str(scrape_time), i['direction'], DST, int(i['price']), i['dep_time'], i['arr_time'],str(i['date']), get_flight_time(i, DST)))
 
 db.commit()
 

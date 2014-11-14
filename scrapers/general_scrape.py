@@ -1,4 +1,5 @@
 import re
+import datetime, pytz
 import requests
 import psycopg2
 from psycopg2 import extras
@@ -45,3 +46,30 @@ def get_currency(cur):
  #return float(r.text[r.text.find('Today = ')+8:r.text.find('Today = ')+13].split('<')[0])
  return float(open("../currencies/"+str(cur),"r").read())
 
+def tz_to_utc(airport, tzdate):
+ curstz = db.cursor()
+ curstz.execute("select tz FROM timezones WHERE airport=%s", (airport,))
+ tz=curstz.fetchall()[0][0]
+ ptz = pytz.timezone(tz)
+ ptz1 = ptz.localize(tzdate, is_dst=None)
+ utc_tz = ptz1.astimezone(pytz.utc)
+ return utc_tz
+
+def check_if_tz_is_const(airport, start, end):
+ tz1=tz_to_utc(airport, start)
+ tz2=tz_to_utc(airport, end)
+ if tz1==tz2 : return  True
+ return False
+
+def get_flight_time(flight, airport): 
+ depstr=str(flight['date']) + " " + str(flight['dep_time'])
+ arrstr=str(flight['date']) + " " + str(flight['arr_time'])
+ depapt='TLV' if flight['direction'] == 1 else airport
+ arrapt=airport if flight['direction'] == 1 else 'TLV'
+ deputc=tz_to_utc(depapt, datetime.datetime.strptime(depstr, '%Y-%m-%d %H:%M'))
+ arrutc=tz_to_utc(arrapt, datetime.datetime.strptime(arrstr, '%Y-%m-%d %H:%M'))
+ return ':'.join(str(arrutc-deputc).split(':')[0:2])
+
+#import codecs
+#fd=codecs.open('../gabi.html', 'w', encoding='utf-8')
+#fd.write(r1.text)
