@@ -124,6 +124,8 @@ while Stop > Start:
       tmpd4['year']=cur_date[0:4]
       tmpd4['month']=cur_date[4:6]
       tmpd4['day']=cur_date[6:]
+      tmpd4['dep_time']='00:00'
+      tmpd4['arr_time']='00:00'
       d4.append(tmpd4)
      cur_date=i[1]
      min_price=max_price=float(i[2].split()[0])
@@ -131,6 +133,7 @@ while Stop > Start:
  if debug_flag:
   print Start.strftime("%d/%m/%Y")
   print Ret.strftime("%d/%m/%Y")
+  for i in d4: print i
   print '-------'
  flightsList.extend(d4)
  Start=Start + datetime.timedelta(days=1)

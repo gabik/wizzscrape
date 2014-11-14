@@ -62,9 +62,6 @@ def check_if_tz_is_const(airport, start, end):
  return False
 
 def get_flight_time(flight, airport): 
- deptime=datetime.datetime.strptime(flight['dep_time'], '%H:%M')
- arrtime=datetime.datetime.strptime(flight['arr_time'], '%H:%M')
- needmoreday=True if arrtime < deptime else False
  date=str(flight['year'])+"-"+str(flight['month'])+"-"+str(flight['day'])
  depstr=str(date) + " " + str(flight['dep_time'])
  arrstr=str(date) + " " + str(flight['arr_time'])
@@ -72,8 +69,9 @@ def get_flight_time(flight, airport):
  arrapt=airport if flight['direction'] == 1 else 'TLV'
  deputc=tz_to_utc(depapt, datetime.datetime.strptime(depstr, '%Y-%m-%d %H:%M'))
  arrutc=tz_to_utc(arrapt, datetime.datetime.strptime(arrstr, '%Y-%m-%d %H:%M'))
- if needmoreday: arrutc+=datetime.timedelta(days=1)
- return ':'.join(str(arrutc-deputc).split(':')[0:2])
+ dur=arrutc-deputc
+ dur+=datetime.timedelta(days=1) if dur.days<0 else 0
+ return ':'.join(str(dur).split(':')[0:2])
 
 #import codecs
 #fd=codecs.open('../gabi.html', 'w', encoding='utf-8')
