@@ -84,6 +84,8 @@ class getFlight(HTMLParser):
    self._vals['month'] = str(self.tmp_date[-4:-2])
    self._vals['direction'] = self.direction
    self._vals['price'] = self.tmp_price
+   self._vals['dep_time'] = '00:00'
+   self._vals['arr_time'] = '00:00'
    self.data.append(self._vals)
    self._vals={}
    self.tmp_date = ""

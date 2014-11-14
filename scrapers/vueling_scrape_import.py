@@ -42,6 +42,9 @@ class getFlight(HTMLParser):
    self.price=0
   if tag == "tr" and self.header==1: 
    self._vals['date'] = self.dep_date.split('T')[0]
+   self._vals['year'] = self._vals['date'].split('-')[0]
+   self._vals['month'] = self._vals['date'].split('-')[1]
+   self._vals['day'] = self._vals['date'].split('-')[2]
    self._vals['dep_time'] = ":".join(self.dep_date.split('T')[1].split(":")[0:2])
    self._vals['arr_time'] = ":".join(self.arr_date.split('T')[1].split(":")[0:2])
    self._vals['price'] = int((min([int(strip_non_ascii(p.split()[0])[0:-2])+1 for p in [" ".join(y.split()) for y in [x for x in self.tmp_price.split('\r\n')[1:]]]])*eur)+0.5)
