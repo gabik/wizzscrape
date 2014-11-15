@@ -1,4 +1,5 @@
 import requests
+import codecs
 from requests.exceptions import ConnectionError
 import psycopg2
 from psycopg2 import extras
@@ -84,6 +85,18 @@ while Stop > Start:
    print x
    cleandone=0
    Start=Start + datetime.timedelta(days=1)
+  continue
+
+ if r2.status_code != 200 :
+  print str(Start), str(Ret)
+  print r2.status_code
+  cleandone=0
+  Start=Start + datetime.timedelta(days=1)
+  if debug_flag: 
+   fd=codecs.open('/tmp/output_pages/'+sys.argv[0]+'_'+DST+'_'+str(Start)+'-'+str(Ret)+'.html', 'w', encoding='utf-8')
+   fd.write(r2.text)
+   fd.close()
+
   continue
 
  cur_date=Start.strftime("%d-%m-%Y")
