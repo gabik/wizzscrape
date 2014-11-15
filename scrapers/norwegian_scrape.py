@@ -21,6 +21,7 @@ Start_orig = datetime.date.today()
 Start_orig += datetime.timedelta(days=(int(maxn)-1)*int(arg_month))
 Stop = Start_orig + datetime.timedelta(days=maxn)
 scrape_time = datetime.datetime.today()
+cleandone=1
 
 DST = sys.argv[1]
 if len(sys.argv) >= 4 :
@@ -85,8 +86,10 @@ for i in flightsList:
  curs.execute("INSERT INTO flights         (company, scrape_time, direction, dst, price, dep_time, arr_time, date, dur_time) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)", (str(company_id),str(scrape_time), i['direction'], DST, int(i['price']), i['dep_time'], i['arr_time'],str(i['date']),i['duretion']))
  curs.execute("INSERT INTO archive_flights (company, scrape_time, direction, dst, price, dep_time, arr_time, date, dur_time) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)", (str(company_id),str(scrape_time), i['direction'], DST, int(i['price']), i['dep_time'], i['arr_time'],str(i['date']),i['duretion']))
 
-curs.execute("delete from flights where company=%s and dst=%s and date>=%s and date<%s and scrape_time<%s", (str(company_id), DST, str(Start_orig.strftime("%Y-%m-%d")), str(Stop.strftime("%Y-%m-%d")), str(scrape_time)))
+if cleandone==1:
+ curs.execute("delete from flights where company=%s and dst=%s and date>=%s and date<%s and scrape_time<%s", (str(company_id), DST, str(Start_orig.strftime("%Y-%m-%d")), str(Stop.strftime("%Y-%m-%d")), str(scrape_time)))
+ print "Done!"
+
 db.commit()
 
-print "Done!"
 print datetime.datetime.now()
