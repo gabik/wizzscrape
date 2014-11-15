@@ -112,8 +112,8 @@ while Stop > Start:
  if debug_flag:
   print Start.strftime("%d/%m/%Y")
   print Ret.strftime("%d/%m/%Y")
-  print '-------'
   for i in flights: print i
+  print '-------'
  flightsList.extend(flights)
  Start=Start + datetime.timedelta(days=1)
 print ""
