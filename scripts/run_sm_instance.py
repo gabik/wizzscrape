@@ -30,7 +30,7 @@ while not instance_id:
 
 instance = EC2.get_all_instances(instance_ids=instance_id)
 time.sleep(5)
-#instance[0].instances[0].add_tag("test","gabi")
+instance[0].instances[0].add_tag("type","scraper")
 instance_ip = instance[0].instances[0].private_ip_address
 
 test_code = "echo ok"

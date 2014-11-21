@@ -30,8 +30,7 @@ sudo chmod 640 /home/ec2-user/wizz/cron
 # on web:
 sudo yum install -y httpd
 sudo yum install -y php
-sudo echo '10 0  * * * ec2-user cd /home/ec2-user/wizz/scripts ; ./clean_flights.sh
-0  0  * * * ec2-user cd /home/ec2-user/wizz/scripts ; ./update_currencies.py' > /etc/cron.d/site_commands
+sudo echo '0  0  * * * ec2-user cd /home/ec2-user/wizz/scripts ; ./update_currencies.py' > /etc/cron.d/site_commands
 # sudo vim /etc/httpd/conf/httpd.conf
 NameVirtualHost *:80
 <VirtualHost *:80>
