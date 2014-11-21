@@ -22,7 +22,7 @@ shift
 count_timeout=0
 run_timeout=20
 # check if something still runs
-while [[ $(ps -ef | grep scrape | grep -v grep | wc -l) -ne 0 ]] ; do
+while [[ $(ps -ef | grep scrape | grep -v grep | grep -v git | wc -l) -ne 0 ]] ; do
  sleep 60
  count_timeout=$((count_timeout+1))
  if [[ count_timeout -ge run_timeout ]] ; then
