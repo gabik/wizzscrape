@@ -47,4 +47,4 @@ while ssh_code != 0:
 
 ssh_code = os.system('ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ' + str(instance_ip) + ' "'+remote_code+'"')
 
-print "Done."
+#print "Done."
