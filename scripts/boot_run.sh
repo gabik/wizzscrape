@@ -1,5 +1,8 @@
 #!/bin/bash
 
+cd
+rm -rf wizz
+git clone git@github.com:gabik/wizzscrape.git wizz
 cd ~/wizz
 git pull
 cd ~/wizz/scripts
