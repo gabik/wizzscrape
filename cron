@@ -1,4 +1,6 @@
 # 0  0   * * * ec2-user cd /home/ec2-user/wizz/scripts ; ./update_currencies.py
+00 0   * * * ec2-user cd /home/ec2-user/wizz/scripts ; ./clean_flights.sh
+
 00 1   * * * ec2-user cd /home/ec2-user/wizz/scripts ; ./run_sm_instance.py 0  1
 05 1   * * * ec2-user cd /home/ec2-user/wizz/scripts ; ./run_sm_instance.py 0  2
 45 1   * * * ec2-user cd /home/ec2-user/wizz/scripts ; ./run_sm_instance.py 1  1
