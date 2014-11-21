@@ -1,10 +1,10 @@
 #!/bin/bash
 
-cd
-rm -rf wizz
-git clone git@github.com:gabik/wizzscrape.git wizz
-cd ~/wizz
-git pull
+#cd
+#rm -rf wizz
+#git clone git@github.com:gabik/wizzscrape.git wizz
+#cd ~/wizz
+#git pull
 cd ~/wizz/scripts
 ./update_currencies.py &> ../logs/cur.log
 
