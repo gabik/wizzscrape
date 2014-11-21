@@ -45,6 +45,6 @@ while ssh_code != 0:
 		print "ERROR : SSH timeout to " + instance_id
 		sys.exit(1)
 
-ssh_code = os.system('ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i 2fly_oregon.cer ' + str(instance_ip) + ' "'+remote_code+'"')
+ssh_code = os.system('ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i 2fly_oregon.cer ' + str(instance_ip) + ' "'+remote_code+'"')
 
 print "Done."
