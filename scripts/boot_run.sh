@@ -5,9 +5,9 @@ git pull
 cd ~/wizz/scripts
 ./update_currencies.py &> ../logs/cur.log
 
-if [[ $# -le 3 ]] ; then
+if [[ $# -le 2 ]] ; then
  echo Missing arguments. 
- echo Usage $0 Machine DST Month [debug]
+ echo Usage $0 Machine Month [debug]
 fi
 
 echo $1 > ~/SM

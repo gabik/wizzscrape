@@ -28,7 +28,7 @@ time.sleep(5)
 #instance[0].instances[0].add_tag("test","gabi")
 instance_ip = instance[0].instances[0].private_ip_address
 
-remote_code = "poweroff"
+remote_code = "cd ~/wizz/scripts ; ./boot_run " + str(args.machine) + " " + str(args.month)
 retries = 0
 ssh_code = os.system('ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i 2fly_oregon.cer ' + str(instance_ip) + ' "'+remote_code+'" > /dev/null 2>&1')
 while ssh_code != 0:
