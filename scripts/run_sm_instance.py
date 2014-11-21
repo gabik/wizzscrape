@@ -34,7 +34,7 @@ time.sleep(5)
 instance_ip = instance[0].instances[0].private_ip_address
 
 test_code = "echo ok"
-remote_code = "cd ~/wizz/scripts ; ./boot_run " + str(args.machine) + " " + str(args.month)
+remote_code = "cd ~/wizz/scripts ; ./boot_run.sh " + str(args.machine) + " " + str(args.month)
 retries = 0
 ssh_code = os.system('ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i 2fly_oregon.cer ' + str(instance_ip) + ' "'+test_code+'" > /dev/null 2>&1')
 while ssh_code != 0:
