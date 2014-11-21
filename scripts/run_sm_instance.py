@@ -13,7 +13,7 @@ args = parser.parse_args()
 
 REGION = boto.utils.get_instance_metadata()['local-hostname'].split('.')[1]
 EC2 = boto.ec2.connect_to_region(REGION)
-AMI = 'ami-edf0a5dd'
+AMI = 'ami-41ffaa71'
 SUBNET = 'subnet-6846a431'
 SGROUP = 'sg-6d4c2208'
 
