@@ -13,7 +13,7 @@ args = parser.parse_args()
 
 REGION = boto.utils.get_instance_metadata()['local-hostname'].split('.')[1]
 EC2 = boto.ec2.connect_to_region(REGION)
-AMI = 'ami-b5f4a185'
+AMI = 'ami-edf7a2dd'
 SUBNET = 'subnet-6846a431'
 SGROUP = 'sg-6d4c2208'
 
@@ -34,17 +34,17 @@ time.sleep(5)
 instance_ip = instance[0].instances[0].private_ip_address
 
 test_code = "echo ok"
-remote_code = "cd  ; rm -rf wizz ; git clone git@github.com:gabik/wizzscrape.git wizz ; cd ~/wizz/scripts ; ./boot_run.sh " + str(args.machine) + " " + str(args.month)
+remote_code = "cd  ; rm -rf wizz ; git clone --quiet git@github.com:gabik/wizzscrape.git wizz ; cd ~/wizz/scripts ; ./boot_run.sh " + str(args.machine) + " " + str(args.month)
 retries = 0
-ssh_code = os.system('ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i 2fly_oregon.cer ' + str(instance_ip) + ' "'+test_code+'" > /dev/null 2>&1')
+ssh_code = os.system('ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i ' + str(instance_ip) + ' "'+test_code+'" > /dev/null 2>&1')
 while ssh_code != 0:
 	retries += 1
 	time.sleep(10)
-	ssh_code = os.system('ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i 2fly_oregon.cer ' + str(instance_ip) + ' "'+test_code+'" > /dev/null 2>&1')
+	ssh_code = os.system('ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ' + str(instance_ip) + ' "'+test_code+'" > /dev/null 2>&1')
 	if retries > 35:
 		print "ERROR : SSH timeout to " + instance_id
 		sys.exit(1)
 
-ssh_code = os.system('ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i 2fly_oregon.cer ' + str(instance_ip) + ' "'+remote_code+'"')
+ssh_code = os.system('ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ' + str(instance_ip) + ' "'+remote_code+'"')
 
 print "Done."
