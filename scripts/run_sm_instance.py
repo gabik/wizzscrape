@@ -34,7 +34,7 @@ instance[0].instances[0].add_tag("type","scraper")
 instance_ip = instance[0].instances[0].private_ip_address
 
 test_code = "echo ok"
-remote_code = "cd  ; rm -rf wizz ; git clone --quiet git@github.com:gabik/wizzscrape.git wizz ; cd ~/wizz/scripts ; ./boot_run.sh &> /tmp/boot_run.log" + str(args.machine) + " " + str(args.month)
+remote_code = "cd  ; rm -rf wizz ; git clone --quiet git@github.com:gabik/wizzscrape.git wizz ; cd ~/wizz/scripts ; ./boot_run.sh " + str(args.machine) + " " + str(args.month) + "  &> /tmp/boot_run.log " 
 retries = 0
 ssh_code = os.system('ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i ' + str(instance_ip) + ' "'+test_code+'" > /dev/null 2>&1')
 while ssh_code != 0:
