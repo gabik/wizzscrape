@@ -3,7 +3,7 @@
 cd ~/wizz
 git pull
 cd ~/wizz/scripts
-./update_currencies.py > ../logs/cur.log
+./update_currencies.py &> ../logs/cur.log
 
 if [[ $# -le 3 ]] ; then
  echo Missing arguments. 

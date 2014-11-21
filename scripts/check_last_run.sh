@@ -15,6 +15,7 @@ for cmp in $(cat ../scripts/SM${SM}/companies) ; do
   fi
  done
 done > $q
+cat cur.log > /dev/null 2>> $q
 
 if [[ $(wc -l $q | awk '{print $1}') -ne 0 ]] ; then
  q1=$(mktemp)
