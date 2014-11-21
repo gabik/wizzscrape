@@ -8,9 +8,10 @@ git pull
 cd ~/wizz/scripts
 ./update_currencies.py &> ../logs/cur.log
 
-if [[ $# -le 2 ]] ; then
+if [[ $# -lt 2 ]] ; then
  echo Missing arguments. 
  echo Usage $0 Machine Month [debug]
+ exit 1
 fi
 
 echo $1 > ~/SM
