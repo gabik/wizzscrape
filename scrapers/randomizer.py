@@ -14,7 +14,7 @@ _dates_list = []
 #init the list with the dateTime object
 def init_randomizer(start_date, numberOfDay):
 	for x in xrange(numberOfDay):
-		_dates_list.append((start_date + datetime.timedelta(days=x)).strftime("%Y-%m-%d"))
+		_dates_list.append((start_date + datetime.timedelta(days=x)))
 
 def get_date_from_list():
 	index = random.randint(0, len(_dates_list) - 1)
