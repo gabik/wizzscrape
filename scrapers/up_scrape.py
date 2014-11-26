@@ -8,6 +8,7 @@ import sys
 import datetime
 from general_scrape import find_all, clean_dup, strip_non_ascii, get_currency, clean_dup_list, db, max_retries, get_flight_time
 import up_scrape_import as up
+import randomizer as rz
 
 # ARGS:
 # 1 = DST
@@ -39,7 +40,10 @@ print DST
 print str(scrape_time)
 print str(Start_orig), str(arg_month)
 retries=0
-while Stop > Start:
+rz.init_randomizer(Start_orig, maxn)
+#while Stop > Start:
+Start = rz.get_date_from_list()
+while not rz.is_empty():
  if Start > datetime.date.today()+datetime.timedelta(days=362) : break 
  n+=1
  if debug_flag:
@@ -95,7 +99,8 @@ while Stop > Start:
    print str(Start), str(Ret)
    print e
    cleandone=0
-   Start=Start + datetime.timedelta(days=1)
+   Start = rz.get_date_from_list()
+   #Start=Start + datetime.timedelta(days=1)
   continue
 
  retries=0
@@ -136,7 +141,8 @@ while Stop > Start:
   for i in d4: print i
   print '-------'
  flightsList.extend(d4)
- Start=Start + datetime.timedelta(days=1)
+ Start = rz.get_date_from_list()
+ #Start=Start + datetime.timedelta(days=1)
 print ""
 if debug_flag:
  print "Debug: efore clean_dup: Out, Inc: "
