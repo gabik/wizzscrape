@@ -34,7 +34,7 @@ instance[0].instances[0].add_tag("type","scraper")
 instance_ip = instance[0].instances[0].private_ip_address
 
 test_code = "echo ok"
-remote_code = "cd  ; rm -rf wizz ; git clone --quiet git@github.com:gabik/wizzscrape.git wizz ; cd ~/wizz/scripts ; ./boot_run.sh " + str(args.machine) + " " + str(args.month) + "  &> /tmp/boot_run.log " 
+remote_code = "retries=0 ; cd  ; rm -rf wizz ; git clone --quiet git@github.com:gabik/wizzscrape.git wizz ; while [[ $? -ne 0 && $retries -lt 10 ]] ; do sleep 15 ; retries=$((retries+1)) ; rm -rf wizz ; git clone --quiet git@github.com:gabik/wizzscrape.git wizz ; done ; cd ~/wizz/scripts ; ./boot_run.sh {0} {1} &> /tmp/boot_run.log".format(str(args.machine), str(args.month))
 retries = 0
 ssh_code = os.system('ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i ' + str(instance_ip) + ' "'+test_code+'" > /dev/null 2>&1')
 while ssh_code != 0:
@@ -45,6 +45,6 @@ while ssh_code != 0:
 		print "ERROR : SSH timeout to " + instance_id
 		sys.exit(1)
 
-ssh_code = os.system('ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ' + str(instance_ip) + ' "'+remote_code+'"')
+ssh_code = os.system('ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ' + str(instance_ip) + " '"+remote_code+"'")
 
 #print "Done."
