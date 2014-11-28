@@ -48,8 +48,13 @@ depurl='http://public.vueling.com/Vueling.Cache.WCF.REST.WebService/BlankDaysSer
 arrurl='http://public.vueling.com/Vueling.Cache.WCF.REST.WebService/BlankDaysService.svc/Get?callback=SKYSALES_Util_checkRoutesAndPromoUniversalDepartureCallback&departure='+DST+'&arrival=TLV&year='+str(Start_orig.year)+'&month='+str(Start_orig.month)+'&monthsRange=3'
 rdepcal=s.get(depurl)
 rarrcal=s.get(arrurl)
-depcal=eval(rdepcal.text[rdepcal.text.find('(')+1:rdepcal.text.find(')')].replace('null','""'))['Calendar']
-arrcal=eval(rarrcal.text[rarrcal.text.find('(')+1:rarrcal.text.find(')')].replace('null','""'))['Calendar']
+depcal = {}
+arrcal = {}
+if rdepcal.status_code != 500:
+ depcal=eval(rdepcal.text[rdepcal.text.find('(')+1:rdepcal.text.find(')')].replace('null','""'))['Calendar']
+
+if rarrcal.status_code != 500:
+ arrcal=eval(rarrcal.text[rarrcal.text.find('(')+1:rarrcal.text.find(')')].replace('null','""'))['Calendar']
 
 headers={}
 headers['Origin']='Origin:http://www.vueling.com'
@@ -61,23 +66,25 @@ print str(scrape_time)
 print str(Start_orig), str(arg_month)
 
 retries=0
+n+=1
 while Stop > Start:
- n+=1
 
  dep_cur_m=getblankdays(Start.month, depcal)
- if debug_flag:  print dep_cur_m
+ if debug_flag:  print "dep cal: {0}".format(str(dep_cur_m))
  arr_cur_m=getblankdays(Start.month, arrcal)
- if dep_cur_m == [y for y in range(dep_cur_m[0],dep_cur_m[-1]+1)] : break
- while Start.day in dep_cur_m:
-  Start= Start + datetime.timedelta(days=1)
-  if Start > Stop : continue
-  dep_cur_m=getblankdays(Start.month, depcal)
-  n+=1
+ if dep_cur_m:
+  if dep_cur_m == [y for y in range(dep_cur_m[0],dep_cur_m[-1]+1)] : break
+  while Start.day in dep_cur_m:
+   Start= Start + datetime.timedelta(days=1)
+   if Start > Stop : continue
+   dep_cur_m=getblankdays(Start.month, depcal)
+   n+=1
 
  Ret = Start + datetime.timedelta(days=1)
- while Ret.day in arr_cur_m:
-  Ret = Ret + datetime.timedelta(days=1)
-  arr_cur_m=getblankdays(Start.month, arrcal)
+ if dep_cur_m:
+  while Ret.day in arr_cur_m:
+   Ret = Ret + datetime.timedelta(days=1)
+   arr_cur_m=getblankdays(Start.month, arrcal)
 
  if debug_flag:
   print "Progress: " + str(n) + "/" + str(maxn)
@@ -119,15 +126,31 @@ while Stop > Start:
  dict['pageToken'] = ""
 
  r2 = s.post('http://tickets.vueling.com/XmlSearch.aspx', data=dict, headers=headers)
- try:
-  cleanr2=r2.text[sorted(list(find_all(r2.text, "basicPriceRoute")))[0]-5:r2.text.find('</tbody>', sorted(list(find_all(r2.text, "basicPriceRoute")))[-1])]
- except IndexError :
+ if r2.status_code == 200:
+  if list(find_all(r2.text, "basicPriceRoute")):
+   cleanr2=r2.text[sorted(list(find_all(r2.text, "basicPriceRoute")))[0]-5:r2.text.find('</tbody>', sorted(list(find_all(r2.text, "basicPriceRoute")))[-1])]
+ else:
   retries+=1
   if retries>max_retries:
-   print str(Start), str(Ret)
+   print "Start:{0}, Ret:{1}. ".format(str(Start), str(Ret))
    cleandone=0
    Start=Start + datetime.timedelta(days=1)
+   n+=1
   continue
+
+
+ #try:
+  #cleanr2=r2.text[sorted(list(find_all(r2.text, "basicPriceRoute")))[0]-5:r2.text.find('</tbody>', sorted(list(find_all(r2.text, "basicPriceRoute")))[-1])]
+ #except IndexError :
+  #retries+=1
+  #if retries>max_retries:
+   #print "Start:{0}, Ret:{1}. ".format(str(Start), str(Ret))
+   #if debug_flag:
+    #print "basicPriceRoute on HTML: {0}".format(list(find_all(r2.text, "basicPriceRoute")))
+   #cleandone=0
+   #Start=Start + datetime.timedelta(days=1)
+   #n+=1
+  #continue
 
  retries=0
  prP = getFlight()
@@ -142,6 +165,7 @@ while Stop > Start:
 
  flightsList.extend(prP.data)
  Start=Start + datetime.timedelta(days=1)
+ n+=1
 
 print ""
 
