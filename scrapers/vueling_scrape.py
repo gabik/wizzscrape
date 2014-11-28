@@ -126,6 +126,7 @@ while Stop > Start:
  dict['pageToken'] = ""
 
  r2 = s.post('http://tickets.vueling.com/XmlSearch.aspx', data=dict, headers=headers)
+ cleanr2 = ""
  if r2.status_code == 200:
   if list(find_all(r2.text, "basicPriceRoute")):
    cleanr2=r2.text[sorted(list(find_all(r2.text, "basicPriceRoute")))[0]-5:r2.text.find('</tbody>', sorted(list(find_all(r2.text, "basicPriceRoute")))[-1])]
