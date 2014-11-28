@@ -32,6 +32,7 @@ if running_ids:
  recs = ['2flycheap@kazav.net']
  subject = "Stuck Machines - {0}".format(datetime.datetime.strftime(datetime.datetime.now(), "%Y-%m-%d %H:%M"))
  mail_msg = """Subject: {0}
+
  We had some stuck machines: {1}. killed them. 
  {2}
  """.format(subject, str(running_ids), error_msg)

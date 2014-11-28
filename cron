@@ -1,6 +1,8 @@
 # 0  0   * * * ec2-user cd /home/ec2-user/wizz/scripts ; ./update_currencies.py
 00 0   * * * ec2-user cd /home/ec2-user/wizz/scripts ; ./clean_flights.sh
 
+45 0   * * * ec2-user cd /home/ec2-user/wizz/scripts ; ./check_stuck_scrapers.py
+
 00 1   * * * ec2-user cd /home/ec2-user/wizz/scripts ; ./run_sm_instance.py 0  1
 05 1   * * * ec2-user cd /home/ec2-user/wizz/scripts ; ./run_sm_instance.py 0  2
 45 1   * * * ec2-user cd /home/ec2-user/wizz/scripts ; ./run_sm_instance.py 1  1
@@ -27,6 +29,8 @@
 20 9   * * * ec2-user cd /home/ec2-user/wizz/scripts ; ./run_sm_instance.py 11 2
 00 10  * * * ec2-user cd /home/ec2-user/wizz/scripts ; ./run_sm_instance.py 12 1
 05 10  * * * ec2-user cd /home/ec2-user/wizz/scripts ; ./run_sm_instance.py 12 2
+
+45 12   * * * ec2-user cd /home/ec2-user/wizz/scripts ; ./check_stuck_scrapers.py
 
 00 13  * * * ec2-user cd /home/ec2-user/wizz/scripts ; ./run_sm_instance.py 0  1
 05 13  * * * ec2-user cd /home/ec2-user/wizz/scripts ; ./run_sm_instance.py 0  2
