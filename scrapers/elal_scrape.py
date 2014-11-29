@@ -97,7 +97,8 @@ while not rz.is_empty() and year_flag:
   retries+=1
   if retries>max_retries:
    print str(Start), str(Ret)
-   print str(e)
+   print "exception: " + str(e)
+   print "Json: " + x
    cleandone=0
    Start = rz.get_date_from_list()
    # Start=Start + datetime.timedelta(days=1)
