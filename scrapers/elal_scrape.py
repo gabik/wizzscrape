@@ -99,6 +99,7 @@ while not rz.is_empty() and year_flag:
    print str(Start), str(Ret)
    print "exception: " + str(e)
    print "Json: " + x
+   print "page: " + r3.text
    cleandone=0
    Start = rz.get_date_from_list()
    # Start=Start + datetime.timedelta(days=1)
