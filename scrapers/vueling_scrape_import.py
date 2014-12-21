@@ -48,8 +48,10 @@ class getFlight(HTMLParser):
    self._vals['dep_time'] = ":".join(self.dep_date.split('T')[1].split(":")[0:2])
    self._vals['arr_time'] = ":".join(self.arr_date.split('T')[1].split(":")[0:2])
    self._vals['price'] = int((min([int(strip_non_ascii(p.split()[0])[0:-2])+1 for p in [" ".join(y.split()) for y in [x for x in self.tmp_price.split('\r\n')[1:]]]])*eur)+0.5)
-   if "TLV" in [strip_non_ascii(x.replace(' ','')) for x in self.tmp_direction.split('\r\n')[1:5]][0] : self._vals['direction']=1
-   if "TLV" in [strip_non_ascii(x.replace(' ','')) for x in self.tmp_direction.split('\r\n')[1:5]][2] : self._vals['direction']=2
+   if "TLV" in self.tmp_direction.strip().split('\r\n')[0] : self._vals['direction']=1
+   if "BCN" in self.tmp_direction.strip().split('\r\n')[0] : self._vals['direction']=2
+   #if "TLV" in [strip_non_ascii(x.replace(' ','')) for x in self.tmp_direction.split('\r\n')[1:5]][0] : self._vals['direction']=1
+   #if "TLV" in [strip_non_ascii(x.replace(' ','')) for x in self.tmp_direction.split('\r\n')[1:5]][2] : self._vals['direction']=2
    self.header=0
    self.data.append(self._vals)
    self._vals = {}

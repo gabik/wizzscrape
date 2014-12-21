@@ -1,4 +1,5 @@
 import re
+import codecs
 import datetime, pytz
 import requests
 import psycopg2
@@ -73,6 +74,7 @@ def get_flight_time(flight, airport):
  dur+=datetime.timedelta(days=1) if dur.days<0 else datetime.timedelta(days=0)
  return ':'.join(str(dur).split(':')[0:2])
 
-#import codecs
-#fd=codecs.open('../gabi.html', 'w', encoding='utf-8')
-#fd.write(r1.text)
+def write_to_gabi(data):
+ fd=codecs.open('../gabi.html', 'w', encoding='utf-7')
+ fd.write(data)
+ fd.close()

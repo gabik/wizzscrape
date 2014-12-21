@@ -99,6 +99,7 @@ while not rz.is_empty():
    print str(Start), str(Ret)
    print "Exception {0}".format(e)
    print "Json {0}".format(x)
+   print "txt {0}".format(r3.text)
    cleandone=0
    Start = rz.get_date_from_list()
    #Start=Start + datetime.timedelta(days=1)

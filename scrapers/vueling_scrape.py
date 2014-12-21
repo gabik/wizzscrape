@@ -7,7 +7,7 @@ import sys
 import datetime
 import time
 from vueling_scrape_import import getFlight
-from general_scrape import find_all, clean_dup, strip_non_ascii, db, max_retries, get_flight_time
+from general_scrape import find_all, clean_dup, strip_non_ascii, db, max_retries, get_flight_time, write_to_gabi
 
 # ARGS:
 # 1 = DST
@@ -129,7 +129,7 @@ while Stop > Start:
  cleanr2 = ""
  if r2.status_code == 200:
   if list(find_all(r2.text, "basicPriceRoute")):
-   cleanr2=r2.text[sorted(list(find_all(r2.text, "basicPriceRoute")))[0]-5:r2.text.find('</tbody>', sorted(list(find_all(r2.text, "basicPriceRoute")))[-1])]
+   cleanr2=r2.text[sorted(list(find_all(r2.text, "basicPriceRoute")))[0]-5:r2.text.find('SKYSALES.Util.createObject', sorted(list(find_all(r2.text, "basicPriceRoute")))[0])]
  else:
   retries+=1
   if retries>max_retries:
@@ -138,6 +138,7 @@ while Stop > Start:
    Start=Start + datetime.timedelta(days=1)
    n+=1
   continue
+ write_to_gabi(cleanr2)
 
 
  #try:
