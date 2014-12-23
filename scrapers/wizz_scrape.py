@@ -9,7 +9,7 @@ import sys
 import datetime
 import time
 from wizz_scrape_import import getViewState, getFlight
-from general_scrape import find_all, clean_dup, strip_non_ascii, db, max_retries, get_flight_time
+from general_scrape import find_all, clean_dup, strip_non_ascii, db, max_retries, get_flight_time, write_to_gabi
 
 # ARGS:
 # 1 = DST
@@ -62,6 +62,10 @@ while Stop > Start:
  else:
   sys.stdout.write(" Progress: %d/%d   \r" % (n,maxn) )
   sys.stdout.flush()
+ headers={}
+ headers['Origin']='https://wizzair.com'
+ headers['Referer']='https://wizzair.com/en-GB/Search'
+ headers['User-Agent']='Agent:Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2062.124 Safari/537.36'
  dict={}
  dict['ControlGroupRibbonAnonHomeView$AvailabilitySearchInputRibbonAnonHomeView$OriginStation']="TLV"
  dict['ControlGroupRibbonAnonHomeView$AvailabilitySearchInputRibbonAnonHomeView$DestinationStation']=DST
@@ -76,7 +80,7 @@ while Stop > Start:
  dict['__VIEWSTATE'] = viewstate
  dict[new_token[0]] = new_token[1]
  try:
-  r2 = requests.post('http://wizzair.com/en-GB/Search', data=dict)
+  r2 = requests.post('http://wizzair.com/en-GB/Search', data=dict, headers=headers)
  except ConnectionError:
   time.sleep(30)
   retries+=1
