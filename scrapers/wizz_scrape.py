@@ -80,7 +80,7 @@ while Stop > Start:
  dict['__VIEWSTATE'] = viewstate
  dict[new_token[0]] = new_token[1]
  try:
-  r2 = requests.post('http://wizzair.com/en-GB/Search', data=dict, headers=headers)
+  r2 = requests.post('https://wizzair.com/en-GB/Search', data=dict, headers=headers)
  except ConnectionError:
   time.sleep(30)
   retries+=1
