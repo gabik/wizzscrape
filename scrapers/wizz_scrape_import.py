@@ -30,7 +30,8 @@ class getViewState(HTMLParser):
    else:
     if (self._vals['type'] == "hidden" ):
      if self._vals['value'] != "":
-      self._newtoken=self._vals['value']
+      if re.search(r'.{8}-.{4}-.{4}-.{4}-.{12}$', self._vals['value']):
+       self._newtoken=self._vals['value']
 
 class getFlight(HTMLParser):
  def __init__(self, req_date):
