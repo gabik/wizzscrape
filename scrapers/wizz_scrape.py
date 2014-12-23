@@ -74,6 +74,7 @@ while Stop > Start:
  dict['ControlGroupRibbonAnonHomeView$AvailabilitySearchInputRibbonAnonHomeView$ButtonSubmit'] = "Search"
  dict['__EVENTTARGET'] = "ControlGroupRibbonAnonHomeView_AvailabilitySearchInputRibbonAnonHomeView_ButtonSubmit"
  dict['__VIEWSTATE'] = viewstate
+ dict[new_token[0]] = new_token[1]
  try:
   r2 = requests.post('http://wizzair.com/en-GB/Search', data=dict)
  except ConnectionError:

@@ -9,7 +9,7 @@ viewstate=""
 
 class getViewState(HTMLParser):
  _viewstate = ""
- _newtoken  = ""
+ _newtoken  = []
  def __init__(self):
   self._vals={}
   HTMLParser.__init__(self)
@@ -23,15 +23,17 @@ class getViewState(HTMLParser):
      self._vals['type'] = i[1]
     if i[0]=="value":
      self._vals['value'] = i[1]
+    if i[0]=="name":
+     self._vals['name'] = i[1]
    if ('id' in self._vals ):
     if (self._vals['type'] == "hidden" and self._vals['id'] == "viewState") : 
      if self._vals['value'] != "":
       self._viewstate=self._vals['value']
    else:
     if (self._vals['type'] == "hidden" ):
-     if self._vals['value'] != "":
+     if self._vals['value'] != "" and self._vals['name'] != "":
       if re.search(r'.{8}-.{4}-.{4}-.{4}-.{12}$', self._vals['value']):
-       self._newtoken=self._vals['value']
+       self._newtoken=[self._vals['name'], self._vals['value']]
 
 class getFlight(HTMLParser):
  def __init__(self, req_date):
