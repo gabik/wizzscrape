@@ -17,7 +17,7 @@ fi
 echo $1 > ~/SM
 sudo hostname SM${1}.2fly.cheap
 shift
-./run.sh $*
+./run.py $*
 
 count_timeout=0
 run_timeout=35

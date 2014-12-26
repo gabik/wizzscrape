@@ -11,6 +11,7 @@ debug_flag = "" if len(sys.argv) < 3 else "debug"
 db= psycopg2.connect( host="gabiscrape.c8f6qy9d6xm4.us-west-2.rds.amazonaws.com", database="GabiScrape", user="root", password="ManegerDB")
 SM=open(os.path.expanduser('~/SM')).readline().strip()
 companies = open('SM{0}/companies'.format(SM)).readlines()
+shuffle(companies)
 for c in companies:
 	cur_c = c.strip()
 	cur1=db.cursor()
