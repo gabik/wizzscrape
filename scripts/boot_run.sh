@@ -20,8 +20,15 @@ shift
 ./run.py $*
 
 count_timeout=0
-run_timeout=35
+run_timeout=60
 # check if something still runs
+while [ ! -f /tmp/finished_to_run.scrape ] ; do
+ sleep 60
+ count_timeout=$((count_timeout+1))
+ if [[ count_timeout -ge run_timeout ]] ; then
+  break
+ fi
+done
 while [[ $(ps -ef | grep scrape | grep -v grep | grep -v git | wc -l) -ne 0 ]] ; do
  sleep 60
  count_timeout=$((count_timeout+1))
