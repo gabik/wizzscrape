@@ -26,6 +26,20 @@ echo 1 > ~/SM
 sudo ln -s /home/ec2-user/wizz/cron /etc/cron.d/scrape
 sudo chown root /home/ec2-user/wizz/cron
 sudo chmod 640 /home/ec2-user/wizz/cron
+sudo yum install -y mod_wsgi.x86_64
+# sudo vim /etc/httpd/conf/httpd.conf
+User ec2-user
+Group ec2-user
+LoadModule wsgi_module modules/mod_wsgi.so
+WSGIScriptAlias /run /home/ec2-user/wizz/web_manager/manual_run/index.wsgi
+WSGIScriptAlias /run_do /home/ec2-user/wizz/web_manager/manual_run/run_do.wsgi
+<Directory /home/ec2-user/wizz/web_manager/manual_run>
+Order allow,deny
+Allow from all
+Options +ExecCGI
+AddHandler cgi-script .py
+</Directory>
+
 
 # on web:
 sudo yum install -y httpd
