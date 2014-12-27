@@ -43,6 +43,8 @@ retries=0
 rz.init_randomizer(Start_orig, maxn)
 #while Stop > Start:
 Start = rz.get_date_from_list()
+headers={}
+headers['User-Agent']='Agent:Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2062.124 Safari/537.36'
 while not rz.is_empty():
  if Start > datetime.date.today()+datetime.timedelta(days=362) : break 
  n+=1
@@ -78,9 +80,9 @@ while not rz.is_empty():
  try:
   rT=s.get(urlT)
   token=rT.text[rT.text.find("OWASP_CSRFTOKEN")+19:rT.text.find("OWASP_CSRFTOKEN")+58]
-  r1=s.get(url1)
+  r1=s.get(url1, headers=headers)
   url2='http://booking.elal.co.il/newBooking/urlDirector.do?OWASP_CSRFTOKEN='+token
-  r2=s.post(url2,data=dict)
+  r2=s.post(url2,data=dict, headers=headers)
   posts=up.getPostVals()
   posts.feed(r2.text)
   dict={}
@@ -89,7 +91,7 @@ while not rz.is_empty():
     dict[i['id']]=i['val']
   
   url3='http://fly.elal.co.il/plnext/ELALspof/Override.action'
-  r3=s.post(url3,data=dict)
+  r3=s.post(url3,data=dict, headers=headers)
   x=r3.text[r3.text.find("generatedJSon"):r3.text.find("\n", r3.text.find("generatedJSon"))]
   y=x[28:-4]
   w=eval(y.replace('false', 'False').replace('true','True'))
@@ -100,6 +102,7 @@ while not rz.is_empty():
    print "Exception {0}".format(e)
    print "Json {0}".format(x)
    print "txt {0}".format(r3.text)
+   print "headers {0}".format(s.headers)
    cleandone=0
    Start = rz.get_date_from_list()
    #Start=Start + datetime.timedelta(days=1)
