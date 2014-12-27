@@ -6,7 +6,7 @@ EOF
 today=`date +%Y-%m-%d -d "yesterday"`
 q=`mktemp`
 psql -t -h$DB_HOST -Uroot -w GabiScrape << EOF > $q
-select * from flights where scrape_time<'$today' order by scrape_time
+select max(a.scrape_time), a.company, max(b.name) cmp, (a.date-current_date)/31 mon  from flights a join companies b on a.company=b.id where a.scrape_time<current_date group by a.company, mon order by cmp, mon;
 EOF
 q1=$(mktemp)
 if [[ $(cat $q) != "" ]] ; then
