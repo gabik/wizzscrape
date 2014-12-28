@@ -31,6 +31,7 @@ sudo yum install -y mod_wsgi.x86_64
 User ec2-user
 Group ec2-user
 LoadModule wsgi_module modules/mod_wsgi.so
+WSGIScriptReloading On
 WSGIScriptAlias /run /home/ec2-user/wizz/web_manager/manual_run/index.wsgi
 WSGIScriptAlias /run_do /home/ec2-user/wizz/web_manager/manual_run/run_do.wsgi
 <Directory /home/ec2-user/wizz/web_manager/manual_run>

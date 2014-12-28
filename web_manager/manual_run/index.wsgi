@@ -6,14 +6,14 @@ import os
 import subprocess
 import psycopg2
 
-process = subprocess.Popen("ps ax | grep run_sm_instance.py | grep -v grep", stdout=subprocess.PIPE, shell=True)
+process = subprocess.Popen("ps ax | grep run_sm_instance.py | grep python | grep -v grep", stdout=subprocess.PIPE, shell=True)
 stdout_list = process.communicate()[0].split('\n')
 ps_list = ""
 for i in stdout_list: ps_list+=' '.join(i.split()[5:])+'<BR>'
 
 db= psycopg2.connect( host="gabiscrape.c8f6qy9d6xm4.us-west-2.rds.amazonaws.com", database="GabiScrape", user="root", password="ManegerDB")
 cur1=db.cursor()
-cur1.execute("select max(a.scrape_time), a.company, max(b.name) cmp, (a.date-current_date)/31 mon  from flights a join companies b on a.company=b.id where a.scrape_time<current_date group by a.company, mon order by cmp, mon")
+cur1.execute("select min(a.scrape_time), a.company, max(b.name) cmp, (a.date-current_date)/31 mon  from flights a join companies b on a.company=b.id where a.scrape_time<current_date group by a.company, mon order by cmp, mon")
 old1 = cur1.fetchall()
 old_flights = ""
 for i in old1:
