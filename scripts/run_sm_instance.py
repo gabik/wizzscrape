@@ -30,8 +30,15 @@ while not instance_id:
 
 instance = EC2.get_all_instances(instance_ids=instance_id)
 time.sleep(5)
-instance[0].instances[0].add_tag("type","scraper")
+if args.month < 99 and args.machine < 99:
+	instance[0].instances[0].add_tag("type","scraper")
+	instance[0].instances[0].add_tag("month",args.month)
+	instance[0].instances[0].add_tag("machine",args.machine)
+else:
+	instance[0].instances[0].add_tag("type","test_scraper")
+
 instance_ip = instance[0].instances[0].private_ip_address
+#public_ip = instance[0].instances[0].ip_address
 
 test_code = "echo ok"
 remote_code = "retries=0 ; cd  ; rm -rf wizz ; git clone --quiet git@github.com:gabik/wizzscrape.git wizz ; while [[ $? -ne 0 && $retries -lt 10 ]] ; do sleep 15 ; retries=$((retries+1)) ; rm -rf wizz ; git clone --quiet git@github.com:gabik/wizzscrape.git wizz ; done ; cd ~/wizz/scripts ; ./boot_run.sh {0} {1} &> /tmp/boot_run.log".format(str(args.machine), str(args.month))
@@ -45,6 +52,13 @@ while ssh_code != 0:
 		print "ERROR : SSH timeout to " + instance_id
 		sys.exit(1)
 
-ssh_code = os.system('ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ' + str(instance_ip) + " '"+remote_code+"'")
-
+if args.month < 99 and args.machine < 99:
+	ssh_code = os.system('ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ' + str(instance_ip) + " '"+remote_code+"'")
+#else:
+	#str_file = '{0} - {1}'.format(str(datetime.datetime.now()), public_ip)
+	#file_name = '/tmp/cur_tmp_server'
+	#fd = open(file_name, 'w')
+	#fd.write(str_file)
+	#fd.close()
+#
 #print "Done."

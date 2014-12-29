@@ -6,6 +6,18 @@ import os
 import subprocess
 import psycopg2
 import datetime
+import boto
+import boto.ec2
+
+def get_tmp_instances():
+	REGION = boto.utils.get_instance_metadata()['local-hostname'].split('.')[1]
+	EC2 = boto.ec2.connect_to_region(REGION)
+	instance = EC2.get_only_instances(filters={'tag:type':'test_scraper', 'instance-state-name':'running'})
+	ips_str = ""
+	for i in instance:
+		ips_str += i.ip_address + "<BR>"
+	return ips_str
+
 
 def get_html():
 	process = subprocess.Popen("ps ax | grep run_sm_instance.py | grep python | grep -v grep", stdout=subprocess.PIPE, shell=True)
@@ -36,6 +48,10 @@ def get_html():
 		c_str = ', '.join([x.strip() for x in cur_comps])
 		comps += "<td>{0}</td>".format(c_str)
 		comps += "</tr>"
+
+	fd = open('/tmp/cur_tmp_server', 'r')
+	tmp_ip = fd.read()
+	fd.close()
 	
 	html="""
 	<HTML>
@@ -59,8 +75,11 @@ def get_html():
 	Old flights on the DB:<BR>
 	Timestamp , Company ID , Company Name , Month <BR>
 	{2}
+	<BR><BR>
+	Temp server IP:<BR>
+	{4}
 	</BODY></HTML>
-	""".format(comps, ps_list, old_flights, str(datetime.datetime.now()))
+	""".format(comps, ps_list, old_flights, str(datetime.datetime.now()), get_tmp_instances())
 
 	return html
 	

@@ -28,7 +28,7 @@ for c in companies:
 
 shuffle(all_runs)
 for r in all_runs:
-	subprocess.call('unbuffer python ../scrapers/{0}_scrape.py {1} {2} {3} &> ../logs/{0}_{1}.log'.format(r['cmp'], r['dst'], arg_month, debug_flag), shell=True)
+	subprocess.call('unbuffer python ../scrapers/{0}_scrape.py {1} {2} {3} &> ../logs/{0}_{1}.log &'.format(r['cmp'], r['dst'], arg_month, debug_flag), shell=True)
 	time.sleep(10)
 
 finish_file = open('/tmp/finished_to_run.scrape', 'w')
