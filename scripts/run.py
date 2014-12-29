@@ -7,7 +7,7 @@ from random import shuffle
 from random import randint
 import sys
 
-max_sleep = 20
+max_sleep = 10
 
 arg_month=sys.argv[1]
 debug_flag = "" if len(sys.argv) < 3 else "debug"
