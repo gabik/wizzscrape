@@ -8,7 +8,6 @@ for i in $(eval echo {$1..$2}) ; do
  ./run.py $i debug &
  sleep 2
  while ps -ef | egrep "run.py|expect" | grep -v grep | grep -v watch &> /dev/null ; do
-  echo waiting
   sleep 10
  done
 done
