@@ -1,11 +1,12 @@
 import requests
+import os
 import psycopg2
 import codecs
 from psycopg2 import extras
 import re
 import sys
 import datetime
-from general_scrape import find_all, clean_dup, strip_non_ascii, get_currency, clean_dup_list, db, max_retries, get_flight_time
+from general_scrape import find_all, clean_dup, strip_non_ascii, get_currency, clean_dup_list, db, max_retries, get_flight_time, replace_proxy
 import up_scrape_import as up
 import randomizer as rz
 
@@ -31,6 +32,32 @@ if len(sys.argv) >= 4 :
 
 usd=get_currency("usd")
 
+class dummy() :
+ text = 'Access Denied'
+
+s=requests.session()
+test_url='http://fly.elal.co.il/plnext/ELALonlinebooking/Override.action'
+test=s.get(test_url)
+if 'Access Denied' in test.text:
+ good=False
+if 'Manual Runner' in test.text:
+ good=False
+#if test.status_code != 200:
+ #good = False
+while good is False:
+ if debug_flag:
+  print "Need Proxy..."
+ cur_proxy = replace_proxy()
+ if debug_flag:
+  print cur_proxy
+ try:
+  test=s.get(test_url)
+ except:
+  test = dummy()
+ #if 'Access Denied' not in test.text and test.status_code == 200 and 'Manual Runner' not in test.text:
+ if 'Access Denied' not in test.text and 'Manual Runner' not in test.text:
+  good = True
+   
 #Start = Start_orig
 flightsList = []
 n=0

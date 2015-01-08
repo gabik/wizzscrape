@@ -1,9 +1,11 @@
 import re
+import os
 import codecs
 import datetime, pytz
 import requests
 import psycopg2
 from psycopg2 import extras
+import proxy_handler
 
 db= psycopg2.connect( host="gabiscrape.c8f6qy9d6xm4.us-west-2.rds.amazonaws.com", database="GabiScrape", user="root", password="ManegerDB")
 
@@ -78,3 +80,10 @@ def write_to_gabi(data):
  fd=codecs.open('../gabi.html', 'w', encoding='utf-7')
  fd.write(data)
  fd.close()
+
+def replace_proxy():
+ proxy_handler.cur_proxy+=1
+ proxy = "http://{0}:{1}".format(proxy_handler.ips_list[proxy_handler.cur_proxy]['ip'], proxy_handler.ips_list[proxy_handler.cur_proxy]['port'])
+ os.environ['http_proxy'] = proxy
+ return proxy
+
