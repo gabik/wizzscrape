@@ -1,0 +1,9 @@
+mkdir /tmp/tortmp
+cd /tmp/tortmp
+yum install -y libevent-devel zlib-devel openssl-devel
+wget 'https://www.torproject.org/dist/tor-0.2.5.10.tar.gz'
+tar xvpfz tor-0.2.5.10.tar.gz
+cd tor-0.2.5.10
+./configure
+make
+

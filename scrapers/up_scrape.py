@@ -47,7 +47,8 @@ headers={}
 headers['User-Agent']='Agent:Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2062.124 Safari/537.36'
 while not rz.is_empty():
  if Start > datetime.date.today()+datetime.timedelta(days=362) : break 
- n+=1
+ if retries == 0:
+  n+=1
  if debug_flag:
   print "Progress: " + str(n) + "/" + str(maxn)
  else:
