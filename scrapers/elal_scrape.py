@@ -46,7 +46,8 @@ rz.init_randomizer(Start_orig, maxn)
 Start = rz.get_date_from_list()
 while not rz.is_empty() and year_flag:
  if Start > datetime.date.today()+datetime.timedelta(days=362) : break
- n+=1
+ if retries == 0: 
+  n+=1
  if debug_flag:
   print "Progress: " + str(n) + "/" + str(maxn)
  else:
