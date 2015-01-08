@@ -49,9 +49,9 @@ def get_html():
 		comps += "<td>{0}</td>".format(c_str)
 		comps += "</tr>"
 
-	fd = open('/tmp/cur_tmp_server', 'r')
-	tmp_ip = fd.read()
-	fd.close()
+	#fd = open('/tmp/cur_tmp_server', 'r')
+	#tmp_ip = fd.read()
+	#fd.close()
 	
 	html="""
 	<HTML>
