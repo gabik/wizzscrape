@@ -125,7 +125,8 @@ while not rz.is_empty() and year_flag:
   d3 = [[y+1, x[y], x[y+2]] for x in d2 for y in range(2)]
  except Exception ,e :
   retries+=1
-  proxy = get_proxy()
+  if retries>1:
+   proxy = get_proxy()
   if retries>max_retries:
    print str(Start), str(Ret)
    traceback.print_exc()
