@@ -1,4 +1,5 @@
 import requests
+import traceback
 import socket
 import psycopg2
 import codecs
