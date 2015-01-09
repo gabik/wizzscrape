@@ -47,6 +47,7 @@ if ($_POST['kind'] == 2) {
 
 #echo $query;
 
+
 pg_close();
 echo json_encode($json);
 ?>

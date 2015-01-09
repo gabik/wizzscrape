@@ -1,5 +1,11 @@
 <?php
 
+ if (isset($_POST['device']) ){
+  $device=$_POST['device']
+ } else {
+  $device='web';
+ }
+
  $dates_join="1";
  if (isset($_POST['AllDates']) ){
   if (($_POST['AllDates']=="1") or ($_POST['AllDates']=="on")) {

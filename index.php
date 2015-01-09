@@ -227,6 +227,7 @@ $(document).ready(function() {
     <div class="well form-well">
      <form name=routeForm method=post action=getroute.php class="form-horizontal" id=routeForm>
       <input type=hidden name=kind id=kind value=2>
+      <input type=hidden name=device id=device value=web>
 
       <div class="row">
        <div class="buttons-one-route">
