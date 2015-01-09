@@ -89,3 +89,6 @@ def replace_proxy():
  os.environ['http_proxy'] = proxy
  return proxy
 
+class dummy() :
+ text = 'Access Denied'
+

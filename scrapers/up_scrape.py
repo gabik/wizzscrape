@@ -6,7 +6,7 @@ from psycopg2 import extras
 import re
 import sys
 import datetime
-from general_scrape import find_all, clean_dup, strip_non_ascii, get_currency, clean_dup_list, db, max_retries, get_flight_time
+from general_scrape import find_all, clean_dup, strip_non_ascii, get_currency, clean_dup_list, db, max_retries, get_flight_time, write_to_gabi, dummy, replace_proxy
 import up_scrape_import as up
 import randomizer as rz
 
@@ -26,6 +26,31 @@ cur_year=Start_orig.year
 Start_orig += datetime.timedelta(days=(int(maxn)-1)*int(arg_month))
 Stop = Start_orig + datetime.timedelta(days=maxn)
 scrape_time = datetime.datetime.today()
+
+def get_proxy():
+ s=requests.session()
+ test_url='http://fly.elal.co.il/plnext/ELALonlinebooking/Override.action'
+ test2_url='http://booking.elal.co.il/newBooking/urlDirector.do'
+ good=False
+ while good is False:
+  cur_proxy = replace_proxy()
+  print "Need Proxy... {0}".format(cur_proxy)
+  try:
+   test=s.get(test_url)
+  except:
+   test = dummy()
+  #if 'Access Denied' not in test.text and test.status_code == 200 and 'Manual Runner' not in test.text:
+  if 'Access Denied' not in test.text and 'Manual Runner' not in test.text:
+   good = True
+
+s=requests.session()
+test_url='http://fly.elal.co.il/plnext/ELALonlinebooking/Override.action'
+test2_url='http://booking.elal.co.il/newBooking/urlDirector.do'
+test=s.get(test_url)
+test2=s.get(test2_url)
+if 'Access Denied' in test.text or  'Manual Runner' in test.text:
+ get_proxy()
+
 
 DST = sys.argv[1]
 if len(sys.argv) >= 4 :
@@ -78,6 +103,9 @@ while not rz.is_empty():
  urlT='http://booking.elal.co.il/newBooking/JavaScriptServlet'
  url1='http://booking.elal.co.il/newBooking/elalInit.do?LANG=IL&systemId=24&campaignCode=04535'
  s=requests.session()
+ x=""
+ r2=dummy()
+ r3=dummy()
  try:
   rT=s.get(urlT)
   token=rT.text[rT.text.find("OWASP_CSRFTOKEN")+19:rT.text.find("OWASP_CSRFTOKEN")+58]
@@ -96,18 +124,22 @@ while not rz.is_empty():
   x=r3.text[r3.text.find("generatedJSon"):r3.text.find("\n", r3.text.find("generatedJSon"))]
   y=x[28:-4]
   w=eval(y.replace('false', 'False').replace('true','True'))
- except (SyntaxError, socket.error), e:
+ except Exception ,e :
   retries+=1
+  proxy = get_proxy()
   if retries>max_retries:
    print str(Start), str(Ret)
-   print "Exception {0}".format(e)
-   print "Json {0}".format(x)
-   print "txt {0}".format(r3.text)
-   print "headers {0}".format(s.headers)
+   traceback.print_exc()
+   print "exception: " + str(e)
+   print "Json: " + x
+   #print "page: " + r3.text
+   write_to_gabi(r3.text)
    cleandone=0
    Start = rz.get_date_from_list()
-   #Start=Start + datetime.timedelta(days=1)
+   retries=0
+   # Start=Start + datetime.timedelta(days=1)
   continue
+
 
  retries=0
  d=w['recommendations']

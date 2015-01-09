@@ -7,7 +7,7 @@ from psycopg2 import extras
 import re
 import sys
 import datetime
-from general_scrape import find_all, clean_dup, strip_non_ascii, get_currency, clean_dup_list, db, max_retries, get_flight_time, replace_proxy, write_to_gabi
+from general_scrape import find_all, clean_dup, strip_non_ascii, get_currency, clean_dup_list, db, max_retries, get_flight_time, replace_proxy, write_to_gabi, dummy
 import up_scrape_import as up
 import randomizer as rz
 
@@ -33,20 +33,14 @@ if len(sys.argv) >= 4 :
 
 usd=get_currency("usd")
 
-class dummy() :
- text = 'Access Denied'
-
 def get_proxy():
  s=requests.session()
  test_url='http://fly.elal.co.il/plnext/ELALonlinebooking/Override.action'
  test2_url='http://booking.elal.co.il/newBooking/urlDirector.do'
  good=False
  while good is False:
-  if debug_flag:
-   print "Need Proxy..."
   cur_proxy = replace_proxy()
-  if debug_flag:
-   print cur_proxy
+  print "Need Proxy... {0}".format(cur_proxy)
   try:
    test=s.get(test_url)
   except:
@@ -131,7 +125,7 @@ while not rz.is_empty() and year_flag:
   d3 = [[y+1, x[y], x[y+2]] for x in d2 for y in range(2)]
  except Exception ,e :
   retries+=1
-  get_proxy()
+  proxy = get_proxy()
   if retries>max_retries:
    print str(Start), str(Ret)
    traceback.print_exc()
