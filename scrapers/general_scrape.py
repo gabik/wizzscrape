@@ -10,7 +10,7 @@ import proxy_handler
 
 db= psycopg2.connect( host="gabiscrape.c8f6qy9d6xm4.us-west-2.rds.amazonaws.com", database="GabiScrape", user="root", password="ManegerDB")
 
-max_retries=5
+max_retries=10
 
 def find_all(a_str, sub):
  start = 0

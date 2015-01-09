@@ -22,15 +22,16 @@ def decode_ip(enc):
  ip = base64.b64decode(base)
  return ip
 
-url = 'http://www.cool-proxy.net/proxies/http_proxy_list/sort:download_speed_average/direction:desc'
-r = requests.get(url).text
-soup = BeautifulSoup(r)
-a=soup.find_all('tr')
 ips_list = []
-for i in a[1:-1]:
-  if 'str_rot13' in str(i):
-   dec64 = i.find_all('td')[0].contents[0].contents[0].split('(')[3].split('"')[1]
-   cur = {}
-   cur['ip'] = decode_ip(dec64)
-   cur['port'] = i.find_all('td')[1].contents[0]
-   ips_list.append(cur)
+for p in range(1,3):
+ url = 'http://www.cool-proxy.net/proxies/http_proxy_list/sort:download_speed_average/direction:desc/page:{0}'.format(p)
+ r = requests.get(url).text
+ soup = BeautifulSoup(r)
+ a=soup.find_all('tr')
+ for i in a[1:-1]:
+   if 'str_rot13' in str(i):
+    dec64 = i.find_all('td')[0].contents[0].contents[0].split('(')[3].split('"')[1]
+    cur = {}
+    cur['ip'] = decode_ip(dec64)
+    cur['port'] = i.find_all('td')[1].contents[0]
+    ips_list.append(cur)
