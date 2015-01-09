@@ -129,7 +129,6 @@ while not rz.is_empty():
   retries+=1
   if retries>1:
    proxy = get_proxy()
-  proxy = get_proxy()
   if retries>max_retries:
    print str(Start), str(Ret)
    traceback.print_exc()
