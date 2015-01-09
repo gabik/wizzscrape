@@ -36,34 +36,35 @@ usd=get_currency("usd")
 class dummy() :
  text = 'Access Denied'
 
-s=requests.session()
-test_url='http://fly.elal.co.il/plnext/ELALonlinebooking/Override.action'
-test2_url='http://booking.elal.co.il/newBooking/urlDirector.do'
-test=s.get(test_url)
-test2=s.get(test2_url)
-if 'Access Denied' in test.text:
- good=False
-if 'Manual Runner' in test.text:
- good=False
-#if test.status_code != 200:
- #good = False
-while good is False:
- if debug_flag:
-  print "Need Proxy..."
- cur_proxy = replace_proxy()
- if debug_flag:
-  print cur_proxy
- try:
-  test=s.get(test_url)
- except:
-  test = dummy()
- #if 'Access Denied' not in test.text and test.status_code == 200 and 'Manual Runner' not in test.text:
- if 'Access Denied' not in test.text and 'Manual Runner' not in test.text:
-  good = True
-
-#print test.text
-#print test2.text
-#sys.exit(1)
+def get_proxy():
+ s=requests.session()
+ test_url='http://fly.elal.co.il/plnext/ELALonlinebooking/Override.action'
+ test2_url='http://booking.elal.co.il/newBooking/urlDirector.do'
+ test=s.get(test_url)
+ test2=s.get(test2_url)
+ if 'Access Denied' in test.text:
+  good=False
+ if 'Manual Runner' in test.text:
+  good=False
+ #if test.status_code != 200:
+  #good = False
+ while good is False:
+  if debug_flag:
+   print "Need Proxy..."
+  cur_proxy = replace_proxy()
+  if debug_flag:
+   print cur_proxy
+  try:
+   test=s.get(test_url)
+  except:
+   test = dummy()
+  #if 'Access Denied' not in test.text and test.status_code == 200 and 'Manual Runner' not in test.text:
+  if 'Access Denied' not in test.text and 'Manual Runner' not in test.text:
+   good = True
+ 
+ #print test.text
+ #print test2.text
+ #sys.exit(1)
 
 #Start = Start_orig
 flightsList = []
@@ -132,6 +133,7 @@ while not rz.is_empty() and year_flag:
   d3 = [[y+1, x[y], x[y+2]] for x in d2 for y in range(2)]
  except Exception ,e :
   retries+=1
+  get_proxy()
   if retries>max_retries:
    print str(Start), str(Ret)
    traceback.print_exc()
