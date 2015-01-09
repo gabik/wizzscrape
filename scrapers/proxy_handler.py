@@ -34,6 +34,3 @@ for i in a[1:-1]:
    cur['ip'] = decode_ip(dec64)
    cur['port'] = i.find_all('td')[1].contents[0]
    ips_list.append(cur)
-
-print ips_list
-

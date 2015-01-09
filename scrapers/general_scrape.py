@@ -77,7 +77,7 @@ def get_flight_time(flight, airport):
  return ':'.join(str(dur).split(':')[0:2])
 
 def write_to_gabi(data):
- fd=codecs.open('../gabi.html', 'w', encoding='utf-7')
+ fd=codecs.open('/tmp/gabi.html', 'w', encoding='utf-7')
  fd.write(data)
  fd.close()
 

@@ -1,4 +1,5 @@
 import requests
+import traceback
 import os
 import psycopg2
 import codecs
@@ -6,7 +7,7 @@ from psycopg2 import extras
 import re
 import sys
 import datetime
-from general_scrape import find_all, clean_dup, strip_non_ascii, get_currency, clean_dup_list, db, max_retries, get_flight_time, replace_proxy
+from general_scrape import find_all, clean_dup, strip_non_ascii, get_currency, clean_dup_list, db, max_retries, get_flight_time, replace_proxy, write_to_gabi
 import up_scrape_import as up
 import randomizer as rz
 
@@ -37,7 +38,9 @@ class dummy() :
 
 s=requests.session()
 test_url='http://fly.elal.co.il/plnext/ELALonlinebooking/Override.action'
+test2_url='http://booking.elal.co.il/newBooking/urlDirector.do'
 test=s.get(test_url)
+test2=s.get(test2_url)
 if 'Access Denied' in test.text:
  good=False
 if 'Manual Runner' in test.text:
@@ -57,7 +60,11 @@ while good is False:
  #if 'Access Denied' not in test.text and test.status_code == 200 and 'Manual Runner' not in test.text:
  if 'Access Denied' not in test.text and 'Manual Runner' not in test.text:
   good = True
-   
+
+#print test.text
+#print test2.text
+#sys.exit(1)
+
 #Start = Start_orig
 flightsList = []
 n=0
@@ -102,6 +109,8 @@ while not rz.is_empty() and year_flag:
  dict['coupons']=""
  s=requests.session()
  url2='http://booking.elal.co.il/newBooking/urlDirector.do' #?OWASP_CSRFTOKEN='+token
+ x=""
+ r3=dummy()
  try:
   r2=s.post(url2,data=dict)
   posts=up.getPostVals()
@@ -125,11 +134,14 @@ while not rz.is_empty() and year_flag:
   retries+=1
   if retries>max_retries:
    print str(Start), str(Ret)
+   traceback.print_exc()
    print "exception: " + str(e)
    print "Json: " + x
-   print "page: " + r3.text
+   #print "page: " + r3.text
+   write_to_gabi(r3.text)
    cleandone=0
    Start = rz.get_date_from_list()
+   retries=0
    # Start=Start + datetime.timedelta(days=1)
   continue
 
