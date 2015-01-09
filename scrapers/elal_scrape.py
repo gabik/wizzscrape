@@ -40,14 +40,7 @@ def get_proxy():
  s=requests.session()
  test_url='http://fly.elal.co.il/plnext/ELALonlinebooking/Override.action'
  test2_url='http://booking.elal.co.il/newBooking/urlDirector.do'
- test=s.get(test_url)
- test2=s.get(test2_url)
- if 'Access Denied' in test.text:
-  good=False
- if 'Manual Runner' in test.text:
-  good=False
- #if test.status_code != 200:
-  #good = False
+ good=False
  while good is False:
   if debug_flag:
    print "Need Proxy..."
@@ -62,9 +55,14 @@ def get_proxy():
   if 'Access Denied' not in test.text and 'Manual Runner' not in test.text:
    good = True
  
- #print test.text
- #print test2.text
- #sys.exit(1)
+s=requests.session()
+test_url='http://fly.elal.co.il/plnext/ELALonlinebooking/Override.action'
+test2_url='http://booking.elal.co.il/newBooking/urlDirector.do'
+test=s.get(test_url)
+test2=s.get(test2_url)
+if 'Access Denied' in test.text or  'Manual Runner' in test.text:
+ get_proxy()
+
 
 #Start = Start_orig
 flightsList = []
