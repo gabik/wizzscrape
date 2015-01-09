@@ -1,4 +1,5 @@
 import re
+import random
 import os
 import codecs
 import datetime, pytz
@@ -9,7 +10,7 @@ import proxy_handler
 
 db= psycopg2.connect( host="gabiscrape.c8f6qy9d6xm4.us-west-2.rds.amazonaws.com", database="GabiScrape", user="root", password="ManegerDB")
 
-max_retries=3
+max_retries=5
 
 def find_all(a_str, sub):
  start = 0
@@ -82,8 +83,9 @@ def write_to_gabi(data):
  fd.close()
 
 def replace_proxy():
- proxy_handler.cur_proxy+=1
- proxy = "http://{0}:{1}".format(proxy_handler.ips_list[proxy_handler.cur_proxy]['ip'], proxy_handler.ips_list[proxy_handler.cur_proxy]['port'])
+ cur_int = random.randint(0, len(proxy_handler.ips_list)-1)
+ cur_proxy = proxy_handler.ips_list[cur_int]
+ proxy = "http://{0}:{1}".format(cur_proxy['ip'], cur_proxy['port'])
  os.environ['http_proxy'] = proxy
  return proxy
 
