@@ -47,6 +47,8 @@ if ($_POST['kind'] == 2) {
 
 #echo $query;
 
+$stat_query = "insert into smart_phones_serch_stat (device) values ('$device')";
+$result = pg_query($db, $stat_query);
 
 pg_close();
 echo json_encode($json);

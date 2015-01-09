@@ -1,7 +1,7 @@
 <?php
 
  if (isset($_POST['device']) ){
-  $device=$_POST['device']
+  $device=$_POST['device'];
  } else {
   $device='web';
  }

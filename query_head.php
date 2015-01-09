@@ -12,7 +12,5 @@ $na = 'N/A';
 
 include 'db_con_string.php';
 $db = pg_pconnect($conn_string);
-$stat_query = "insert into smart_phones_serch_stat (device) values ($device)";
-$result = pg_query($db, $stat_query);
 
 ?>
