@@ -20,7 +20,9 @@ if ($_POST['kind'] == 2) {
   $indur = "";
   if ($row[16]=="") { $outdur = 'N/A'; } else {list($a,$b)=explode(':', $row[16]); $outdur=$a.':'.$b; }
   if ($row[17]=="") { $indur = 'N/A'; } else {list($a,$b)=explode(':', $row[17]); $indur=$a.':'.$b; }
-  $cur_elem=array('id' => $i, 'company' => $row[9], 'destination' => $row[4], 'airport' => $row[10], 'outdate' => $row[2], 'indate' => $row[3], 'outprice' => $row[5], 'inprice' => $row[6], 'total' => $row[7], 'nights' => $row[8], 'outarr' => $row[12],'inarr' => $row[14],'outdep' => $row[11],'indep' => $row[13], 'indur' => $indur, 'outdur' => $outdur, 'direction' => $na , 'ils' => $row[7], 'eur' => floor($row[7]/$eur), 'usd' => floor($row[7]/$usd));
+  list($outmon1, $outmon2) = explode("-", $row[2]);
+   $outmon = $outmon1."-".$outmon2;
+  $cur_elem=array('id' => $i, 'company' => $row[9], 'destination' => $row[4], 'airport' => $row[10], 'outdate' => $row[2], 'indate' => $row[3], 'outprice' => $row[5], 'inprice' => $row[6], 'total' => $row[7], 'nights' => $row[8], 'outarr' => $row[12],'inarr' => $row[14],'outdep' => $row[11],'indep' => $row[13], 'indur' => $indur, 'outdur' => $outdur, 'direction' => $na , 'ils' => $row[7], 'eur' => floor($row[7]/$eur), 'usd' => floor($row[7]/$usd), 'outmon' => $outmon);
   array_push($json, $cur_elem);
   $i+=1;
  }

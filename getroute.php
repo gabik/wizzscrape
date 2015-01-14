@@ -61,13 +61,16 @@ function fill_results(startI) {
   var flight = sorted_flights[f];
   var outdate=new Date(flight['outdate']);
   var indate=new Date(flight['indate']);
+  var dst = flight['destination'];
+  var outdateonly = outdate.getFullYear() + '/' + outdate.getMonth() + '/' + outdate.getDate();
+  var indateonly = indate.getFullYear() + '/' + indate.getMonth() + '/' + indate.getDate();
   var outdep = flight['outdep'].split(":")[0]+":"+flight['outdep'].split(":")[1]
   var indep = flight['indep'].split(":")[0]+":"+flight['indep'].split(":")[1]
   var outarr = flight['outarr'].split(":")[0]+":"+flight['outarr'].split(":")[1]
   var inarr = flight['inarr'].split(":")[0]+":"+flight['inarr'].split(":")[1]
   var price=flight[currency];
   var data = 
-    '<div class="result_row text-center ">'+
+    '<div class="result_row text-center " onclick=\'web_redirect("'+outdateonly+'", "'+indateonly+'", "'+outdep+'", "'+indep+'", "'+dst+'", "Tel Aviv")\'>'+
     '<div class="'+flight['special']+'"></div>'+
     '<img src="images/flight_card.jpg" class="flightcard">'+
     '<div class="result_price"><span class="fa_cur"><i class="fa fa-'+currency+'"></i></span> '+price+'</div>'+
@@ -88,6 +91,10 @@ function fill_results(startI) {
   $("#flight_results").append(data);
  }
  fill_pages();
+}
+
+function web_redirect(outdte, indate, ourdep, indep, dst, src) {
+    window.location.assign("http://www.w3schools.com")
 }
 
 function fill_pages() {
