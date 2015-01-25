@@ -31,7 +31,7 @@ top: 30px;
 left: 250px;
 width: 100%;
 }
-.square_elem { margin: 0 3%  ; }
+.square_elem { margin: 0 1%  ; padding: 1% 0 ;}
 .navbar-header-txt { width:200px; line-height: 280%;
  margin:10px;
 }

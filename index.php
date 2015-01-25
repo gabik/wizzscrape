@@ -353,7 +353,7 @@ $(document).ready(function() {
        <div class="row">
         <div class="col-sm-12">
          <div class="form-footer">
-          Bla Bla Bla
+          The final book and payment will be on the airline site.
          </div>
         </div>
        </div>
